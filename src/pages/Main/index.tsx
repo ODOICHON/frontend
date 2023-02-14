@@ -1,5 +1,5 @@
-import React from "react";
+import React from 'react';
 
 export default function MainPage() {
-  return <div>mainPage</div>;
+  return <div>메인페이지</div>;
 }
