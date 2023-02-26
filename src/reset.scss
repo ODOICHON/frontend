@@ -5,11 +5,10 @@
 @import './media.scss';
 
 :root {
-  --background-color: #a8b0d7;
-  --poision-color: #373261;
-  --safe-color: #5d7151;
-  --button-color: #9675f5;
-  --purple-color: #690e89;
+  --main-color: #16b88b;
+  --gray-color: #d9d9d9;
+  --darkgray-color: #878d91;
+  --gray-background: #eaeeef;
 }
 
 html,
@@ -115,9 +114,8 @@ section {
 }
 body {
   line-height: 1;
-  font-family: 'Yeon Sung', cursive;
-  // font-family: "Sunshiney", cursive;
-  background-color: var(--background-color);
+  // font-family: 'NanumSquareAcR';
+  font-family: 'Pretendard';
 }
 ol,
 ul {
