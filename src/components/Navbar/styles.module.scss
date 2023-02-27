@@ -1,0 +1,51 @@
+@import '@/media.scss';
+
+.container {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 77px;
+  background-color: white;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(20px);
+  z-index: 100;
+}
+.innerContainer {
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo {
+  width: 8.875rem;
+}
+.buttonContainer {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  font-size: 1.25rem;
+  font-family: 'NanumGothic';
+}
+.loginContainer {
+  @extend .buttonContainer;
+  gap: 1rem;
+}
+.button {
+  height: 2.5rem;
+  padding: 0.625rem 1.5rem;
+  border-radius: 30px;
+  &:first-child {
+    color: white;
+    background-color: var(--main-color);
+  }
+  &:last-child {
+    background-color: var(--gray-color);
+  }
+}

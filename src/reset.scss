@@ -117,6 +117,13 @@ body {
   // font-family: 'NanumSquareAcR';
   font-family: 'Pretendard';
 }
+a {
+  color: black;
+  text-decoration: none;
+  &:hover {
+    opacity: 0.8;
+  }
+}
 ol,
 ul {
   list-style: none;
