@@ -155,3 +155,9 @@ html {
     font-size: 100%; // 1rem = 16px;
   }
 }
+.swiper .swiper-pagination-bullet {
+  background-color: var(--gray-color);
+}
+.swiper .swiper-pagination-bullet-active {
+  background-color: #00c18c;
+}
