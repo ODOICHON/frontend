@@ -265,6 +265,9 @@
   &:hover {
     opacity: 0.8;
   }
+  & > svg {
+    transform: translate(4px);
+  }
 }
 .commuNextBtn {
   position: absolute;

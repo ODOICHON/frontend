@@ -15,6 +15,7 @@ import pin from '@/assets/common/map-pin.svg';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
+import Footer from '@/components/Footer';
 
 export default function MainPage() {
   const [_, updateState] = useState(false);
@@ -209,6 +210,7 @@ export default function MainPage() {
           </svg>
         </button>
       </div>
+      <Footer />
     </div>
   );
 }
