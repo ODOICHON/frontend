@@ -115,8 +115,8 @@ section {
 }
 body {
   line-height: 1;
-  // font-family: 'NanumSquareAcR';
-  font-family: 'Pretendard';
+  font-family: 'NanumSquareAcR';
+  // font-family: 'Pretendard';
 }
 a {
   color: black;
@@ -161,4 +161,9 @@ html {
 }
 .swiper .swiper-pagination-bullet-active {
   background-color: #00c18c;
+}
+.swiper-button-next:after {
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }

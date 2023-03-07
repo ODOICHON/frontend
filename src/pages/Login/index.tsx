@@ -1,5 +1,7 @@
 import removeImg from '@/assets/common/remove.png';
+import { opacityVariants } from '@/constants/variants';
 import useInput from '@/hooks/useInput';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
 
@@ -13,7 +15,12 @@ export default function LoginPage() {
     else return;
   };
   return (
-    <div className={styles.container}>
+    <motion.div
+      className={styles.container}
+      variants={opacityVariants}
+      initial="initial"
+      animate="mount"
+    >
       <div className={styles.title}>로그인</div>
       <div className={styles.contents}>
         <div id="idContainer" className={styles.inputContainer}>
@@ -54,6 +61,6 @@ export default function LoginPage() {
           <Link to="/signup">회원가입</Link>
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -1,0 +1,56 @@
+@import '@/media.scss';
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 44.75rem;
+}
+.upper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 0.7;
+  width: 100%;
+  height: 100%;
+  padding-left: 11rem;
+  padding-right: 11rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
+  & > p {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  & > h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    & > b {
+      color: var(--main-color);
+    }
+  }
+  @include mobile {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}
+.lower {
+  flex: 0.3;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 11rem;
+  background-color: #4d5256;
+  color: white;
+  & > p {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  @include mobile {
+    padding-left: 5rem;
+  }
+}
