@@ -19,6 +19,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-left: 8rem;
+  padding-right: 8rem;
   color: white;
   & > h3 {
     position: absolute;
@@ -214,6 +216,9 @@
     word-break: break-all;
     line-height: 3.125rem;
     white-space: pre-line;
+  }
+  @include mobile {
+    padding: 3rem 6rem;
   }
 }
 .communitySwiper {

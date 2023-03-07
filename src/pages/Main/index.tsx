@@ -16,6 +16,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Footer from '@/components/Footer';
+import { motion } from 'framer-motion';
+import { opacityVariants } from '@/constants/variants';
 
 export default function MainPage() {
   const [_, updateState] = useState(false);
@@ -27,7 +29,12 @@ export default function MainPage() {
     updateState(true);
   }, [introNextRef, commuNextRef]);
   return (
-    <div className={styles.container}>
+    <motion.div
+      className={styles.container}
+      variants={opacityVariants}
+      initial="initial"
+      animate="mount"
+    >
       <Swiper
         spaceBetween={30}
         centeredSlides={true}
@@ -211,6 +218,6 @@ export default function MainPage() {
         </button>
       </div>
       <Footer />
-    </div>
+    </motion.div>
   );
 }
