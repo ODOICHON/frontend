@@ -8,7 +8,7 @@ type TermsProps = {
 export default function Terms({ setToggle }: TermsProps) {
   const onToggleClick = () => {
     const bodyEl = document.querySelector('body');
-    bodyEl?.removeAttribute('class', 'over_hidden');
+    bodyEl?.classList.remove('over_hidden');
     setToggle(false);
   };
   return (

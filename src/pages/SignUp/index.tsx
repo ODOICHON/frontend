@@ -13,10 +13,11 @@ type IForm = {
   phone: string;
   age: string;
   signUpRoute: string;
+  terms: boolean;
 };
 
 export default function SignUpPage() {
-  const { register, watch, control } = useForm<IForm>({
+  const { register, watch } = useForm<IForm>({
     mode: 'onSubmit',
     defaultValues: {
       id: '',
@@ -30,15 +31,15 @@ export default function SignUpPage() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const onToggleClick = () => {
     const bodyEl = document.querySelector('body');
-    bodyEl?.setAttribute('class', 'over_hidden');
+    bodyEl?.classList.add('over_hidden');
     setToggle(true);
   };
+  // TODO: 눈 이미지 클릭 시 input창 포커스 방법 모색
   const onEyeClick = (e: React.MouseEvent<HTMLImageElement>) => {
     if (e.currentTarget.id === 'passwordEye') {
       console.log(passwordRef.current?.type);
     }
   };
-  console.log(control);
   return (
     <div className={styles.container}>
       <img className={styles.logo} src={logoImage} alt="로고" />
@@ -238,7 +239,7 @@ export default function SignUpPage() {
           <label>약관</label>
           <div className={styles.termsContainer}>
             <span>
-              <input id="terms" type="checkbox" />
+              <input id="terms" type="checkbox" {...register('terms')} />
               <label htmlFor="terms">서비스 이용약관에 동의(필수)</label>
             </span>
             <button
