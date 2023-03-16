@@ -156,6 +156,9 @@ html {
     font-size: 100%; // 1rem = 16px;
   }
 }
+.over_hidden {
+  overflow-y: hidden;
+}
 .swiper .swiper-pagination-bullet {
   background-color: var(--gray-color);
 }

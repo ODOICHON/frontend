@@ -2,7 +2,8 @@ import logoImage from '@/assets/common/logo.svg';
 import eyeImage from '@/assets/common/eye.svg';
 import { useForm } from 'react-hook-form';
 import styles from './styles.module.scss';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import Terms from '@/components/Terms';
 
 type IForm = {
   id: string;
@@ -15,18 +16,23 @@ type IForm = {
 };
 
 export default function SignUpPage() {
-  const { register, watch, getFieldState, trigger, formState, control } =
-    useForm<IForm>({
-      mode: 'onSubmit',
-      defaultValues: {
-        id: '',
-        password: '',
-        passwordCheck: '',
-        nickname: '',
-        phone: '',
-      },
-    });
+  const { register, watch, control } = useForm<IForm>({
+    mode: 'onSubmit',
+    defaultValues: {
+      id: '',
+      password: '',
+      passwordCheck: '',
+      nickname: '',
+      phone: '',
+    },
+  });
+  const [toggle, setToggle] = useState(false);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const onToggleClick = () => {
+    const bodyEl = document.querySelector('body');
+    bodyEl?.setAttribute('class', 'over_hidden');
+    setToggle(true);
+  };
   const onEyeClick = (e: React.MouseEvent<HTMLImageElement>) => {
     if (e.currentTarget.id === 'passwordEye') {
       console.log(passwordRef.current?.type);
@@ -235,13 +241,18 @@ export default function SignUpPage() {
               <input id="terms" type="checkbox" />
               <label htmlFor="terms">서비스 이용약관에 동의(필수)</label>
             </span>
-            <button className={styles.termsButton} type="button">
+            <button
+              className={styles.termsButton}
+              type="button"
+              onClick={onToggleClick}
+            >
               약관보기 &gt;
             </button>
           </div>
         </div>
         <button className={styles.signUpButton}>회원가입</button>
       </form>
+      {toggle ? <Terms setToggle={setToggle} /> : null}
     </div>
   );
 }
