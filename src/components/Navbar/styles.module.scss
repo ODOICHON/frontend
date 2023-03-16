@@ -31,7 +31,13 @@
   align-items: center;
   gap: 2.5rem;
   font-size: 1.25rem;
-  font-family: 'NanumGothic';
+  font-weight: 700;
+  @include mobile {
+    & > a {
+      font-size: 10px;
+      zoom: 0.8;
+    }
+  }
 }
 .loginContainer {
   @extend .buttonContainer;
