@@ -1,0 +1,65 @@
+.overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 300;
+}
+.termsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 38.25rem;
+  height: 51.5rem;
+  background-color: white;
+  border-radius: 25px;
+  & > h1 {
+    display: flex;
+    align-items: center;
+    padding: 2rem 2.25rem;
+    font-family: 'Pretendard';
+    font-size: 1.875rem;
+    font-weight: 700;
+  }
+  & > div {
+    flex-grow: 1;
+    padding: 0 2.2rem;
+    font-family: 'Pretendard';
+    overflow-y: scroll;
+  }
+  & > button {
+    border: none;
+    border-radius: 0 0 25px 25px;
+    background-color: transparent;
+    padding: 2rem 2.25rem;
+    font-family: 'Pretendard';
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--main-color);
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+article {
+  margin-bottom: 1rem;
+  line-height: 1.5rem;
+}
+ul {
+  padding-left: 1rem;
+  list-style: disc;
+}
+ol {
+  list-style: decimal;
+  padding-left: 1rem;
+}

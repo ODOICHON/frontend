@@ -148,13 +148,16 @@ table {
   box-sizing: border-box;
 }
 html {
-  font-size: 62.5%; // 1rem = 10px;
+  font-size: 52.5%;
   @include tablet {
     font-size: 87.5%; // 1rem = 14px;
   }
   @include desktop {
     font-size: 100%; // 1rem = 16px;
   }
+}
+.over_hidden {
+  overflow-y: hidden;
 }
 .swiper .swiper-pagination-bullet {
   background-color: var(--gray-color);
