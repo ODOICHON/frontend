@@ -8,6 +8,7 @@ import Terms from '@/components/Terms';
 import { useMutation } from '@tanstack/react-query';
 import { restFetcher } from '@/queryClient';
 import useCheckAPI from '@/hooks/useCheckAPI';
+import { useNavigate } from 'react-router-dom';
 
 type IForm = {
   email: string;
@@ -17,8 +18,16 @@ type IForm = {
   phone_num: string;
   phone_check: string;
   age: string;
-  join_paths: string;
+  join_paths: string[];
   terms: boolean;
+};
+type ISubmitForm = {
+  email: string;
+  password: string;
+  nick_name: string;
+  phone_num: string;
+  age: string;
+  join_paths: string[];
 };
 
 export default function SignUpPage() {
@@ -50,7 +59,13 @@ export default function SignUpPage() {
       body: { phone_num: watch('phone_num'), code: phone_check },
     }),
   );
-
+  const { mutate: singUpAPI } = useMutation((form: ISubmitForm) =>
+    restFetcher({
+      method: 'POST',
+      path: '/api/v1/users/sign-up',
+      body: form,
+    }),
+  );
   const {
     register,
     watch,
@@ -66,6 +81,7 @@ export default function SignUpPage() {
       phone_num: '',
     },
   });
+  const navigate = useNavigate();
   const [toggle, setToggle] = useState(false); // 약관 토글
   const [eyeState, setEyeState] = useState(false);
   const [eyeCheckState, setEyeCheckState] = useState(false);
@@ -125,7 +141,32 @@ export default function SignUpPage() {
     });
   };
   const onSubmit = (data: IForm) => {
-    console.log(data);
+    if (!idCheck) {
+      alert('아이디 중복검사를 해주세요.');
+      return;
+    } else if (!nicknameCheck) {
+      alert('닉네임 중복검사를 해주세요.');
+      return;
+    } else if (!phoneSMSCheck) {
+      alert('전화번호 인증을 해주세요.');
+      return;
+    }
+    singUpAPI(
+      {
+        email: data.email,
+        password: data.password,
+        nick_name: data.nick_name,
+        phone_num: data.phone_num,
+        age: data.age,
+        join_paths: data.join_paths,
+      },
+      {
+        onSuccess: () => {
+          alert('회원가입에 성공하였습니다.');
+          navigate('/login');
+        },
+      },
+    );
   };
   return (
     <div className={styles.container}>
@@ -295,7 +336,6 @@ export default function SignUpPage() {
           </p>
         </div>
         {isCheckNum && (
-          // TODO: 인증요청 버튼 클릭 시 인풋 추가하는 코드
           <div className={styles.inputContainer}>
             <label htmlFor="phone_num">인증번호</label>
             <div className={styles.inputInline}>
@@ -343,7 +383,7 @@ export default function SignUpPage() {
                 type="radio"
                 value="20대 미만"
                 {...register('age', {
-                  required: '필수 입력입니다.',
+                  required: '필수 선택입니다.',
                 })}
               />
               <label htmlFor="20대 미만">20대 미만</label>
@@ -387,7 +427,7 @@ export default function SignUpPage() {
                 type="checkbox"
                 value="지인 소개"
                 {...register('join_paths', {
-                  required: '필수 입력입니다.',
+                  required: '필수 선택입니다.',
                 })}
               />
               <label htmlFor="지인 소개">지인소개</label>
@@ -468,7 +508,7 @@ export default function SignUpPage() {
               <input
                 id="terms"
                 type="checkbox"
-                {...register('terms', { required: '필수 입력입니다.' })}
+                {...register('terms', { required: '필수 선택입니다.' })}
               />
               <label htmlFor="terms">서비스 이용약관에 동의(필수)</label>
             </span>
