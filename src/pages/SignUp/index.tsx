@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import styles from './styles.module.scss';
 import { useState } from 'react';
 import Terms from '@/components/Terms';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { restFetcher } from '@/queryClient';
 import useCheckAPI from '@/hooks/useCheckAPI';
 
@@ -15,6 +15,7 @@ type IForm = {
   passwordCheck: string;
   nick_name: string;
   phone_num: string;
+  phone_check: string;
   age: string;
   join_paths: string;
   terms: boolean;
@@ -35,6 +36,21 @@ export default function SignUpPage() {
       body: { nick_name },
     }),
   );
+  const { mutate: phoneSMSAPI } = useMutation((phone_num: string) =>
+    restFetcher({
+      method: 'POST',
+      path: '/api/v1/users/send/sms',
+      body: { phone_num },
+    }),
+  );
+  const { mutate: phoneCheckAPI } = useMutation((phone_check: string) =>
+    restFetcher({
+      method: 'POST',
+      path: '/api/v1/users/check/sms',
+      body: { phone_num: watch('phone_num'), code: phone_check },
+    }),
+  );
+
   const {
     register,
     watch,
@@ -50,9 +66,12 @@ export default function SignUpPage() {
       phone_num: '',
     },
   });
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(false); // 약관 토글
   const [eyeState, setEyeState] = useState(false);
   const [eyeCheckState, setEyeCheckState] = useState(false);
+  const [isCheckNum, setIsCheckNum] = useState(false); // 전화번호 인증 중 상태
+  const [phoneSMSCheck, setPhoneSMSCheck] = useState(false); // 전화번호 인증 완료 상태
+  const [phoneSMSMessage, setPhoneSMSMessage] = useState<string | undefined>(); // 전화번호 인증 완료 상태
   const [idCheck, idCheckMessage, idCheckHandler] = useCheckAPI(
     idCheckAPI,
     /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g,
@@ -78,6 +97,32 @@ export default function SignUpPage() {
   const onEyeClick = (e: React.MouseEvent<HTMLImageElement>) => {
     if (e.currentTarget.id === 'passwordEye') setEyeState((prev) => !prev);
     else setEyeCheckState((prev) => !prev);
+  };
+  const onSendSMS = () => {
+    if (/^01(?:0|1|[6-9])[0-9]{7,8}/g.test(watch('phone_num')) === false)
+      return;
+    phoneSMSAPI(watch('phone_num'), {
+      onSuccess: () => {
+        setIsCheckNum(true);
+      },
+    });
+  };
+  const onCheckSMS = () => {
+    if (/^(?=.*[0-9])[0-9]{4}$/g.test(watch('phone_check')) === false) {
+      setPhoneSMSCheck(false);
+      setPhoneSMSMessage('잘못된 인증번호입니다.');
+    }
+    phoneCheckAPI(watch('phone_check'), {
+      onSuccess: (res) => {
+        if (res.data === true) {
+          setPhoneSMSCheck(true);
+          setPhoneSMSMessage('인증에 성공하셨습니다.');
+        } else if (res.data === false) {
+          setPhoneSMSCheck(false);
+          setPhoneSMSMessage('인증번호가 일치하지 않습니다.');
+        }
+      },
+    });
   };
   const onSubmit = (data: IForm) => {
     console.log(data);
@@ -196,7 +241,13 @@ export default function SignUpPage() {
             />
             <button
               type="button"
-              className={styles.buttonStyle}
+              className={
+                /^(?=.*[a-zA-Z0-9가-힣])[A-Za-z0-9가-힣]{1,20}$/g.test(
+                  watch('nick_name'),
+                )
+                  ? styles.buttonStyleActive
+                  : styles.buttonStyle
+              }
               onClick={nicknameCheckHandler}
             >
               중복확인
@@ -227,7 +278,15 @@ export default function SignUpPage() {
                 },
               })}
             />
-            <button type="button" className={styles.buttonStyle}>
+            <button
+              type="button"
+              className={
+                /^01(?:0|1|[6-9])[0-9]{7,8}/g.test(watch('phone_num'))
+                  ? styles.buttonStyleActive
+                  : styles.buttonStyle
+              }
+              onClick={onSendSMS}
+            >
               인증요청
             </button>
           </div>
@@ -235,9 +294,46 @@ export default function SignUpPage() {
             {errors.phone_num && errors.phone_num.message}
           </p>
         </div>
-        {
+        {isCheckNum && (
           // TODO: 인증요청 버튼 클릭 시 인풋 추가하는 코드
-        }
+          <div className={styles.inputContainer}>
+            <label htmlFor="phone_num">인증번호</label>
+            <div className={styles.inputInline}>
+              <input
+                className={styles.inputStyle}
+                id="phone_num"
+                type="text"
+                placeholder="인증문자 4자리"
+                {...register('phone_check', {
+                  required: '휴대폰 번호 인증을 해주세요.',
+                  pattern: {
+                    value: /^(?=.*[0-9])[0-9]{4}$/g,
+                    message: '인증문자 4자리를 입력해주세요.',
+                  },
+                })}
+              />
+              <button
+                type="button"
+                className={
+                  /^(?=.*[0-9])[0-9]{4}$/g.test(watch('phone_check'))
+                    ? styles.buttonStyleActive
+                    : styles.buttonStyle
+                }
+                onClick={onCheckSMS}
+              >
+                확인
+              </button>
+            </div>
+            <p
+              className={
+                phoneSMSCheck ? styles.correctMessage : styles.errorMessage
+              }
+            >
+              {errors.phone_check && errors.phone_check.message}
+              {!errors.phone_check && phoneSMSMessage && phoneSMSMessage}
+            </p>
+          </div>
+        )}
         <div className={styles.inputContainer}>
           <label>연령대</label>
           <div className={styles.boxContainer}>
