@@ -25,7 +25,7 @@ export const getClient = (() => {
   };
 })();
 
-const BASE_URL = '';
+const BASE_URL = 'https://duaily.net';
 
 export const restFetcher = async ({
   method,

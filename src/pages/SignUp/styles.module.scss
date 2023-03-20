@@ -1,3 +1,4 @@
+@import '@/media.scss';
 .container {
   width: 100vw;
   min-height: calc(100vh - 77px);
@@ -24,7 +25,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
   & > label {
     font-family: 'Pretendard';
     font-weight: 700;
@@ -72,7 +73,7 @@
         margin-right: 0.25rem;
         cursor: pointer;
         &:checked {
-          background-color: var(--darkgray-color);
+          background-color: var(--main-color);
         }
       }
       & > label {
@@ -114,10 +115,16 @@
     opacity: 0.8;
   }
 }
+.buttonStyleActive {
+  @extend .buttonStyle;
+  background-color: var(--main-color);
+  border: none;
+  color: white;
+}
 .eyeImage {
   position: absolute;
   right: 2rem;
-  top: calc(50% - 1.25rem / 2 + 1.75rem / 2);
+  top: 3.5rem;
   width: 1.5rem;
   cursor: pointer;
   &:hover {
@@ -155,7 +162,7 @@
       margin-right: 1.125rem;
       cursor: pointer;
       &:checked {
-        background-color: var(--darkgray-color);
+        background-color: var(--main-color);
       }
     }
     & > label {
@@ -176,6 +183,9 @@
   &:hover {
     opacity: 0.8;
   }
+  @include mobile {
+    zoom: 0.8;
+  }
 }
 .signUpButton {
   width: 100%;
@@ -189,4 +199,17 @@
   &:hover {
     opacity: 0.8;
   }
+}
+
+.errorMessage {
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  min-height: 1.2rem;
+  color: #f24147;
+  font-family: 'Pretendard';
+  font-size: 1rem;
+}
+.correctMessage {
+  @extend .errorMessage;
+  color: #1bbf83;
 }
