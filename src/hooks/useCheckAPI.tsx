@@ -20,6 +20,7 @@ const useCheckAPI = (
     }
     mutateFn(value, {
       onSuccess: (res) => {
+        if (!res) throw Error;
         if (res.data === true) {
           setCheckState(true);
           setCheckMessage(correctMsg || '사용 가능합니다.');
