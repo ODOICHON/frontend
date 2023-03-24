@@ -1,42 +1,13 @@
 import removeImg from '@/assets/common/remove.png';
 import { opacityVariants } from '@/constants/variants';
 import useInput from '@/hooks/useInput';
-import { restFetcher } from '@/queryClient';
-import userStore from '@/store/userStore';
-import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
-
-type LoginForm = {
-  email: string;
-  password: string;
-};
+import { LoginAPI, LoginForm } from '@/apis/login';
+import userStore from '@/store/userStore';
 
 export default function LoginPage() {
-  const { mutate: loginAPI } = useMutation(
-    (form: LoginForm) =>
-      restFetcher({
-        method: 'POST',
-        path: '/api/v1/users/sign-in',
-        body: form,
-      }),
-    {
-      onSuccess: (res) => {
-        if (!res || res.code !== 'SUCCESS') throw Error;
-        const tokens: Tokens = {
-          access_token: res.data.access_token,
-          refresh_token: res.data.refresh_token,
-        };
-        setTokens(tokens);
-        navigate('/');
-      },
-      onError(err) {
-        console.log(err);
-      },
-    },
-  );
   const { setTokens } = userStore();
   const navigate = useNavigate();
   const [id, handleId, setId] = useInput('');
@@ -47,16 +18,20 @@ export default function LoginPage() {
       setPassword('');
     else return;
   };
-  const handleLogin = () => {
-    if (id === '' || password === '') {
-      alert('아이디 또는 비밀번호를 입력하세요.');
-      return;
-    }
+  const handleLogin = async () => {
     const form: LoginForm = {
       email: id,
       password,
     };
-    loginAPI(form);
+    const response = await LoginAPI(form);
+    if (response?.code === 'SUCCESS') {
+      const tokens: Tokens = {
+        access_token: response!.data.access_token,
+        refresh_token: response!.data.refresh_token,
+      };
+      setTokens(tokens);
+      navigate('/');
+    }
   };
   return (
     <motion.div
