@@ -3,12 +3,14 @@ import eyeImage from '@/assets/common/eye.svg';
 import eyeClosedImage from '@/assets/common/eyeClosed.svg';
 import { useForm } from 'react-hook-form';
 import styles from './styles.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Terms from '@/components/Terms';
 import { useMutation } from '@tanstack/react-query';
 import { restFetcher } from '@/queryClient';
 import useCheckAPI from '@/hooks/useCheckAPI';
 import { useNavigate } from 'react-router-dom';
+import { opacityVariants } from '@/constants/variants';
+import { motion } from 'framer-motion';
 
 type IForm = {
   email: string;
@@ -88,7 +90,14 @@ export default function SignUpPage() {
   const [isCheckNum, setIsCheckNum] = useState(false); // 전화번호 인증 중 상태
   const [phoneSMSCheck, setPhoneSMSCheck] = useState(false); // 전화번호 인증 완료 상태
   const [phoneSMSMessage, setPhoneSMSMessage] = useState<string | undefined>(); // 전화번호 인증 완료 상태
-  const [idCheck, idCheckMessage, idCheckHandler] = useCheckAPI(
+  const [phoneErrMessage, setPhoneErrMessage] = useState<string | undefined>(); // 전화번호 에러 메세지
+  const [
+    idCheck,
+    idCheckMessage,
+    idCheckHandler,
+    setIdCheck,
+    setIdCheckMessage,
+  ] = useCheckAPI(
     idCheckAPI,
     /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g,
     watch('email'),
@@ -96,15 +105,20 @@ export default function SignUpPage() {
     '이미 존재하는 아이디 입니다.',
     '4~20자리/영문, 숫자, 특수문자’_’만 사용해주세요.',
   );
-  const [nicknameCheck, nicknameCheckMessage, nicknameCheckHandler] =
-    useCheckAPI(
-      nicknameCheckAPI,
-      /^(?=.*[a-zA-Z0-9가-힣])[A-Za-z0-9가-힣]{1,20}$/g,
-      watch('nick_name'),
-      '사용가능한 닉네임입니다.',
-      '이미 존재하는 닉네임 입니다. ',
-      '20자 이하의 조합만 사용해주세요. ',
-    );
+  const [
+    nicknameCheck,
+    nicknameCheckMessage,
+    nicknameCheckHandler,
+    setNicknameCheck,
+    setNicknameCheckMessage,
+  ] = useCheckAPI(
+    nicknameCheckAPI,
+    /^(?=.*[a-zA-Z0-9가-힣])[A-Za-z0-9가-힣]{1,20}$/g,
+    watch('nick_name'),
+    '사용가능한 닉네임입니다.',
+    '이미 존재하는 닉네임 입니다.',
+    '닉네임 형식에 맞지 않습니다.',
+  );
   const onToggleClick = () => {
     const bodyEl = document.querySelector('body');
     bodyEl?.classList.add('over_hidden');
@@ -115,11 +129,16 @@ export default function SignUpPage() {
     else setEyeCheckState((prev) => !prev);
   };
   const onSendSMS = () => {
-    if (/^01(?:0|1|[6-9])[0-9]{7,8}/g.test(watch('phone_num')) === false)
+    if (/^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(watch('phone_num')) === false)
       return;
     phoneSMSAPI(watch('phone_num'), {
-      onSuccess: () => {
+      onSuccess: (res) => {
+        if (!res) throw Error;
+        setPhoneErrMessage(undefined);
         setIsCheckNum(true);
+      },
+      onError: () => {
+        setPhoneErrMessage('이미 가입된 전화번호입니다.');
       },
     });
   };
@@ -139,6 +158,14 @@ export default function SignUpPage() {
         }
       },
     });
+  };
+  const onChangeInput = (
+    setCheckState: React.Dispatch<React.SetStateAction<boolean>>,
+    setMessage: React.Dispatch<React.SetStateAction<string>>,
+    feild: string,
+  ) => {
+    setCheckState(false);
+    setMessage(`${feild} 중복검사를 해주세요`);
   };
   const onSubmit = (data: IForm) => {
     if (!idCheck) {
@@ -168,8 +195,23 @@ export default function SignUpPage() {
       },
     );
   };
+  useEffect(() => {
+    onChangeInput(setIdCheck, setIdCheckMessage, '아이디');
+  }, [watch('email')]);
+  useEffect(() => {
+    onChangeInput(setNicknameCheck, setNicknameCheckMessage, '닉네임');
+  }, [watch('nick_name')]);
+  useEffect(() => {
+    setPhoneSMSCheck(false);
+    setPhoneSMSMessage('전화번호 인증을 해주세요.');
+  }, [watch('phone_num')]);
   return (
-    <div className={styles.container}>
+    <motion.div
+      variants={opacityVariants}
+      initial="initial"
+      animate="mount"
+      className={styles.container}
+    >
       <img className={styles.logo} src={logoImage} alt="로고" />
       <form className={styles.formContent}>
         <div className={styles.inputContainer}>
@@ -314,7 +356,7 @@ export default function SignUpPage() {
               {...register('phone_num', {
                 required: '전화번호를 입력해주세요.',
                 pattern: {
-                  value: /^01(?:0|1|[6-9])[0-9]{7,8}/g,
+                  value: /^01(?:0|1|[6-9])[0-9]{7,8}$/g,
                   message: '‘-’빼고 숫자만 입력해주세요.',
                 },
               })}
@@ -322,7 +364,7 @@ export default function SignUpPage() {
             <button
               type="button"
               className={
-                /^01(?:0|1|[6-9])[0-9]{7,8}/g.test(watch('phone_num'))
+                /^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(watch('phone_num'))
                   ? styles.buttonStyleActive
                   : styles.buttonStyle
               }
@@ -333,6 +375,7 @@ export default function SignUpPage() {
           </div>
           <p className={styles.errorMessage}>
             {errors.phone_num && errors.phone_num.message}
+            {!errors.phone_num && phoneErrMessage && phoneErrMessage}
           </p>
         </div>
         {isCheckNum && (
@@ -532,6 +575,6 @@ export default function SignUpPage() {
         </button>
       </form>
       {toggle ? <Terms setToggle={setToggle} /> : null}
-    </div>
+    </motion.div>
   );
 }

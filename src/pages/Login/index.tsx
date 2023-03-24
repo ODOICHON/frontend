@@ -2,10 +2,14 @@ import removeImg from '@/assets/common/remove.png';
 import { opacityVariants } from '@/constants/variants';
 import useInput from '@/hooks/useInput';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
+import { LoginAPI, LoginForm } from '@/apis/login';
+import userStore from '@/store/userStore';
 
 export default function LoginPage() {
+  const { setTokens } = userStore();
+  const navigate = useNavigate();
   const [id, handleId, setId] = useInput('');
   const [password, handlePassword, setPassword] = useInput('');
   const handleRemove = (e: React.SyntheticEvent) => {
@@ -13,6 +17,21 @@ export default function LoginPage() {
     if (e.currentTarget.parentElement?.id === 'passwordContainer')
       setPassword('');
     else return;
+  };
+  const handleLogin = async () => {
+    const form: LoginForm = {
+      email: id,
+      password,
+    };
+    const response = await LoginAPI(form);
+    if (response?.code === 'SUCCESS') {
+      const tokens: Tokens = {
+        access_token: response!.data.access_token,
+        refresh_token: response!.data.refresh_token,
+      };
+      setTokens(tokens);
+      navigate('/');
+    }
   };
   return (
     <motion.div
@@ -55,7 +74,9 @@ export default function LoginPage() {
             />
           )}
         </div>
-        <button className={styles.loginButton}>로그인</button>
+        <button className={styles.loginButton} onClick={handleLogin}>
+          로그인
+        </button>
         <span className={styles.subContainer}>
           <p>회원으로 가입하고 싶으신가요?</p>
           <Link to="/signup">회원가입</Link>

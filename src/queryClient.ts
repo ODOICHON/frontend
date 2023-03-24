@@ -25,8 +25,6 @@ export const getClient = (() => {
   };
 })();
 
-const BASE_URL = 'https://duaily.net';
-
 export const restFetcher = async ({
   method,
   path,
@@ -39,7 +37,7 @@ export const restFetcher = async ({
   params?: AnyOBJ;
 }) => {
   try {
-    let url = `${BASE_URL}${path}`;
+    let url = `${path}`;
     const axiosConfig: AxiosRequestConfig = {
       method,
     };
