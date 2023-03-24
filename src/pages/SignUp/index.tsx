@@ -3,12 +3,14 @@ import eyeImage from '@/assets/common/eye.svg';
 import eyeClosedImage from '@/assets/common/eyeClosed.svg';
 import { useForm } from 'react-hook-form';
 import styles from './styles.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Terms from '@/components/Terms';
 import { useMutation } from '@tanstack/react-query';
 import { restFetcher } from '@/queryClient';
 import useCheckAPI from '@/hooks/useCheckAPI';
 import { useNavigate } from 'react-router-dom';
+import { opacityVariants } from '@/constants/variants';
+import { motion } from 'framer-motion';
 
 type IForm = {
   email: string;
@@ -89,7 +91,13 @@ export default function SignUpPage() {
   const [phoneSMSCheck, setPhoneSMSCheck] = useState(false); // 전화번호 인증 완료 상태
   const [phoneSMSMessage, setPhoneSMSMessage] = useState<string | undefined>(); // 전화번호 인증 완료 상태
   const [phoneErrMessage, setPhoneErrMessage] = useState<string | undefined>(); // 전화번호 에러 메세지
-  const [idCheck, idCheckMessage, idCheckHandler] = useCheckAPI(
+  const [
+    idCheck,
+    idCheckMessage,
+    idCheckHandler,
+    setIdCheck,
+    setIdCheckMessage,
+  ] = useCheckAPI(
     idCheckAPI,
     /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g,
     watch('email'),
@@ -97,15 +105,20 @@ export default function SignUpPage() {
     '이미 존재하는 아이디 입니다.',
     '4~20자리/영문, 숫자, 특수문자’_’만 사용해주세요.',
   );
-  const [nicknameCheck, nicknameCheckMessage, nicknameCheckHandler] =
-    useCheckAPI(
-      nicknameCheckAPI,
-      /^(?=.*[a-zA-Z0-9가-힣])[A-Za-z0-9가-힣]{1,20}$/g,
-      watch('nick_name'),
-      '사용가능한 닉네임입니다.',
-      '이미 존재하는 닉네임 입니다.',
-      '닉네임 형식에 맞지 않습니다.',
-    );
+  const [
+    nicknameCheck,
+    nicknameCheckMessage,
+    nicknameCheckHandler,
+    setNicknameCheck,
+    setNicknameCheckMessage,
+  ] = useCheckAPI(
+    nicknameCheckAPI,
+    /^(?=.*[a-zA-Z0-9가-힣])[A-Za-z0-9가-힣]{1,20}$/g,
+    watch('nick_name'),
+    '사용가능한 닉네임입니다.',
+    '이미 존재하는 닉네임 입니다.',
+    '닉네임 형식에 맞지 않습니다.',
+  );
   const onToggleClick = () => {
     const bodyEl = document.querySelector('body');
     bodyEl?.classList.add('over_hidden');
@@ -121,6 +134,7 @@ export default function SignUpPage() {
     phoneSMSAPI(watch('phone_num'), {
       onSuccess: (res) => {
         if (!res) throw Error;
+        setPhoneErrMessage(undefined);
         setIsCheckNum(true);
       },
       onError: () => {
@@ -144,6 +158,14 @@ export default function SignUpPage() {
         }
       },
     });
+  };
+  const onChangeInput = (
+    setCheckState: React.Dispatch<React.SetStateAction<boolean>>,
+    setMessage: React.Dispatch<React.SetStateAction<string>>,
+    feild: string,
+  ) => {
+    setCheckState(false);
+    setMessage(`${feild} 중복검사를 해주세요`);
   };
   const onSubmit = (data: IForm) => {
     if (!idCheck) {
@@ -173,8 +195,23 @@ export default function SignUpPage() {
       },
     );
   };
+  useEffect(() => {
+    onChangeInput(setIdCheck, setIdCheckMessage, '아이디');
+  }, [watch('email')]);
+  useEffect(() => {
+    onChangeInput(setNicknameCheck, setNicknameCheckMessage, '닉네임');
+  }, [watch('nick_name')]);
+  useEffect(() => {
+    setPhoneSMSCheck(false);
+    setPhoneSMSMessage('전화번호 인증을 해주세요.');
+  }, [watch('phone_num')]);
   return (
-    <div className={styles.container}>
+    <motion.div
+      variants={opacityVariants}
+      initial="initial"
+      animate="mount"
+      className={styles.container}
+    >
       <img className={styles.logo} src={logoImage} alt="로고" />
       <form className={styles.formContent}>
         <div className={styles.inputContainer}>
@@ -538,6 +575,6 @@ export default function SignUpPage() {
         </button>
       </form>
       {toggle ? <Terms setToggle={setToggle} /> : null}
-    </div>
+    </motion.div>
   );
 }

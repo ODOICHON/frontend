@@ -1,7 +1,13 @@
 import { UseMutateFunction } from '@tanstack/react-query';
 import { useState } from 'react';
 
-type ReturnType = [boolean, string, () => void];
+type ReturnType = [
+  boolean,
+  string,
+  () => void,
+  React.Dispatch<React.SetStateAction<boolean>>,
+  React.Dispatch<React.SetStateAction<string>>,
+];
 
 const useCheckAPI = (
   mutateFn: UseMutateFunction<any, unknown, string, unknown>,
@@ -31,7 +37,7 @@ const useCheckAPI = (
       },
     });
   };
-  return [checkState, checkMessage, handler];
+  return [checkState, checkMessage, handler, setCheckState, setCheckMessage];
 };
 
 export default useCheckAPI;
