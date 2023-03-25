@@ -1,0 +1,60 @@
+@import '@/media.scss';
+.wrapper {
+  position: relative;
+}
+.dropdownWrapper {
+  display: flex;
+  gap: 0.2rem;
+  color: #878d91;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.notClicked {
+  transition: 0.2s ease-in;
+}
+
+.clicked {
+  transition: 0.2s ease-in;
+  transform: rotate(180deg);
+}
+
+.image {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.dropdown {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  padding-left: 1rem;
+  top: 2rem;
+  left: -30%;
+  width: 7.5rem;
+  height: 7rem;
+  border: 1px solid #ced3d6;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.dropdownMenu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  & > p {
+    font-size: 0.8rem;
+    @include mobile {
+      zoom: 0.8;
+    }
+  }
+  &:hover {
+    color: var(--main-color);
+  }
+}

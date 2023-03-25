@@ -39,19 +39,3 @@
     }
   }
 }
-.loginContainer {
-  @extend .buttonContainer;
-  gap: 1rem;
-}
-.button {
-  height: 2.5rem;
-  padding: 0.625rem 1.5rem;
-  border-radius: 30px;
-  &:first-child {
-    color: white;
-    background-color: var(--main-color);
-  }
-  &:last-child {
-    background-color: var(--gray-color);
-  }
-}
