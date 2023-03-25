@@ -6,6 +6,7 @@ export const LoginAPI = async (form: LoginForm) => {
       '/api/v1/users/sign-in',
       form,
     );
+    axios.defaults.headers.common['Authorization'] = data.data.access_token;
     return data;
   } catch (err) {
     alert((err as AxiosError<LoginError, undefined>).response?.data.message);
