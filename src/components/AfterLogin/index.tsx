@@ -53,7 +53,7 @@ export default function AfterLogin() {
         <ul className={styles.dropdown}>
           <li className={styles.dropdownMenu}>
             <img className={styles.image} src={homeImage} />
-            <p>마이페이지</p>
+            <p onClick={() => navigate('/mypage')}>마이페이지</p>
           </li>
           <li className={styles.dropdownMenu}>
             <img className={styles.image} src={logOutImage} />

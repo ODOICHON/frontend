@@ -8,9 +8,10 @@ import Terms from '@/components/Terms';
 import { useMutation } from '@tanstack/react-query';
 import { restFetcher } from '@/queryClient';
 import useCheckAPI from '@/hooks/useCheckAPI';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { opacityVariants } from '@/constants/variants';
 import { motion } from 'framer-motion';
+import userStore from '@/store/userStore';
 
 type IForm = {
   email: string;
@@ -84,6 +85,7 @@ export default function SignUpPage() {
     },
   });
   const navigate = useNavigate();
+  const { tokens } = userStore();
   const [toggle, setToggle] = useState(false); // 약관 토글
   const [eyeState, setEyeState] = useState(false);
   const [eyeCheckState, setEyeCheckState] = useState(false);
@@ -205,6 +207,10 @@ export default function SignUpPage() {
     setPhoneSMSCheck(false);
     setPhoneSMSMessage('전화번호 인증을 해주세요.');
   }, [watch('phone_num')]);
+
+  if (tokens) {
+    return <Navigate to="/" />;
+  }
   return (
     <motion.div
       variants={opacityVariants}
