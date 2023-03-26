@@ -2,13 +2,13 @@ import removeImg from '@/assets/common/remove.png';
 import { opacityVariants } from '@/constants/variants';
 import useInput from '@/hooks/useInput';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
 import { LoginAPI, LoginForm } from '@/apis/login';
 import userStore from '@/store/userStore';
 
 export default function LoginPage() {
-  const { setTokens } = userStore();
+  const { tokens, setTokens } = userStore();
   const navigate = useNavigate();
   const [id, handleId, setId] = useInput('');
   const [password, handlePassword, setPassword] = useInput('');
@@ -33,6 +33,9 @@ export default function LoginPage() {
       navigate('/');
     }
   };
+  if (tokens) {
+    return <Navigate to="/" />;
+  }
   return (
     <motion.div
       className={styles.container}

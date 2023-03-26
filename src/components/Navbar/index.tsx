@@ -14,9 +14,9 @@ export default function Navbar() {
           <img className={styles.logo} src={logo} alt="logo" />
         </Link>
         <div className={styles.buttonContainer}>
-          <Link to="#">오도이촌 소개</Link>
-          <Link to="#">빈집거래</Link>
-          <Link to="#">커뮤니티</Link>
+          <Link to="/introduce">오도이촌 소개</Link>
+          <Link to="/trade">빈집거래</Link>
+          <Link to="/community">커뮤니티</Link>
           {tokens ? <AfterLogin /> : <BeforeLogin />}
         </div>
       </div>
