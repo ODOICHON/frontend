@@ -27,15 +27,36 @@
   width: 8.875rem;
 }
 .buttonContainer {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 2.5rem;
   font-size: 1.25rem;
   font-weight: 700;
+  // & > a {
+  //   transition: 0.5s ease-in;
+  // }
   @include mobile {
     & > a {
       font-size: 10px;
       zoom: 0.8;
     }
   }
+}
+
+.underline {
+  position: absolute;
+  margin-top: 0.5rem;
+  width: 0;
+  height: 0.25rem;
+  background-color: var(--main-color);
+  border-radius: 5px;
+  transition: 0.5s;
+  @include mobile {
+    zoom: 0.8;
+  }
+}
+
+.focusMenu {
+  color: var(--main-color);
 }
