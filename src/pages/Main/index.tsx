@@ -16,8 +16,22 @@ import dayjs from 'dayjs';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { opacityVariants } from '@/constants/variants';
+import { useQuery } from '@tanstack/react-query';
+import { QueryKeys, restFetcher } from '@/queryClient';
+import userStore from '@/store/userStore';
+import { GetUserData } from '@/types/userType';
 
 export default function MainPage() {
+  const { setUser } = userStore();
+  const {} = useQuery<GetUserData>(
+    [QueryKeys.USER],
+    () => restFetcher({ method: 'GET', path: '/users' }),
+    {
+      onSuccess: (res) => {
+        setUser(res.data);
+      },
+    },
+  );
   const [_, updateState] = useState(false);
   const introNextRef = useRef<HTMLButtonElement>(null);
   const introPrevRef = useRef<HTMLButtonElement>(null);

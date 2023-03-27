@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const LogoutAPI = async () => {
-  const response = await axios.post<LogoutSuccess>('/api/v1/users/logout');
+  const response = await axios.post<LogoutSuccess>('/users/logout');
   if (response.data.code === 'SUCCESS') {
     delete axios.defaults.headers.common['Authorization'];
   }
