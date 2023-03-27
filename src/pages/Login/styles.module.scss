@@ -46,6 +46,10 @@
   height: 1.5rem;
   right: calc(1.625rem - 1.5rem / 2);
   top: calc(4.5rem / 2 - 1.5rem / 2);
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 .loginButton {
   width: 30rem;
