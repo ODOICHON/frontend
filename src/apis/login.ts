@@ -2,10 +2,7 @@ import axios, { AxiosError } from 'axios';
 
 export const LoginAPI = async (form: LoginForm) => {
   try {
-    const { data } = await axios.post<LoginSuccess>(
-      '/api/v1/users/sign-in',
-      form,
-    );
+    const { data } = await axios.post<LoginSuccess>('/users/sign-in', form);
     axios.defaults.headers.common['Authorization'] = data.data.access_token;
     return data;
   } catch (err) {

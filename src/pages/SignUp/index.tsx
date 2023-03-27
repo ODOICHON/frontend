@@ -37,35 +37,35 @@ export default function SignUpPage() {
   const { mutate: idCheckAPI } = useMutation((email: string) =>
     restFetcher({
       method: 'POST',
-      path: '/api/v1/users/check/email',
+      path: '/users/check/email',
       body: { email },
     }),
   );
   const { mutate: nicknameCheckAPI } = useMutation((nick_name: string) =>
     restFetcher({
       method: 'POST',
-      path: '/api/v1/users/check/nick-name',
+      path: '/users/check/nick-name',
       body: { nick_name },
     }),
   );
   const { mutate: phoneSMSAPI } = useMutation((phone_num: string) =>
     restFetcher({
       method: 'POST',
-      path: '/api/v1/users/send/sms',
+      path: '/users/send/sms',
       body: { phone_num },
     }),
   );
   const { mutate: phoneCheckAPI } = useMutation((phone_check: string) =>
     restFetcher({
       method: 'POST',
-      path: '/api/v1/users/check/sms',
+      path: '/users/check/sms',
       body: { phone_num: watch('phone_num'), code: phone_check },
     }),
   );
   const { mutate: singUpAPI } = useMutation((form: ISubmitForm) =>
     restFetcher({
       method: 'POST',
-      path: '/api/v1/users/sign-up',
+      path: '/users/sign-up',
       body: form,
     }),
   );

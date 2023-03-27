@@ -26,11 +26,22 @@ export default function LoginPage() {
     const response = await LoginAPI(form);
     if (response?.code === 'SUCCESS') {
       const tokens: Tokens = {
-        access_token: response!.data.access_token,
-        refresh_token: response!.data.refresh_token,
+        access_token: response?.data.access_token,
+        refresh_token: response?.data.refresh_token,
       };
       setTokens(tokens);
       navigate('/');
+    }
+  };
+  const onKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      e.currentTarget.value.length !== 0 &&
+      e.key === 'Enter' &&
+      !e.shiftKey &&
+      e.nativeEvent.isComposing === false
+    ) {
+      e.preventDefault();
+      handleLogin();
     }
   };
   if (tokens) {
@@ -66,6 +77,7 @@ export default function LoginPage() {
             className={styles.inputBox}
             type="password"
             value={password}
+            onKeyDown={onKeydown}
             onChange={handlePassword}
             placeholder="비밀번호"
           />
