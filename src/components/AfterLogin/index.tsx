@@ -39,13 +39,16 @@ export default function AfterLogin() {
       </span>
       {isClicked && (
         <ul className={styles.dropdown}>
-          <li className={styles.dropdownMenu}>
+          <li
+            className={styles.dropdownMenu}
+            onClick={() => navigate('/mypage')}
+          >
             <img className={styles.image} src={homeImage} />
-            <p onClick={() => navigate('/mypage')}>마이페이지</p>
+            <p>마이페이지</p>
           </li>
-          <li className={styles.dropdownMenu}>
+          <li className={styles.dropdownMenu} onClick={handleLogout}>
             <img className={styles.image} src={logOutImage} />
-            <p onClick={handleLogout}>로그아웃</p>
+            <p>로그아웃</p>
           </li>
         </ul>
       )}
