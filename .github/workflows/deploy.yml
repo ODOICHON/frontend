@@ -1,0 +1,58 @@
+name: Deploy
+on:
+  push:
+    branches: 'master'
+
+env:
+  PROJECT_NAME: duaily-client
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code. # Repo checkout
+        uses: actions/checkout@v2
+
+      - name: Check Node v # Node v 확인
+        run: node -v
+
+      - name: Cache node modules # node modules 캐싱
+        uses: actions/cache@v1
+        with: # with 구문으로 설정할 수 있는데, path와 key를 반드시 설정해주어야 함
+          path: node_modules # 저장하고 불러올 캐시 대상 폴더
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }} # 저장하고 불러올 때 식별할 수 있는 키 값
+          restore-keys:
+            | # 캐시 key가 일치하는 것이 없을 때, 차선택으로 캐싱 폴더를 찾는 key
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: Install Dependencies # 의존 파일 설치
+        run: yarn install --frozen-lockfile
+
+      - name: Setting .env (Dev)
+        run: echo "${{ secrets.REACT_ENV }}" >> .env
+
+      - name: Build # React Build
+        run: yarn build
+
+      - name: zip create # zip 파일을 만듭니다
+        run: zip -r ./$GITHUB_SHA.zip ./dist appspec.yml
+        shell: bash
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload to S3 # S3에 파일 업로드
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://${{ secrets.S3_BUCKET_NAME }}/$PROJECT_NAME/$GITHUB_SHA.zip
+
+      - name: Code Deploy (Dev) # CodeDeploy 배포
+        run: |
+          aws deploy create-deployment \
+          --application-name duaily-deploy \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name duaily-deploy-group-client \
+          --s3-location bucket=${{ secrets.S3_BUCKET_NAME_DEV }},bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
