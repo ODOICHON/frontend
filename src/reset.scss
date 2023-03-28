@@ -5,11 +5,11 @@
 @import './media.scss';
 
 :root {
-  --background-color: #a8b0d7;
-  --poision-color: #373261;
-  --safe-color: #5d7151;
-  --button-color: #9675f5;
-  --purple-color: #690e89;
+  --main-color: #ec6130;
+  --gray-color: #d9d9d9;
+  --darkgray-color: #878d91;
+  --gray-background: #eaeeef;
+  --background-color: #f8fafb;
 }
 
 html,
@@ -115,9 +115,15 @@ section {
 }
 body {
   line-height: 1;
-  font-family: 'Yeon Sung', cursive;
-  // font-family: "Sunshiney", cursive;
-  background-color: var(--background-color);
+  font-family: 'NanumSquareAcR';
+  // font-family: 'Pretendard';
+}
+a {
+  color: black;
+  text-decoration: none;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 ol,
 ul {
@@ -142,11 +148,25 @@ table {
   box-sizing: border-box;
 }
 html {
-  font-size: 62.5%; // 1rem = 10px;
+  font-size: 52.5%;
   @include tablet {
     font-size: 87.5%; // 1rem = 14px;
   }
   @include desktop {
     font-size: 100%; // 1rem = 16px;
   }
+}
+.over_hidden {
+  overflow-y: hidden;
+}
+.swiper .swiper-pagination-bullet {
+  background-color: var(--gray-color);
+}
+.swiper .swiper-pagination-bullet-active {
+  background-color: #00c18c;
+}
+.swiper-button-next:after {
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }
