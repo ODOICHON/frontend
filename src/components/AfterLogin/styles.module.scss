@@ -58,3 +58,18 @@
     color: var(--main-color);
   }
 }
+
+.mobileWrapper {
+  display: flex;
+  flex-direction: column;
+  & > * {
+    color: var(--darkgray-color);
+    padding: 1rem 0;
+  }
+  & > p {
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}

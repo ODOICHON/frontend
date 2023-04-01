@@ -23,15 +23,15 @@ import { GetUserData } from '@/types/userType';
 
 export default function MainPage() {
   const { setUser } = userStore();
-  const {} = useQuery<GetUserData>(
-    [QueryKeys.USER],
-    () => restFetcher({ method: 'GET', path: '/users' }),
-    {
-      onSuccess: (res) => {
-        setUser(res.data);
-      },
-    },
-  );
+  // const {} = useQuery<GetUserData>(
+  //   [QueryKeys.USER],
+  //   () => restFetcher({ method: 'GET', path: '/users' }),
+  //   {
+  //     onSuccess: (res) => {
+  //       setUser(res.data);
+  //     },
+  //   },
+  // );
   const [_, updateState] = useState(false);
   const introNextRef = useRef<HTMLButtonElement>(null);
   const introPrevRef = useRef<HTMLButtonElement>(null);
