@@ -148,12 +148,16 @@ table {
   box-sizing: border-box;
 }
 html {
-  font-size: 52.5%;
+  font-size: 52.5%; // 1rem = 8.4px;
   @include tablet {
-    font-size: 87.5%; // 1rem = 14px;
+    font-size: 62.5%; // 1rem = 10px;
   }
   @include desktop {
-    font-size: 100%; // 1rem = 16px;
+    font-size: 80%; // 1rem = 12.8px;
+    /*
+      구현된 페이지가 생각보다 커서 기존 100% -> 80%로 축소
+      1rem = 12.8px이지만 계산은 그대로 16px 기준으로 rem 계산할 것.
+    */
   }
 }
 .over_hidden {
