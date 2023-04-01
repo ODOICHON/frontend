@@ -7,15 +7,20 @@
   font-size: 1.25rem;
   font-weight: 700;
   @include mobile {
+    align-items: flex-start;
     & > a {
-      font-size: 10px;
-      zoom: 0.8;
+      font-size: 1.8rem;
+      color: var(--darkgray-color);
     }
   }
 }
 .loginContainer {
   @extend .buttonContainer;
   gap: 1rem;
+  @include mobile {
+    gap: 0;
+    flex-direction: column;
+  }
 }
 .button {
   height: 2.5rem;
@@ -27,5 +32,17 @@
   }
   &:last-child {
     background-color: var(--gray-color);
+  }
+  @include mobile {
+    padding: 1rem 0;
+    height: auto;
+    border: none;
+    &:first-child {
+      color: var(--darkgray-color);
+      background-color: transparent;
+    }
+    &:last-child {
+      background-color: transparent;
+    }
   }
 }
