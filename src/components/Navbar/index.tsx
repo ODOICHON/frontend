@@ -36,7 +36,7 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    setToggle(false);
+    if (windowSize.width <= 500) setToggle(false);
     if (!underlineRef.current) return;
     const menu = location.pathname.split('/')[1];
     switch (menu) {

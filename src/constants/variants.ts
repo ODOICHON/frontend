@@ -18,3 +18,18 @@ export const toggleVariants = {
     right: -250,
   },
 };
+
+export const dropdownVariants = {
+  initial: {
+    top: 0,
+    opacity: 0,
+  },
+  visiable: {
+    top: 30,
+    opacity: 1,
+  },
+  exit: {
+    top: 0,
+    opacity: 0,
+  },
+};
