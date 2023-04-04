@@ -188,6 +188,7 @@
 }
 .odoiTrend_image {
   flex-grow: 1;
+  object-fit: cover;
 }
 .sectionSwiper {
   flex: 0.56;
@@ -298,5 +299,37 @@
     & > svg {
       transform: translate(-1px, 1px);
     }
+  }
+}
+.outro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 32.25rem;
+  padding-left: 11rem;
+  padding-right: 11rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
+  & > p {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  & > h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    & > b {
+      color: var(--main-color);
+    }
+  }
+  @include mobile {
+    padding-left: 5rem;
+    padding-right: 5rem;
   }
 }
