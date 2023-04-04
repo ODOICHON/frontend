@@ -9,13 +9,13 @@ import {
   jumbotronData,
   odoiIntroData,
 } from '@/constants/main_dummy';
-import pin from '@/assets/common/map-pin.svg';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { opacityVariants } from '@/constants/variants';
+import footer from '@/assets/common/footer.png';
 
 export default function MainPage() {
   const [_, updateState] = useState(false);
@@ -59,10 +59,6 @@ export default function MainPage() {
             <h3>0{idx + 1}</h3>
             <h1 dangerouslySetInnerHTML={{ __html: data.title }}></h1>
             <p>{data.content}</p>
-            <div className={styles.address}>
-              <img src={pin} alt="map-pin" />
-              <p>{data.address}</p>
-            </div>
           </SwiperSlide>
         ))}
       </Swiper>
@@ -217,6 +213,20 @@ export default function MainPage() {
             />
           </svg>
         </button>
+      </div>
+      <div
+        className={styles.outro}
+        style={{
+          background: `linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 100%), url(${footer}), #FFFFFF`,
+        }}
+      >
+        <p>
+          모든 가족들이 주말 만큼은 세상에 단 하나뿐인 집에서 함께할 수 있는
+          그날까지
+        </p>
+        <h1>
+          <b>주말의집</b>과 함께해요.
+        </h1>
       </div>
       <Footer />
     </motion.div>
