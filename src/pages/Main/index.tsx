@@ -9,7 +9,6 @@ import {
   jumbotronData,
   odoiIntroData,
 } from '@/constants/main_dummy';
-import pin from '@/assets/common/map-pin.svg';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -59,10 +58,6 @@ export default function MainPage() {
             <h3>0{idx + 1}</h3>
             <h1 dangerouslySetInnerHTML={{ __html: data.title }}></h1>
             <p>{data.content}</p>
-            <div className={styles.address}>
-              <img src={pin} alt="map-pin" />
-              <p>{data.address}</p>
-            </div>
           </SwiperSlide>
         ))}
       </Swiper>
