@@ -34,7 +34,7 @@
     background-color: var(--gray-color);
   }
   @include mobile {
-    padding: 1rem 0;
+    padding: 2rem 0;
     height: auto;
     border: none;
     &:first-child {
