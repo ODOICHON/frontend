@@ -10,7 +10,7 @@ import {
   odoiIntroData,
 } from '@/constants/main_dummy';
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
@@ -19,6 +19,8 @@ import footer from '@/assets/common/footer.png';
 
 export default function MainPage() {
   const [_, updateState] = useState(false);
+  const [introToggle, setIntroToggle] = useState<'trend' | 'review'>('trend');
+  const navigate = useNavigate();
   const introNextRef = useRef<HTMLButtonElement>(null);
   const introPrevRef = useRef<HTMLButtonElement>(null);
   const commuNextRef = useRef<HTMLButtonElement>(null);
@@ -71,11 +73,21 @@ export default function MainPage() {
             <h1>지금 만나보세요.</h1>
           </div>
           <div className={styles.odoiIntro_buttons}>
-            <button>트랜드</button>
-            <button className={styles.button_disabled}>후기</button>
+            <button
+              className={introToggle === 'trend' ? '' : styles.button_disabled}
+              onClick={() => setIntroToggle('trend')}
+            >
+              트랜드
+            </button>
+            <button
+              className={introToggle === 'review' ? '' : styles.button_disabled}
+              onClick={() => setIntroToggle('review')}
+            >
+              후기
+            </button>
           </div>
           <div className={styles.odoiIntro_bottom}>
-            <Link to="#">더 알아보기</Link>
+            <Link to="/introduce">더 알아보기</Link>
             <div className={styles.slideButton}>
               <button ref={introPrevRef}>
                 <svg
@@ -126,7 +138,10 @@ export default function MainPage() {
         >
           {odoiIntroData.map((data, idx) => (
             <SwiperSlide key={idx}>
-              <div className={styles.odoiTrend}>
+              <div
+                className={styles.odoiTrend}
+                onClick={() => navigate('/introduce')}
+              >
                 <div className={styles.odoiTrend_text}>
                   <h1>{data.category}</h1>
                   <div>
@@ -176,6 +191,7 @@ export default function MainPage() {
                   backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.35)),
                 url(${data.imageUrl})`,
                 }}
+                onClick={() => navigate('/community')}
               >
                 <h1>{data.title}</h1>
                 <p>{data.content}</p>
