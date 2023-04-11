@@ -3,9 +3,9 @@ import { persist, PersistOptions } from 'zustand/middleware';
 
 type UserStore = {
   user: User | null;
-  tokens: Tokens | null;
+  token: Token | null;
   setUser: (user: User | null) => void;
-  setTokens: (tokens: Tokens | null) => void;
+  setToken: (token: Token | null) => void;
   logout: () => void;
 };
 type UserPersist = (
@@ -17,11 +17,11 @@ const userStore = create<UserStore>(
   (persist as UserPersist)(
     (set) => ({
       user: null,
-      tokens: null,
-      setTokens: (tokens: Tokens | null) => set({ tokens }),
+      token: null,
+      setToken: (token: Token | null) => set({ token }),
       setUser: (user: User | null) => set({ user }),
       logout: () => {
-        set({ tokens: null });
+        set({ token: null });
         set({ user: null });
       },
     }),

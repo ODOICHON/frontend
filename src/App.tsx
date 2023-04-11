@@ -10,7 +10,7 @@ import axios from 'axios';
 import { reissue } from './apis/reissue';
 
 export default function App() {
-  const { tokens, setTokens, logout } = userStore();
+  const { token, setToken, logout } = userStore();
   const { VITE_BASE_URL } = import.meta.env;
 
   axios.defaults.baseURL = VITE_BASE_URL;
@@ -22,9 +22,8 @@ export default function App() {
         try {
           refresh = true;
           const data = await reissue();
-          setTokens({
+          setToken({
             access_token: data!.data.access_token,
-            refresh_token: data!.data.refresh_token,
           });
           axios.defaults.headers.common['Authorization'] =
             data!.data.access_token;
@@ -44,8 +43,8 @@ export default function App() {
   const queryClient = getClient();
   const elem = useRoutes(routes);
   useEffect(() => {
-    if (tokens) {
-      setInterceptor(tokens.access_token);
+    if (token) {
+      setInterceptor(token.access_token);
     }
   }, []);
   return (

@@ -10,7 +10,7 @@ import { menuToggleStore } from '@/store/menuToggleStore';
 import useWindowSize from '@/hooks/useWindowSize';
 
 export default function Navbar() {
-  const { tokens } = userStore();
+  const { token } = userStore();
   const { setToggle } = menuToggleStore();
   const location = useLocation();
   const underlineRef = useRef<HTMLDivElement>(null);
@@ -79,7 +79,7 @@ export default function Navbar() {
           >
             커뮤니티
           </Link>
-          {tokens ? <AfterLogin /> : <BeforeLogin />}
+          {token ? <AfterLogin /> : <BeforeLogin />}
         </div>
       </div>
     );
