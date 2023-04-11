@@ -85,7 +85,7 @@ export default function SignUpPage() {
     },
   });
   const navigate = useNavigate();
-  const { tokens } = userStore();
+  const { token } = userStore();
   const [toggle, setToggle] = useState(false); // 약관 토글
   const [eyeState, setEyeState] = useState(false);
   const [eyeCheckState, setEyeCheckState] = useState(false);
@@ -208,7 +208,7 @@ export default function SignUpPage() {
     setPhoneSMSMessage('전화번호 인증을 해주세요.');
   }, [watch('phone_num')]);
 
-  if (tokens) {
+  if (token) {
     return <Navigate to="/" />;
   }
   return (

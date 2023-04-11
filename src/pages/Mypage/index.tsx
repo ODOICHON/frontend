@@ -5,9 +5,9 @@ import { motion } from 'framer-motion';
 import { Navigate } from 'react-router-dom';
 
 export default function MyPage() {
-  const { tokens } = userStore();
+  const { token } = userStore();
 
-  if (!tokens) return <Navigate to="/login" />;
+  if (!token) return <Navigate to="/login" />;
   return (
     <motion.div variants={opacityVariants} initial="initial" animate="mount">
       <Preparation />

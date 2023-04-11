@@ -8,7 +8,7 @@ import { LoginAPI, LoginForm } from '@/apis/login';
 import userStore from '@/store/userStore';
 
 export default function LoginPage() {
-  const { tokens, setTokens } = userStore();
+  const { token, setToken } = userStore();
   const navigate = useNavigate();
   const [id, handleId, setId] = useInput('');
   const [password, handlePassword, setPassword] = useInput('');
@@ -25,11 +25,10 @@ export default function LoginPage() {
     };
     const response = await LoginAPI(form);
     if (response?.code === 'SUCCESS') {
-      const tokens: Tokens = {
+      const token: Token = {
         access_token: response?.data.access_token,
-        refresh_token: response?.data.refresh_token,
       };
-      setTokens(tokens);
+      setToken(token);
       navigate('/');
     }
   };
@@ -44,7 +43,7 @@ export default function LoginPage() {
       handleLogin();
     }
   };
-  if (tokens) {
+  if (token) {
     return <Navigate to="/" />;
   }
   return (
