@@ -10,8 +10,7 @@ declare global {
     age: string;
   };
 
-  type Tokens = {
+  type Token = {
     access_token: string;
-    refresh_token: string;
   };
 }

@@ -2,7 +2,9 @@ import axios, { AxiosError } from 'axios';
 
 export const LoginAPI = async (form: LoginForm) => {
   try {
-    const { data } = await axios.post<LoginSuccess>('/users/sign-in', form);
+    const { data } = await axios.post<LoginSuccess>('/users/sign-in', form, {
+      withCredentials: true,
+    });
     axios.defaults.headers.common['Authorization'] = data.data.access_token;
     return data;
   } catch (err) {
@@ -13,7 +15,7 @@ export const LoginAPI = async (form: LoginForm) => {
 export type LoginSuccess = {
   code: string;
   message: string;
-  data: Tokens;
+  data: Token;
 };
 
 export type LoginError = {

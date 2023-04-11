@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { toggleVariants } from '@/constants/variants';
 
 export default function ToggleMenu() {
-  const { tokens } = userStore();
+  const { token } = userStore();
   const { setToggle } = menuToggleStore();
   const onToggleMenu = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.currentTarget.id === 'overlay') {
@@ -43,7 +43,7 @@ export default function ToggleMenu() {
         <Link to="/introduce">오도이촌 소개</Link>
         <Link to="/trade">빈집거래</Link>
         <Link to="/community">커뮤니티</Link>
-        {tokens ? <AfterLogin /> : <BeforeLogin />}
+        {token ? <AfterLogin /> : <BeforeLogin />}
       </div>
     </motion.div>
   );
