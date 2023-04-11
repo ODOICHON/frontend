@@ -5,7 +5,7 @@ export const reissue = async () => {
     const { data } = await axios.post<ReissueResponse>(
       '/users/reissue',
       {
-        access_token: JSON.parse(localStorage.getItem('user')!).state.tokens
+        access_token: JSON.parse(localStorage.getItem('user')!).state.token
           .access_token,
       },
       { withCredentials: true },
@@ -19,10 +19,5 @@ export const reissue = async () => {
 type ReissueResponse = {
   code: string;
   message: string;
-  data: Data;
-};
-
-type Data = {
-  access_token: string;
-  refresh_token: string;
+  data: Token;
 };
