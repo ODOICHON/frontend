@@ -1,0 +1,43 @@
+@import '@/media.scss';
+.quill {
+  font-family: 'NanumSquareAcR';
+}
+.textEditor {
+  & h1 {
+    font-size: 2.5rem;
+    font-family: 'NanumSquareAcB';
+  }
+  & h2 {
+    font-size: 2rem;
+    font-family: 'NanumSquareAcB';
+  }
+  & p {
+    font-size: 1.5rem;
+  }
+  & strong {
+    font-family: 'NanumSquareAcB';
+  }
+  & ol {
+    display: block;
+    list-style-type: decimal;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+  }
+  & ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+  }
+
+  & li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+  }
+}

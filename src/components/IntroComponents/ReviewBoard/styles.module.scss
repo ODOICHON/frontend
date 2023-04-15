@@ -1,0 +1,25 @@
+.wrapper {
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+  & > img {
+    width: 100%;
+    height: 26rem;
+    border-radius: 16px;
+    margin-bottom: 1.375rem;
+  }
+  & > h3 {
+    font-family: 'Pretendard';
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  & > p {
+    font-family: 'Pretendard';
+    font-weight: 300;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
+}

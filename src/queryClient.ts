@@ -53,4 +53,4 @@ export const restFetcher = async ({
   }
 };
 
-export const QueryKeys = { USER: 'USER' };
+export const QueryKeys = { USER: 'USER', BOARD: 'BOARD' };
