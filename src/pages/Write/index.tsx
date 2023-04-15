@@ -11,10 +11,25 @@ import { useNavigate } from 'react-router-dom';
 export default function WritePage() {
   const navigate = useNavigate();
   const QuillRef = useRef<ReactQuill>();
+  const [thumbnail, setThumbnail] = useState<string>('');
   const [contents, setContents] = useState('');
   const [title, setTitle] = useState('');
   const [prefix, setPrefix] = useState('');
   const [category, setCategory] = useState('');
+
+  const thumbnailHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.files !== null) {
+      const file = e.currentTarget.files[0];
+      try {
+        const res = await uploadFile(file);
+        const url = res?.location || '';
+        setThumbnail(url);
+      } catch (e) {
+        const err = e as AxiosError;
+        return { ...err.response, success: false };
+      }
+    }
+  };
 
   // 이미지를 업로드 하기 위한 함수
   const imageHandler = () => {
@@ -131,7 +146,7 @@ export default function WritePage() {
       title,
       code: contents,
       category,
-      imageUrls: getImageUrls(),
+      imageUrls: [thumbnail, ...getImageUrls()],
       prefixCategory: prefix,
       fixed: false,
     };
@@ -143,6 +158,10 @@ export default function WritePage() {
   };
   return (
     <div>
+      <div>
+        <label htmlFor="thumbnail">썸네일</label>
+        <input type="file" onChange={thumbnailHandler} />
+      </div>
       <div>
         <label htmlFor="title">타이틀</label>
         <input
@@ -193,10 +212,10 @@ export default function WritePage() {
         onChange={onChange}
         modules={modules}
       />
-      <div
+      {/* <div
         className={styles.textEditor}
         dangerouslySetInnerHTML={{ __html: Dompurify.sanitize(contents) }}
-      />
+      /> */}
       <button onClick={onPost}>게시글 작성하기</button>
     </div>
   );

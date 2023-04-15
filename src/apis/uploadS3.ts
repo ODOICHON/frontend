@@ -10,19 +10,16 @@ const {
 
 export const s3Config = {
   bucketName: VITE_S3_BUCKET_NAME,
-  // dirName: 'directory-name' /* Optional */,
   region: VITE_S3_REGION,
   accessKeyId: VITE_S3_ACCESS_KEY,
   secretAccessKey: VITE_S3_SECRET_ACCESS_KEY,
-  s3Url: VITE_S3_URL /* Optional */,
+  s3Url: VITE_S3_URL,
 };
 
 export const uploadFile = async (file: File) => {
   const s3 = new ReactS3Client(s3Config);
 
-  const filename = file.name
-    .trim()
-    .replace(/(.png|.jpg|.jpeg|.gif)$/, ''); /* Optional */
+  const filename = file.name.trim().replace(/(.png|.jpg|.jpeg|.gif)$/, '');
 
   try {
     const res = await s3.uploadFile(file, filename);
