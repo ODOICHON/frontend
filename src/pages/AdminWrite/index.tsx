@@ -6,9 +6,11 @@ import 'react-quill/dist/quill.snow.css';
 import Dompurify from 'dompurify';
 import styles from './styles.module.scss';
 import { PostBoardAPI } from '@/apis/boards';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import userStore from '@/store/userStore';
 
-export default function WritePage() {
+export default function AdminWritePage() {
+  const { user } = userStore();
   const navigate = useNavigate();
   const QuillRef = useRef<ReactQuill>();
   const [thumbnail, setThumbnail] = useState<string>('');
@@ -156,6 +158,11 @@ export default function WritePage() {
       navigate('/introduce');
     }
   };
+  if (user?.authority !== 'ADMIN') {
+    alert('권한이 없습니다');
+    return <Navigate to={'/introduce'} />;
+  }
+  console.log(user?.authority);
   return (
     <div>
       <div>

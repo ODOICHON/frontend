@@ -30,8 +30,12 @@ export default function IntroducePage() {
     {
       onSuccess: (data) => {
         const response = data.data.content;
-        setTrendData(response);
-        setReviewData(response);
+        setTrendData(
+          response.filter((content) => content.category === 'TREND'),
+        );
+        setReviewData(
+          response.filter((content) => content.category === 'REVIEW'),
+        );
         setPageLength(Math.ceil(response.length / 4));
         response.length <= 4
           ? setTrendSliceData(response)
@@ -53,8 +57,8 @@ export default function IntroducePage() {
   useEffect(() => {
     if (!data) return;
     const response = data.data.content;
-    setTrendData(response);
-    setReviewData(response);
+    setTrendData(response.filter((content) => content.category === 'TREND'));
+    setReviewData(response.filter((content) => content.category === 'REVIEW'));
     setPageLength(Math.ceil(response.length / 4));
     response.length <= 4
       ? setTrendSliceData(response)
