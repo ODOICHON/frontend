@@ -1,0 +1,19 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 10rem 0;
+  & > img {
+    width: 4rem;
+    height: 4rem;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+  & > p {
+    font-family: 'NanumSquareAcB';
+    font-size: 2rem;
+  }
+}

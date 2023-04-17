@@ -57,4 +57,5 @@ export const QueryKeys = {
   USER: 'USER',
   BOARD: 'BOARD',
   INTRO_BOARD: 'INTRO_BOARD',
+  LIKE: 'LIKE',
 };

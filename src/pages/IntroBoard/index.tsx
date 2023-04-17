@@ -9,6 +9,8 @@ import { motion } from 'framer-motion';
 import { opacityVariants } from '@/constants/variants';
 import userStore from '@/store/userStore';
 import { DeleteBoardAPI } from '@/apis/boards';
+import Like from '@/components/BoardComponents/Like';
+import Comments from '@/components/BoardComponents/Comments';
 
 export default function IntroBoardPage() {
   const { user } = userStore();
@@ -65,6 +67,16 @@ export default function IntroBoardPage() {
           }}
         />
       </div>
+      {data?.data.category === 'REVIEW' && (
+        <div>
+          <Like
+            boardId={data.data.boardId}
+            loveCount={data.data.loveCount}
+            intro={true}
+          />
+          <Comments />
+        </div>
+      )}
     </motion.div>
   );
 }

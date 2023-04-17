@@ -1,3 +1,8 @@
+export interface GetLikeResponse {
+  code: string;
+  message: string;
+  data: boolean;
+}
 export interface BoardDetailResponse {
   code: string;
   message: string;
