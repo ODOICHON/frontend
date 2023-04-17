@@ -185,6 +185,9 @@ export default function AdminWritePage() {
                 setCategory(e.target.value)
               }
             >
+              <option disabled={true} value="">
+                말머리를 선택하세요.
+              </option>
               <option value="TREND">트렌드</option>
               <option value="REVIEW">후기</option>
             </select>

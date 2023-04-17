@@ -54,6 +54,9 @@
   max-width: 1200px;
   margin: 0 auto;
   margin-bottom: 4.5rem;
+
+  padding: 1rem;
+
   & > h1 {
     font-family: 'NanumSquareAcEB';
     font-size: 2rem;
@@ -117,6 +120,9 @@
   & > label:last-child {
     height: 40rem;
   }
+  @include mobile {
+    display: none;
+  }
 }
 .thumbnailWrapper {
   display: flex;
@@ -151,5 +157,8 @@
   }
   & > .categoryInput {
     width: 18rem;
+    & > option[value=''][disabled] {
+      display: none;
+    }
   }
 }
