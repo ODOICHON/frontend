@@ -68,13 +68,18 @@ export default function IntroBoardPage() {
         />
       </div>
       {data?.data.category === 'REVIEW' && (
-        <div>
+        <div className={styles.commentWrapper}>
           <Like
             boardId={data.data.boardId}
             loveCount={data.data.loveCount}
             intro={true}
           />
-          <Comments />
+          <Comments
+            boardId={data.data.boardId}
+            comments={data.data.comments}
+            count={data.data.commentCount}
+            intro={true}
+          />
         </div>
       )}
     </motion.div>
