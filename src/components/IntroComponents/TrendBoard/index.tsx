@@ -3,12 +3,15 @@ import styles from './styles.module.scss';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { updownVariants } from '@/constants/variants';
+import { useNavigate } from 'react-router-dom';
 
 export default function TrendBoard(props: BoardContent) {
+  const navigate = useNavigate();
   const [isMouseOver, setIsMouseOver] = useState(false);
   return (
     <motion.div
       className={styles.wrapper}
+      onClick={() => navigate(`/intro_board/${props.boardId}`)}
       onMouseOver={() => setIsMouseOver(true)}
       onMouseLeave={() => setIsMouseOver(false)}
       style={{
