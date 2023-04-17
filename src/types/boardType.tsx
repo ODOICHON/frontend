@@ -8,12 +8,12 @@ export interface Data {
   content: BoardContent[];
   pageable: Pageable;
   last: boolean;
-  totalElements: number;
   totalPages: number;
-  size: number;
-  sort: Sort;
-  first: boolean;
+  totalElements: number;
   number: number;
+  sort: Sort;
+  size: number;
+  first: boolean;
   numberOfElements: number;
   empty: boolean;
 }
@@ -27,19 +27,21 @@ export interface BoardContent {
   createdAt: Date;
   imageUrl: string;
   commentCount: number;
+  category: string;
+  prefixCategory: string;
 }
 
 export interface Pageable {
   sort: Sort;
   offset: number;
-  pageSize: number;
   pageNumber: number;
-  paged: boolean;
+  pageSize: number;
   unpaged: boolean;
+  paged: boolean;
 }
 
 export interface Sort {
   empty: boolean;
-  unsorted: boolean;
   sorted: boolean;
+  unsorted: boolean;
 }

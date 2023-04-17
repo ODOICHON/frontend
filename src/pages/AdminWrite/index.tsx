@@ -6,20 +6,25 @@ import 'react-quill/dist/quill.snow.css';
 import Dompurify from 'dompurify';
 import styles from './styles.module.scss';
 import { PostBoardAPI } from '@/apis/boards';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import userStore from '@/store/userStore';
+import Footer from '@/components/Footer';
 
-export default function WritePage() {
+export default function AdminWritePage() {
+  const { user } = userStore();
   const navigate = useNavigate();
   const QuillRef = useRef<ReactQuill>();
-  const [thumbnail, setThumbnail] = useState<string>('');
+  const thumbnailRef = useRef<HTMLInputElement>(null);
+  const [thumbnail, setThumbnail] = useState('');
+  const [thumbnailTitle, setThumbnailTitle] = useState('');
   const [contents, setContents] = useState('');
   const [title, setTitle] = useState('');
-  const [prefix, setPrefix] = useState('');
   const [category, setCategory] = useState('');
 
   const thumbnailHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.currentTarget.files !== null) {
       const file = e.currentTarget.files[0];
+      setThumbnailTitle(e.currentTarget.files[0].name);
       try {
         const res = await uploadFile(file);
         const url = res?.location || '';
@@ -147,7 +152,7 @@ export default function WritePage() {
       code: contents,
       category,
       imageUrls: [thumbnail, ...getImageUrls()],
-      prefixCategory: prefix,
+      prefixCategory: 'INTRO',
       fixed: false,
     };
     const response = await PostBoardAPI(boardForm);
@@ -156,67 +161,81 @@ export default function WritePage() {
       navigate('/introduce');
     }
   };
+  if (user?.authority !== 'ADMIN') {
+    alert('권한이 없습니다');
+    return <Navigate to={'/introduce'} />;
+  }
   return (
-    <div>
-      <div>
-        <label htmlFor="thumbnail">썸네일</label>
-        <input type="file" onChange={thumbnailHandler} />
-      </div>
-      <div>
-        <label htmlFor="title">타이틀</label>
-        <input
-          id="title"
-          type="text"
-          value={title}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setTitle(e.target.value)
-          }
-        />
-      </div>
-      <div>
-        <label htmlFor="prefix">카테고리</label>
-        <select
-          name="prefix"
-          id="prefix"
-          value={prefix}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-            setPrefix(e.target.value)
-          }
-        >
-          <option value="DEFAULT">자유</option>
-          <option value="ADVERTISEMENT">홍보</option>
-          <option value="INTRO">소개</option>
-        </select>
-      </div>
-      <div>
-        <label htmlFor="category">말머리</label>
-        <select
-          name="category"
-          id="category"
-          value={category}
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-            setCategory(e.target.value)
-          }
-        >
-          <option value="REVIEW">후기</option>
-          <option value="TREND">트렌드</option>
-        </select>
-      </div>
-      <ReactQuill
-        className={styles.quill}
-        ref={(element) => {
-          if (element !== null) {
-            QuillRef.current = element;
-          }
-        }}
-        onChange={onChange}
-        modules={modules}
-      />
-      {/* <div
+    <>
+      <div className={styles.container}>
+        <h1>관리자 글쓰기</h1>
+        <div className={styles.sectionWrapper}>
+          <section className={styles.labelSection}>
+            <label>말머리</label>
+            <label>제목</label>
+            <label>썸네일</label>
+            <label>내용</label>
+          </section>
+          <section className={styles.contentSection}>
+            <select
+              className={styles.categoryInput}
+              name="category"
+              value={category}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setCategory(e.target.value)
+              }
+            >
+              <option disabled={true} value="">
+                말머리를 선택하세요.
+              </option>
+              <option value="TREND">트렌드</option>
+              <option value="REVIEW">후기</option>
+            </select>
+            <input
+              className={styles.titleInput}
+              type="text"
+              value={title}
+              placeholder="50자 이내로 제목을 입력해 주세요."
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setTitle(e.target.value)
+              }
+            />
+            <div className={styles.thumbnailWrapper}>
+              <input
+                type="text"
+                value={thumbnailTitle}
+                placeholder="사진을 첨부해주세요. "
+                readOnly
+              />
+              <input
+                ref={thumbnailRef}
+                style={{ display: 'none' }}
+                type="file"
+                onChange={thumbnailHandler}
+              />
+              <button onClick={() => thumbnailRef.current?.click()}>
+                업로드
+              </button>
+            </div>
+            <ReactQuill
+              className={styles.quill}
+              ref={(element) => {
+                if (element !== null) {
+                  QuillRef.current = element;
+                }
+              }}
+              onChange={onChange}
+              modules={modules}
+            />
+          </section>
+        </div>
+        <button onClick={onPost}>등록하기</button>
+        {/* <div
         className={styles.textEditor}
         dangerouslySetInnerHTML={{ __html: Dompurify.sanitize(contents) }}
       /> */}
-      <button onClick={onPost}>게시글 작성하기</button>
-    </div>
+      </div>
+      <Footer />
+    </>
   );
 }

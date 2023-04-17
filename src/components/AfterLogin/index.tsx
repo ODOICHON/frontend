@@ -16,11 +16,17 @@ import { dropdownVariants } from '@/constants/variants';
 
 export default function AfterLogin() {
   const queryClient = useQueryClient();
-  const { data } = useQuery<GetUserData>([QueryKeys.USER], () =>
-    restFetcher({ method: 'GET', path: '/users' }),
+  const { logout, setUser } = userStore();
+  const { data } = useQuery<GetUserData>(
+    [QueryKeys.USER],
+    () => restFetcher({ method: 'GET', path: '/users' }),
+    {
+      onSuccess: (data) => {
+        setUser(data.data);
+      },
+    },
   );
 
-  const { logout } = userStore();
   const { setToggle } = menuToggleStore();
   const [windowSize, windowEventListener] = useWindowSize();
 

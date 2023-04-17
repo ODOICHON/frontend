@@ -8,7 +8,7 @@ import { LoginAPI, LoginForm } from '@/apis/login';
 import userStore from '@/store/userStore';
 
 export default function LoginPage() {
-  const { token, setToken } = userStore();
+  const { token, setToken, setUser } = userStore();
   const navigate = useNavigate();
   const [id, handleId, setId] = useInput('');
   const [password, handlePassword, setPassword] = useInput('');

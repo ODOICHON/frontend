@@ -12,8 +12,12 @@ import styles from './styles.module.scss';
 import ReviewBoard from '@/components/IntroComponents/ReviewBoard';
 import Footer from '@/components/Footer';
 import { useEffect, useState } from 'react';
+import userStore from '@/store/userStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function IntroducePage() {
+  const { user } = userStore();
+  const navigate = useNavigate();
   const [trendSliceData, setTrendSliceData] = useState<BoardContent[]>([]);
   const [trendData, setTrendData] = useState<BoardContent[]>([]);
   const [reviewData, setReviewData] = useState<BoardContent[]>([]);
@@ -30,8 +34,12 @@ export default function IntroducePage() {
     {
       onSuccess: (data) => {
         const response = data.data.content;
-        setTrendData(response);
-        setReviewData(response);
+        setTrendData(
+          response.filter((content) => content.category === 'TREND'),
+        );
+        setReviewData(
+          response.filter((content) => content.category === 'REVIEW'),
+        );
         setPageLength(Math.ceil(response.length / 4));
         response.length <= 4
           ? setTrendSliceData(response)
@@ -44,6 +52,10 @@ export default function IntroducePage() {
     setPage((prev) => prev + 1);
   };
 
+  const goToAdminWritePage = () => {
+    navigate('/admin_write');
+  };
+
   useEffect(() => {
     const data = trendData;
     page === pageLength
@@ -53,8 +65,8 @@ export default function IntroducePage() {
   useEffect(() => {
     if (!data) return;
     const response = data.data.content;
-    setTrendData(response);
-    setReviewData(response);
+    setTrendData(response.filter((content) => content.category === 'TREND'));
+    setReviewData(response.filter((content) => content.category === 'REVIEW'));
     setPageLength(Math.ceil(response.length / 4));
     response.length <= 4
       ? setTrendSliceData(response)
@@ -75,7 +87,12 @@ export default function IntroducePage() {
         </div>
       </div>
       <section className={styles.trendSection}>
-        <h2>오도이촌 트렌드</h2>
+        <div className={styles.titleWrapper}>
+          <h2>오도이촌 트렌드</h2>
+          {user?.authority === 'ADMIN' && (
+            <button onClick={goToAdminWritePage}>관리자 글쓰기</button>
+          )}
+        </div>
         <p>
           {`‘오도이촌' 막상 준비하려 하니 무엇부터 해야 할지 모르시겠다고요?
 주말의집이 이런 분들을 위해 준비했습니다. 오도이촌의 다양한 트렌드를 빠르게 제공해 드립니다.`}
@@ -93,7 +110,12 @@ export default function IntroducePage() {
       </section>
       <section className={styles.reviewSectionContainer}>
         <div className={styles.reviewSection}>
-          <h2>오도이촌 후기</h2>
+          <div className={styles.titleWrapper}>
+            <h2>오도이촌 후기</h2>
+            {user?.authority === 'ADMIN' && (
+              <button onClick={goToAdminWritePage}>관리자 글쓰기</button>
+            )}
+          </div>
           <p>
             {`오도이촌, 준비해야 하는 것이 많은 만큼 걱정되는 것도 많은데요.
 그렇다면 직접 ‘오도이촌' 해본 분의 다양한 후기를 접해보고 소통해보세요!`}

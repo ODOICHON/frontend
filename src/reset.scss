@@ -174,3 +174,21 @@ html {
   left: 0;
   bottom: 0;
 }
+
+.ql-toolbar {
+  position: sticky;
+  z-index: 50;
+}
+.ql-container {
+  overflow-y: scroll;
+}
+.ql-editor {
+  font-family: 'Pretendard';
+  & strong {
+    font-weight: 700;
+  }
+  & img {
+    max-width: 70% !important;
+    clear: both;
+  }
+}
