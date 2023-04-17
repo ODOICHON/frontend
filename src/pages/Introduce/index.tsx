@@ -10,7 +10,6 @@ import 'swiper/css';
 import 'swiper/css/scrollbar';
 import styles from './styles.module.scss';
 import ReviewBoard from '@/components/IntroComponents/ReviewBoard';
-import Footer from '@/components/Footer';
 import { useEffect, useState } from 'react';
 import userStore from '@/store/userStore';
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +23,7 @@ export default function IntroducePage() {
   const [page, setPage] = useState(1);
   const [pageLength, setPageLength] = useState(1);
   const { data } = useQuery<BoardResponse>(
-    [QueryKeys.BOARD, 'TREND'],
+    [QueryKeys.BOARD],
     () =>
       restFetcher({
         method: 'GET',
@@ -142,7 +141,6 @@ export default function IntroducePage() {
           </Swiper>
         </div>
       </section>
-      <Footer />
     </motion.div>
   );
 }

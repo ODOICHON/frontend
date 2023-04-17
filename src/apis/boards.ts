@@ -9,6 +9,15 @@ export const PostBoardAPI = async (form: BoardForm) => {
   }
 };
 
+export const DeleteBoardAPI = async (id: string) => {
+  try {
+    const { data } = await axios.delete<Response>(`/boards/${id}`);
+    return data;
+  } catch (err) {
+    alert((err as AxiosError<any>).response?.data.message);
+  }
+};
+
 type BoardForm = {
   title: string;
   code: string;
@@ -22,4 +31,9 @@ type BoardPostResponse = {
   code: string;
   message: string;
   data: number;
+};
+
+type Response = {
+  code: string;
+  message: string;
 };

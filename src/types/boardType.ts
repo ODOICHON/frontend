@@ -1,10 +1,10 @@
 export interface BoardResponse {
   code: string;
   message: string;
-  data: Data;
+  data: BoardData;
 }
 
-export interface Data {
+export interface BoardData {
   content: BoardContent[];
   pageable: Pageable;
   last: boolean;

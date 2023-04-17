@@ -3,16 +3,17 @@ import { AxiosError } from 'axios';
 import { useMemo, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import Dompurify from 'dompurify';
 import styles from './styles.module.scss';
 import { PostBoardAPI } from '@/apis/boards';
 import { Navigate, useNavigate } from 'react-router-dom';
 import userStore from '@/store/userStore';
-import Footer from '@/components/Footer';
+import { useQueryClient } from '@tanstack/react-query';
+import { QueryKeys } from '@/queryClient';
 
 export default function AdminWritePage() {
   const { user } = userStore();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const QuillRef = useRef<ReactQuill>();
   const thumbnailRef = useRef<HTMLInputElement>(null);
   const [thumbnail, setThumbnail] = useState('');
@@ -158,6 +159,7 @@ export default function AdminWritePage() {
     const response = await PostBoardAPI(boardForm);
     if (response?.code === 'SUCCESS') {
       alert('게시글이 작성되었습니다.');
+      queryClient.refetchQueries([QueryKeys.BOARD]);
       navigate('/introduce');
     }
   };
@@ -230,12 +232,7 @@ export default function AdminWritePage() {
           </section>
         </div>
         <button onClick={onPost}>등록하기</button>
-        {/* <div
-        className={styles.textEditor}
-        dangerouslySetInnerHTML={{ __html: Dompurify.sanitize(contents) }}
-      /> */}
       </div>
-      <Footer />
     </>
   );
 }

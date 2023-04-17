@@ -12,7 +12,6 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
-import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { opacityVariants } from '@/constants/variants';
 import footer from '@/assets/common/footer.png';
@@ -246,7 +245,6 @@ export default function MainPage() {
           <b>주말의집</b>과 함께해요.
         </h1>
       </div>
-      <Footer />
     </motion.div>
   );
 }
