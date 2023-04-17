@@ -4,6 +4,7 @@ import useInput from '@/hooks/useInput';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import userStore from '@/store/userStore';
+import CommentDetail from '../CommentDetail';
 
 type CommentsProps = {
   boardId: number;
@@ -43,6 +44,7 @@ export default function Comments({
       alert('로그인 후 이용 가능합니다.');
       return;
     }
+    if (content.trim() === '') return;
     setContent('');
     PostComment();
   };
@@ -54,13 +56,22 @@ export default function Comments({
         <textarea
           value={content}
           onChange={handleContent}
-          placeholder="로그인 후 댓글을 달아보세요!"
+          placeholder={
+            !user ? '로그인 후 댓글을 달아보세요!' : '댓글을 입력하세요'
+          }
         />
         <span>
           <p>{content.length}/400</p>
           <button onClick={onClickButton}>등록</button>
         </span>
       </div>
+      {comments.map((comment) => (
+        <CommentDetail
+          key={comment.commentId}
+          comment={comment}
+          intro={intro}
+        />
+      ))}
     </div>
   );
 }
