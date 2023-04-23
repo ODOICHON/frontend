@@ -118,7 +118,8 @@ body {
   font-family: 'NanumSquareAcR';
   // font-family: 'Pretendard';
 }
-a {
+a,
+button {
   color: black;
   text-decoration: none;
   &:hover {

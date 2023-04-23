@@ -36,6 +36,7 @@ export default function Comments({
     {
       onSuccess: () => {
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
+        setContent('');
         intro ? queryClient.refetchQueries([QueryKeys.INTRO_BOARD]) : null;
       },
     },
@@ -51,7 +52,6 @@ export default function Comments({
       return;
     }
     if (content.trim() === '') return;
-    setContent('');
     PostComment();
   };
   return (
