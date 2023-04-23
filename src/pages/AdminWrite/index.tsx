@@ -1,27 +1,44 @@
 import { uploadFile } from '@/apis/uploadS3';
 import { AxiosError } from 'axios';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import styles from './styles.module.scss';
 import { PostBoardAPI } from '@/apis/boards';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import userStore from '@/store/userStore';
-import { useQueryClient } from '@tanstack/react-query';
-import { QueryKeys } from '@/queryClient';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { QueryKeys, restFetcher } from '@/queryClient';
+import { BoardDetailData } from '@/types/boardDetailType';
+
+type BoardForm = {
+  title: string;
+  code: string;
+  category: string;
+  imageUrls: string[];
+  prefixCategory: string;
+  fixed: boolean;
+};
+
+// TODO: 이미지 10개 이상 등록 불가
 
 export default function AdminWritePage() {
   const { user } = userStore();
   const navigate = useNavigate();
+  const location = useLocation();
+  const boardData: BoardDetailData | null = location.state;
   const queryClient = useQueryClient();
   const QuillRef = useRef<ReactQuill>();
   const thumbnailRef = useRef<HTMLInputElement>(null);
-  const [thumbnail, setThumbnail] = useState('');
-  const [thumbnailTitle, setThumbnailTitle] = useState('');
+  const [thumbnail, setThumbnail] = useState(
+    boardData ? boardData.imageUrls[0] : '',
+  );
+  const [thumbnailTitle, setThumbnailTitle] = useState(
+    boardData ? boardData.imageUrls[0].split('/')[3] : '',
+  );
   const [contents, setContents] = useState('');
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
-
+  const [title, setTitle] = useState(boardData ? boardData.title : '');
+  const [category, setCategory] = useState(boardData ? boardData.category : '');
   const thumbnailHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.currentTarget.files !== null) {
       const file = e.currentTarget.files[0];
@@ -136,7 +153,6 @@ export default function AdminWritePage() {
   );
   const onChange = (content: string) => {
     setContents(content);
-    console.log(content);
   };
   const getImageUrls = () => {
     const sources = [];
@@ -147,8 +163,33 @@ export default function AdminWritePage() {
     }
     return sources;
   };
+
+  const { mutate } = useMutation(
+    (boardForm: BoardForm) =>
+      restFetcher({
+        method: 'PUT',
+        path: `boards/${boardData?.boardId}`,
+        body: {
+          ...boardForm,
+        },
+      }),
+    {
+      onSuccess: (res) => {
+        alert('게시글을 수정하였습니다.');
+        queryClient.refetchQueries([
+          QueryKeys.INTRO_BOARD,
+          `${boardData?.boardId}`,
+        ]);
+        queryClient.refetchQueries([QueryKeys.BOARD]);
+        navigate(`/intro_board/${boardData?.boardId}`);
+      },
+      onError: () => {
+        alert('게시글 수정을 실패했습니다.');
+      },
+    },
+  );
   const onPost = async () => {
-    const boardForm = {
+    const boardForm: BoardForm = {
       title,
       code: contents,
       category,
@@ -163,6 +204,25 @@ export default function AdminWritePage() {
       navigate('/introduce');
     }
   };
+  const onUpdate = () => {
+    const boardForm: BoardForm = {
+      title,
+      code: contents,
+      category,
+      imageUrls: [thumbnail, ...getImageUrls()],
+      prefixCategory: 'INTRO',
+      fixed: false,
+    };
+    mutate(boardForm);
+  };
+  useEffect(() => {
+    // 개발모드에선 StricMode 때문에 같은글이 두번 넣어짐. StrictMode를 해제하고 테스트하자
+    if (boardData) {
+      QuillRef.current
+        ?.getEditor()
+        .clipboard.dangerouslyPasteHTML(0, boardData.code);
+    }
+  }, []);
   if (user?.authority !== 'ADMIN') {
     alert('권한이 없습니다');
     return <Navigate to={'/introduce'} />;
@@ -170,7 +230,7 @@ export default function AdminWritePage() {
   return (
     <>
       <div className={styles.container}>
-        <h1>관리자 글쓰기</h1>
+        <h1>{boardData ? '관리자 글 수정하기' : '관리자 글쓰기'}</h1>
         <div className={styles.sectionWrapper}>
           <section className={styles.labelSection}>
             <label>말머리</label>
@@ -231,7 +291,11 @@ export default function AdminWritePage() {
             />
           </section>
         </div>
-        <button onClick={onPost}>등록하기</button>
+        {boardData ? (
+          <button onClick={onUpdate}>수정하기</button>
+        ) : (
+          <button onClick={onPost}>등록하기</button>
+        )}
       </div>
     </>
   );

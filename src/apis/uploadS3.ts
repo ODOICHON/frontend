@@ -19,7 +19,7 @@ export const s3Config = {
 export const uploadFile = async (file: File) => {
   const s3 = new ReactS3Client(s3Config);
 
-  const filename = file.name.trim().replace(/(.png|.jpg|.jpeg|.gif)$/, '');
+  const filename = file.name.trim().replace(/(.png|.jpg|.jpeg|.gif|.svg)$/, '');
 
   try {
     const res = await s3.uploadFile(file, filename);

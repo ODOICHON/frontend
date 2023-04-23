@@ -1,3 +1,4 @@
+@import '@/media.scss';
 .wrapper {
   width: 100%;
   min-height: 8.25rem;
@@ -37,6 +38,9 @@
     &:hover {
       opacity: 0.8;
     }
+    @include mobile {
+      zoom: 0.8;
+    }
   }
 }
 
@@ -45,4 +49,17 @@
   line-height: 1.5rem;
   white-space: pre-wrap;
   word-break: break-all;
+}
+
+.updateInput {
+  flex-grow: 1;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  resize: none;
+  white-space: pre-wrap;
+  &:focus {
+    outline: none;
+  }
 }
