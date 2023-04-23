@@ -18,7 +18,7 @@ const useWindowSize = (): ReturnType => {
       width: window.innerWidth,
       height: window.innerHeight,
     });
-  }, 1000);
+  }, 500);
   const eventListener = () => {
     window.addEventListener('resize', resizeViewPort);
     return () => {
