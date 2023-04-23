@@ -136,7 +136,6 @@ export default function AdminWritePage() {
   );
   const onChange = (content: string) => {
     setContents(content);
-    console.log(content);
   };
   const getImageUrls = () => {
     const sources = [];

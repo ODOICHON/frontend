@@ -33,16 +33,18 @@ export default function IntroducePage() {
     {
       onSuccess: (data) => {
         const response = data.data.content;
-        setTrendData(
-          response.filter((content) => content.category === 'TREND'),
+        const trendData = response.filter(
+          (content) => content.category === 'TREND',
         );
-        setReviewData(
-          response.filter((content) => content.category === 'REVIEW'),
+        const reviewData = response.filter(
+          (content) => content.category === 'REVIEW',
         );
+        setTrendData(trendData);
+        setReviewData(reviewData);
         setPageLength(Math.ceil(response.length / 4));
         response.length <= 4
-          ? setTrendSliceData(response)
-          : setTrendSliceData(response.slice(0, 4));
+          ? setTrendSliceData(trendData)
+          : setTrendSliceData(trendData.slice(0, 4));
       },
     },
   );
@@ -64,12 +66,18 @@ export default function IntroducePage() {
   useEffect(() => {
     if (!data) return;
     const response = data.data.content;
-    setTrendData(response.filter((content) => content.category === 'TREND'));
-    setReviewData(response.filter((content) => content.category === 'REVIEW'));
+    const trendData = response.filter(
+      (content) => content.category === 'TREND',
+    );
+    const reviewData = response.filter(
+      (content) => content.category === 'REVIEW',
+    );
+    setTrendData(trendData);
+    setReviewData(reviewData);
     setPageLength(Math.ceil(response.length / 4));
     response.length <= 4
-      ? setTrendSliceData(response)
-      : setTrendSliceData(response.slice(0, 4));
+      ? setTrendSliceData(trendData)
+      : setTrendSliceData(trendData.slice(0, 4));
   }, []);
 
   return (

@@ -8,6 +8,7 @@ import { setInterceptor } from './utils/utils';
 import userStore from './store/userStore';
 import axios from 'axios';
 import { reissue } from './apis/reissue';
+import ScrollToTop from './utils/ScrollToTop';
 
 export default function App() {
   const { token, setToken, logout } = userStore();
@@ -50,6 +51,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       {elem}
+      <ScrollToTop />
       <ReactQueryDevtools />
     </QueryClientProvider>
   );
