@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import userStore from '@/store/userStore';
 import CommentDetail from '../CommentDetail';
+import { useState } from 'react';
 
 type CommentsProps = {
   boardId: number;
@@ -21,7 +22,7 @@ export default function Comments({
 }: CommentsProps) {
   const { user } = userStore();
   const queryClient = useQueryClient();
-  const [content, handleContent, setContent] = useInput('');
+  const [content, setContent] = useState('');
   const { mutate: PostComment } = useMutation(
     () =>
       restFetcher({
@@ -39,6 +40,11 @@ export default function Comments({
       },
     },
   );
+  const handleContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.currentTarget.value;
+    if (value.length > 400) return;
+    setContent(value);
+  };
   const onClickButton = () => {
     if (!user) {
       alert('로그인 후 이용 가능합니다.');

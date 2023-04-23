@@ -58,6 +58,7 @@ export default function CommentDetail({
     if (inputRef.current) {
       inputRef.current.style.height = 'auto';
       inputRef.current.style.height = inputRef.current.scrollHeight + 'px';
+      if (e.currentTarget.value.length > 400) return;
       setUpdateContenet(e.target.value);
     }
   };
