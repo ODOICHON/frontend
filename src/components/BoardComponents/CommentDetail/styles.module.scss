@@ -1,0 +1,65 @@
+@import '@/media.scss';
+.wrapper {
+  width: 100%;
+  min-height: 8.25rem;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  font-family: 'Pretendard';
+}
+.metaDataWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.metaData {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  & > h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  & > p {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #9a9a9a;
+  }
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  & > button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+    @include mobile {
+      zoom: 0.8;
+    }
+  }
+}
+
+.content {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.updateInput {
+  flex-grow: 1;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: none;
+  resize: none;
+  white-space: pre-wrap;
+  &:focus {
+    outline: none;
+  }
+}

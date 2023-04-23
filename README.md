@@ -22,13 +22,6 @@ Area| Tech Stack|
 
 ![주말의집 아키텍처](https://user-images.githubusercontent.com/61505572/220286737-8b62ca94-a38e-4b68-b0a3-54d85a4b622c.png)
 
-- Route 53
-- EC2
-- ALB, Nginx, S3, CodeDeploy
-- MySQL( RDS )
-- Git, Github Actions CI/CD
-- CloudWatch, Slack
-- Jacoco, SonarlCloud
 
 
 ### 버전 관리

@@ -12,7 +12,6 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
-import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { opacityVariants } from '@/constants/variants';
 import footer from '@/assets/common/footer.png';
@@ -155,80 +154,82 @@ export default function MainPage() {
           ))}
         </Swiper>
       </div>
-      <div className={styles.section2}>
-        <h3>오도이촌 커뮤니티</h3>
-        <h1>{`‘오도이촌’이라는 공통의 관심사를 가진 분들과
+      <div className={styles.section2Container}>
+        <div className={styles.section2}>
+          <h3>오도이촌 커뮤니티</h3>
+          <h1>{`‘오도이촌’이라는 공통의 관심사를 가진 분들과
 다양한 이야기를 공유해보세요.`}</h1>
-        <Swiper
-          slidesPerView={1}
-          spaceBetween={0}
-          breakpoints={{
-            768: {
-              slidesPerView: 2,
-              spaceBetween: 20,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 30,
-            },
-          }}
-          pagination={{
-            clickable: true,
-          }}
-          navigation={{
-            nextEl: commuNextRef.current,
-            prevEl: commuPrevRef.current,
-          }}
-          touchStartPreventDefault={false}
-          modules={[Pagination, Navigation]}
-          className={styles.communitySwiper}
-        >
-          {communityData.map((data, idx) => (
-            <SwiperSlide style={{ width: '100%' }} key={idx}>
-              <div
-                className={styles.odoiCommunity}
-                style={{
-                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.35)),
+          <Swiper
+            slidesPerView={1}
+            spaceBetween={0}
+            breakpoints={{
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+              },
+            }}
+            pagination={{
+              clickable: true,
+            }}
+            navigation={{
+              nextEl: commuNextRef.current,
+              prevEl: commuPrevRef.current,
+            }}
+            touchStartPreventDefault={false}
+            modules={[Pagination, Navigation]}
+            className={styles.communitySwiper}
+          >
+            {communityData.map((data, idx) => (
+              <SwiperSlide style={{ width: '100%' }} key={idx}>
+                <div
+                  className={styles.odoiCommunity}
+                  style={{
+                    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.35)),
                 url(${data.imageUrl})`,
-                }}
-                onClick={() => navigate('/community')}
-              >
-                <h1>{data.title}</h1>
-                <p>{data.content}</p>
-                <div className={styles.commuMeta}>
-                  <p>{dayjs(data.date).format('YYYY-MM-DD')}</p>
-                  <p>{data.author}님</p>
+                  }}
+                  onClick={() => navigate('/community')}
+                >
+                  <h1>{data.title}</h1>
+                  <p>{data.content}</p>
+                  <div className={styles.commuMeta}>
+                    <p>{dayjs(data.date).format('YYYY-MM-DD')}</p>
+                    <p>{data.author}님</p>
+                  </div>
                 </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        <button className={styles.commuPrevBtn} ref={commuPrevRef}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              d="M9.125 21.1L.7 12.7q-.15-.15-.213-.325T.425 12q0-.2.063-.375T.7 11.3l8.425-8.425q.35-.35.875-.35t.9.375q.375.375.375.875t-.375.875L3.55 12l7.35 7.35q.35.35.35.863t-.375.887q-.375.375-.875.375t-.875-.375Z"
-            />
-          </svg>
-        </button>
-        <button className={styles.commuNextBtn} ref={commuNextRef}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              d="M7.15 21.1q-.375-.375-.375-.888t.375-.887L14.475 12l-7.35-7.35q-.35-.35-.35-.875t.375-.9q.375-.375.888-.375t.887.375l8.4 8.425q.15.15.213.325T17.6 12q0 .2-.063.375t-.212.325L8.9 21.125q-.35.35-.863.35T7.15 21.1Z"
-            />
-          </svg>
-        </button>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <button className={styles.commuPrevBtn} ref={commuPrevRef}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M9.125 21.1L.7 12.7q-.15-.15-.213-.325T.425 12q0-.2.063-.375T.7 11.3l8.425-8.425q.35-.35.875-.35t.9.375q.375.375.375.875t-.375.875L3.55 12l7.35 7.35q.35.35.35.863t-.375.887q-.375.375-.875.375t-.875-.375Z"
+              />
+            </svg>
+          </button>
+          <button className={styles.commuNextBtn} ref={commuNextRef}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M7.15 21.1q-.375-.375-.375-.888t.375-.887L14.475 12l-7.35-7.35q-.35-.35-.35-.875t.375-.9q.375-.375.888-.375t.887.375l8.4 8.425q.15.15.213.325T17.6 12q0 .2-.063.375t-.212.325L8.9 21.125q-.35.35-.863.35T7.15 21.1Z"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
       <div
         className={styles.outro}
@@ -244,7 +245,6 @@ export default function MainPage() {
           <b>주말의집</b>과 함께해요.
         </h1>
       </div>
-      <Footer />
     </motion.div>
   );
 }

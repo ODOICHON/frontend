@@ -6,7 +6,7 @@ declare global {
     email: string;
     nick_name: string;
     phone_num: string;
-    authority: string;
+    authority: 'USER' | 'ADMIN';
     age: string;
   };
 

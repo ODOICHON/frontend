@@ -8,6 +8,8 @@ const MyPage = lazy(() => import('@/pages/Mypage'));
 const IntroducePage = lazy(() => import('@/pages/Introduce'));
 const TradePage = lazy(() => import('@/pages/Trade'));
 const CommunityPage = lazy(() => import('@/pages/Community'));
+const AdminWritePage = lazy(() => import('@/pages/AdminWrite'));
+const IntroBoardPage = lazy(() => import('@/pages/IntroBoard'));
 
 export const routes = [
   {
@@ -21,6 +23,8 @@ export const routes = [
       { path: '/introduce', element: <IntroducePage /> },
       { path: '/trade', element: <TradePage /> },
       { path: '/community', element: <CommunityPage /> },
+      { path: '/admin_write', element: <AdminWritePage /> },
+      { path: '/intro_board/:id', element: <IntroBoardPage /> },
     ],
   },
 ];
