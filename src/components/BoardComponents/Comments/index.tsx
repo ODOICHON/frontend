@@ -69,6 +69,7 @@ export default function Comments({
         <CommentDetail
           key={comment.commentId}
           comment={comment}
+          boardId={boardId}
           intro={intro}
         />
       ))}
