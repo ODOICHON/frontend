@@ -4,8 +4,7 @@ import dayjs from 'dayjs';
 import userStore from '@/store/userStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys, restFetcher } from '@/queryClient';
-import useInput from '@/hooks/useInput';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type CommentDetailProps = {
   comment: Comment;
@@ -91,7 +90,9 @@ export default function CommentDetail({
             </span>
           ) : (
             <span className={styles.buttonWrapper}>
-              <button onClick={onClickUpdate}>수정</button>
+              {user?.nick_name === comment.nickName && (
+                <button onClick={onClickUpdate}>수정</button>
+              )}
               <button onClick={() => deleteComment()}>삭제</button>
             </span>
           ))}

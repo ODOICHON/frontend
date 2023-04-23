@@ -41,7 +41,7 @@ export default function IntroducePage() {
         );
         setTrendData(trendData);
         setReviewData(reviewData);
-        setPageLength(Math.ceil(response.length / 4));
+        setPageLength(Math.ceil(trendData.length / 4));
         response.length <= 4
           ? setTrendSliceData(trendData)
           : setTrendSliceData(trendData.slice(0, 4));
@@ -74,7 +74,7 @@ export default function IntroducePage() {
     );
     setTrendData(trendData);
     setReviewData(reviewData);
-    setPageLength(Math.ceil(response.length / 4));
+    setPageLength(Math.ceil(trendData.length / 4));
     response.length <= 4
       ? setTrendSliceData(trendData)
       : setTrendSliceData(trendData.slice(0, 4));

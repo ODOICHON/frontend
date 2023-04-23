@@ -1,3 +1,4 @@
+@import '@/media.scss';
 .wrapper {
   width: 100%;
   min-height: 8.25rem;
@@ -36,6 +37,9 @@
     cursor: pointer;
     &:hover {
       opacity: 0.8;
+    }
+    @include mobile {
+      zoom: 0.8;
     }
   }
 }

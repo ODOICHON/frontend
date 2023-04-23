@@ -29,6 +29,11 @@ export default function IntroBoardPage() {
       navigate('/introduce');
     }
   };
+  const onUpdateClick = () => {
+    navigate('/admin_write', {
+      state: data?.data,
+    });
+  };
   return (
     <motion.div
       variants={opacityVariants}
@@ -51,7 +56,7 @@ export default function IntroBoardPage() {
             </p>
             {user?.authority === 'ADMIN' && (
               <div>
-                <button>수정</button> |{' '}
+                <button onClick={onUpdateClick}>수정</button> |{' '}
                 <button onClick={deletePost}>삭제</button>
               </div>
             )}
