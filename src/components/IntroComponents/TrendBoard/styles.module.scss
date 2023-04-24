@@ -25,5 +25,11 @@
     word-break: break-all;
     white-space: pre-line;
     overflow-y: scroll;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
   }
 }

@@ -54,7 +54,7 @@ export default function IntroducePage() {
   };
 
   const goToAdminWritePage = () => {
-    navigate('/admin_write');
+    navigate('/intro_write');
   };
 
   useEffect(() => {

@@ -149,7 +149,7 @@
     }
   }
 }
-.odoiTrend {
+.odoiIntro_slide {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -165,17 +165,16 @@
     // border-left: none;
   }
 }
-.odoiTrendLast {
+.odoiIntro_slide_last {
   border-right: 1px solid var(--gray-color);
   @include mobile {
     border-right: none;
   }
 }
-.odoiTrend_text {
-  flex-grow: 0.6;
+.odoiIntro_slide_text {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 3rem;
   padding-top: 8.3125rem;
   padding-left: 2.75rem;
   padding-right: 2.75rem;
@@ -193,11 +192,16 @@
     font-weight: 400;
     color: #4d4d4d;
     word-break: break-all;
-    white-space: pre-line;
     line-height: 1.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
   }
 }
-.odoiTrend_image {
+.odoiIntro_slide_image {
   flex-grow: 1;
   object-fit: cover;
 }

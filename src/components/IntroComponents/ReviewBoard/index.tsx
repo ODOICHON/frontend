@@ -11,7 +11,7 @@ export default function ReviewBoard(props: BoardContent) {
     >
       <img src={props.imageUrl} />
       <h3>{props.title}</h3>
-      <p>{props.oneLineContent}</p>
+      <p>{props.oneLineContent}...</p>
     </div>
   );
 }
