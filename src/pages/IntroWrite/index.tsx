@@ -22,7 +22,7 @@ type BoardForm = {
 
 // TODO: 이미지 10개 이상 등록 불가
 
-export default function AdminWritePage() {
+export default function IntroWritePage() {
   const { user } = userStore();
   const navigate = useNavigate();
   const location = useLocation();

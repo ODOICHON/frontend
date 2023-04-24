@@ -4,29 +4,64 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import styles from './styles.module.scss';
 import { Autoplay, Pagination, Navigation } from 'swiper';
-import {
-  communityData,
-  jumbotronData,
-  odoiIntroData,
-} from '@/constants/main_dummy';
+import { communityData, jumbotronData } from '@/constants/main_dummy';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
 import { opacityVariants } from '@/constants/variants';
 import footer from '@/assets/common/footer.png';
+import { useQuery } from '@tanstack/react-query';
+import { BoardContent, BoardResponse } from '@/types/boardType';
+import { QueryKeys, restFetcher } from '@/queryClient';
 
 export default function MainPage() {
   const [_, updateState] = useState(false);
+  const [trendData, setTrendData] = useState<BoardContent[]>([]);
+  const [reviewData, setReviewData] = useState<BoardContent[]>([]);
   const [introToggle, setIntroToggle] = useState<'trend' | 'review'>('trend');
   const navigate = useNavigate();
   const introNextRef = useRef<HTMLButtonElement>(null);
   const introPrevRef = useRef<HTMLButtonElement>(null);
   const commuNextRef = useRef<HTMLButtonElement>(null);
   const commuPrevRef = useRef<HTMLButtonElement>(null);
+  const { data: odoiIntroData } = useQuery<BoardResponse>(
+    [QueryKeys.BOARD],
+    () =>
+      restFetcher({
+        method: 'GET',
+        path: 'boards',
+        params: { category: 'INTRO' },
+      }),
+    {
+      onSuccess: (data) => {
+        const response = data.data.content;
+        const trendData = response.filter(
+          (content) => content.category === 'TREND',
+        );
+        const reviewData = response.filter(
+          (content) => content.category === 'REVIEW',
+        );
+        setTrendData(trendData);
+        setReviewData(reviewData);
+      },
+    },
+  );
   useEffect(() => {
     updateState(true);
   }, [introNextRef, commuNextRef]);
+  useEffect(() => {
+    if (!odoiIntroData) return;
+    const response = odoiIntroData.data.content;
+    const trendData = response.filter(
+      (content) => content.category === 'TREND',
+    );
+    const reviewData = response.filter(
+      (content) => content.category === 'REVIEW',
+    );
+    setTrendData(trendData);
+    setReviewData(reviewData);
+  }, []);
   return (
     <motion.div
       className={styles.container}
@@ -118,16 +153,13 @@ export default function MainPage() {
           </div>
         </div>
         <Swiper
-          slidesPerView={2}
           navigation={{
             nextEl: introNextRef.current,
             prevEl: introPrevRef.current,
           }}
+          slidesPerView={1}
           breakpoints={{
-            768: {
-              slidesPerView: 1,
-            },
-            1200: {
+            520: {
               slidesPerView: 2,
             },
           }}
@@ -135,20 +167,23 @@ export default function MainPage() {
           modules={[Navigation]}
           className={styles.sectionSwiper}
         >
-          {odoiIntroData.map((data, idx) => (
-            <SwiperSlide key={idx}>
+          {(introToggle === 'trend' ? trendData : reviewData).map((data) => (
+            <SwiperSlide key={data.boardId}>
               <div
-                className={styles.odoiTrend}
-                onClick={() => navigate('/introduce')}
+                className={styles.odoiIntro_slide}
+                onClick={() => navigate(`/intro_board/${data.boardId}`)}
               >
-                <div className={styles.odoiTrend_text}>
+                <div className={styles.odoiIntro_slide_text}>
                   <h1>{data.category}</h1>
                   <div>
                     <h3>{data.title}</h3>
-                    <p>{data.content}</p>
+                    <p>{data.oneLineContent}</p>
                   </div>
                 </div>
-                <img className={styles.odoiTrend_image} src={data.image} />
+                <img
+                  className={styles.odoiIntro_slide_image}
+                  src={data.imageUrl}
+                />
               </div>
             </SwiperSlide>
           ))}
