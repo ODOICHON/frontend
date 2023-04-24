@@ -22,7 +22,7 @@ type BoardForm = {
 
 // TODO: 이미지 10개 이상 등록 불가
 
-export default function IntroWritePage() {
+export default function AdminWritePage() {
   const { user } = userStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -45,7 +45,7 @@ export default function IntroWritePage() {
       setThumbnailTitle(e.currentTarget.files[0].name);
       try {
         const res = await uploadFile(file);
-        const url = res?.location || '';
+        const url = res || '';
         setThumbnail(url);
       } catch (e) {
         const err = e as AxiosError;
@@ -67,7 +67,7 @@ export default function IntroWritePage() {
         const file = input.files[0];
         try {
           const res = await uploadFile(file);
-          const url = res?.location || '';
+          const url = res || '';
           const range = QuillRef.current?.getEditor().getSelection()?.index;
           if (range !== null && range !== undefined) {
             let quill = QuillRef.current?.getEditor();
@@ -79,11 +79,9 @@ export default function IntroWritePage() {
               `<img src=${url} alt="이미지" />`,
             );
           }
-
-          return { ...res, success: true };
         } catch (error) {
           const err = error as AxiosError;
-          return { ...err.response, success: false };
+          console.log(err);
         }
       }
     };
