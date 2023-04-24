@@ -30,7 +30,7 @@ export default function IntroBoardPage() {
     }
   };
   const onUpdateClick = () => {
-    navigate('/admin_write', {
+    navigate('/intro_write', {
       state: data?.data,
     });
   };
