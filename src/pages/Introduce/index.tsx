@@ -1,18 +1,18 @@
-import TrendBoard from '@/components/IntroComponents/TrendBoard';
-import { opacityVariants } from '@/constants/variants';
-import { QueryKeys, restFetcher } from '@/queryClient';
-import { BoardResponse, BoardContent } from '@/types/boardType';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import { Scrollbar } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/scrollbar';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { opacityVariants } from '@/constants/variants';
+import { BoardResponse, BoardContent } from '@/types/boardType';
 import styles from './styles.module.scss';
 import ReviewBoard from '@/components/IntroComponents/ReviewBoard';
-import { useEffect, useState } from 'react';
+import TrendBoard from '@/components/IntroComponents/TrendBoard';
+import { QueryKeys, restFetcher } from '@/queryClient';
+import 'swiper/css';
+import 'swiper/css/scrollbar';
 import userStore from '@/store/userStore';
-import { useNavigate } from 'react-router-dom';
 
 export default function IntroducePage() {
   const { user } = userStore();

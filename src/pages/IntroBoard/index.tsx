@@ -1,16 +1,16 @@
-import { QueryKeys, restFetcher } from '@/queryClient';
-import { BoardDetailResponse } from '@/types/boardDetailType';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import Dompurify from 'dompurify';
-import styles from './styles.module.scss';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import Dompurify from 'dompurify';
 import { motion } from 'framer-motion';
 import { opacityVariants } from '@/constants/variants';
-import userStore from '@/store/userStore';
+import { BoardDetailResponse } from '@/types/boardDetailType';
+import styles from './styles.module.scss';
 import { DeleteBoardAPI } from '@/apis/boards';
-import Like from '@/components/BoardComponents/Like';
 import Comments from '@/components/BoardComponents/Comments';
+import Like from '@/components/BoardComponents/Like';
+import { QueryKeys, restFetcher } from '@/queryClient';
+import userStore from '@/store/userStore';
 
 export default function IntroBoardPage() {
   const { user } = userStore();
@@ -77,13 +77,13 @@ export default function IntroBoardPage() {
           <Like
             boardId={data.data.boardId}
             loveCount={data.data.loveCount}
-            intro={true}
+            intro
           />
           <Comments
             boardId={data.data.boardId}
             comments={data.data.comments}
             count={data.data.commentCount}
-            intro={true}
+            intro
           />
         </div>
       )}
