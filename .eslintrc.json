@@ -153,6 +153,7 @@
     "react/jsx-props-no-spreading": "off",
     "no-useless-escape": "off",
     "react/no-array-index-key": "off",
-    "no-param-reassign": "off"
+    "no-param-reassign": "off",
+    "react/no-danger": "off"
   }
 }
