@@ -44,7 +44,7 @@ export const restFetcher = async ({
     if (body) axiosConfig.data = body;
     if (params) {
       const searchParams = new URLSearchParams(params);
-      url += '?' + searchParams.toString();
+      url += `?${searchParams.toString()}`;
     }
     const res = await axios(url, axiosConfig);
     return res.data;

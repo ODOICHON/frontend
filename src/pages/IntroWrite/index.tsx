@@ -1,15 +1,16 @@
-import { uploadFile } from '@/apis/uploadS3';
-import { AxiosError } from 'axios';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import styles from './styles.module.scss';
-import { PostBoardAPI } from '@/apis/boards';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import userStore from '@/store/userStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { PostBoardAPI } from '@/apis/boards';
+import { uploadFile } from '@/apis/uploadS3';
+import userStore from '@/store/userStore';
 import { BoardDetailData } from '@/types/boardDetailType';
+import { ErrorResponse } from '@/types/error';
+import styles from './styles.module.scss';
 
 type BoardForm = {
   title: string;
@@ -47,8 +48,8 @@ export default function AdminWritePage() {
         const res = await uploadFile(file);
         const url = res || '';
         setThumbnail(url);
-      } catch (e) {
-        const err = e as AxiosError;
+      } catch (error) {
+        const err = error as AxiosError;
         return { ...err.response, success: false };
       }
     }
@@ -70,7 +71,7 @@ export default function AdminWritePage() {
           const url = res || '';
           const range = QuillRef.current?.getEditor().getSelection()?.index;
           if (range !== null && range !== undefined) {
-            let quill = QuillRef.current?.getEditor();
+            const quill = QuillRef.current?.getEditor();
 
             quill?.setSelection(range, 1);
 
@@ -80,8 +81,7 @@ export default function AdminWritePage() {
             );
           }
         } catch (error) {
-          const err = error as AxiosError;
-          console.log(err);
+          alert((error as AxiosError<ErrorResponse>).response?.data.message);
         }
       }
     };
@@ -155,8 +155,8 @@ export default function AdminWritePage() {
   const getImageUrls = () => {
     const sources = [];
     const imgRegex = /(<img[^>]*src\s*=\s*[\"']?([^>\"']+)[\"']?[^>]*>)/g;
-    let match;
-    while ((match = imgRegex.exec(contents)) !== null) {
+    const match = imgRegex.exec(contents);
+    while (match !== null) {
       sources.push(match[2]);
     }
     return sources;
@@ -172,7 +172,7 @@ export default function AdminWritePage() {
         },
       }),
     {
-      onSuccess: (res) => {
+      onSuccess: () => {
         alert('게시글을 수정하였습니다.');
         queryClient.refetchQueries([
           QueryKeys.INTRO_BOARD,
@@ -223,78 +223,80 @@ export default function AdminWritePage() {
   }, []);
   if (user?.authority !== 'ADMIN') {
     alert('권한이 없습니다');
-    return <Navigate to={'/introduce'} />;
+    return <Navigate to="/introduce" />;
   }
   return (
-    <>
-      <div className={styles.container}>
-        <h1>{boardData ? '관리자 글 수정하기' : '관리자 글쓰기'}</h1>
-        <div className={styles.sectionWrapper}>
-          <section className={styles.labelSection}>
-            <label>말머리</label>
-            <label>제목</label>
-            <label>썸네일</label>
-            <label>내용</label>
-          </section>
-          <section className={styles.contentSection}>
-            <select
-              className={styles.categoryInput}
-              name="category"
-              value={category}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                setCategory(e.target.value)
-              }
-            >
-              <option disabled={true} value="">
-                말머리를 선택하세요.
-              </option>
-              <option value="TREND">트렌드</option>
-              <option value="REVIEW">후기</option>
-            </select>
+    <div className={styles.container}>
+      <h1>{boardData ? '관리자 글 수정하기' : '관리자 글쓰기'}</h1>
+      <div className={styles.sectionWrapper}>
+        <section className={styles.labelSection}>
+          <label>말머리</label>
+          <label>제목</label>
+          <label>썸네일</label>
+          <label>내용</label>
+        </section>
+        <section className={styles.contentSection}>
+          <select
+            className={styles.categoryInput}
+            name="category"
+            value={category}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              setCategory(e.target.value)
+            }
+          >
+            <option disabled value="">
+              말머리를 선택하세요.
+            </option>
+            <option value="TREND">트렌드</option>
+            <option value="REVIEW">후기</option>
+          </select>
+          <input
+            className={styles.titleInput}
+            type="text"
+            value={title}
+            placeholder="50자 이내로 제목을 입력해 주세요."
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setTitle(e.target.value)
+            }
+          />
+          <div className={styles.thumbnailWrapper}>
             <input
-              className={styles.titleInput}
               type="text"
-              value={title}
-              placeholder="50자 이내로 제목을 입력해 주세요."
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setTitle(e.target.value)
+              value={thumbnailTitle}
+              placeholder="사진을 첨부해주세요. "
+              readOnly
+            />
+            <input
+              ref={thumbnailRef}
+              style={{ display: 'none' }}
+              type="file"
+              onChange={thumbnailHandler}
+            />
+            <button type="button" onClick={() => thumbnailRef.current?.click()}>
+              업로드
+            </button>
+          </div>
+          <ReactQuill
+            className={styles.quill}
+            ref={(element) => {
+              if (element !== null) {
+                QuillRef.current = element;
               }
-            />
-            <div className={styles.thumbnailWrapper}>
-              <input
-                type="text"
-                value={thumbnailTitle}
-                placeholder="사진을 첨부해주세요. "
-                readOnly
-              />
-              <input
-                ref={thumbnailRef}
-                style={{ display: 'none' }}
-                type="file"
-                onChange={thumbnailHandler}
-              />
-              <button onClick={() => thumbnailRef.current?.click()}>
-                업로드
-              </button>
-            </div>
-            <ReactQuill
-              className={styles.quill}
-              ref={(element) => {
-                if (element !== null) {
-                  QuillRef.current = element;
-                }
-              }}
-              onChange={onChange}
-              modules={modules}
-            />
-          </section>
-        </div>
-        {boardData ? (
-          <button onClick={onUpdate}>수정하기</button>
-        ) : (
-          <button onClick={onPost}>등록하기</button>
-        )}
+            }}
+            onChange={onChange}
+            modules={modules}
+          />
+        </section>
       </div>
-    </>
+      {boardData ? (
+        <button type="button" onClick={onUpdate}>
+          수정하기
+        </button>
+      ) : (
+        <button type="button" onClick={onPost}>
+          등록하기
+        </button>
+      )}
+    </div>
   );
 }

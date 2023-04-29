@@ -1,5 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { ErrorResponse } from '@/types/error';
 
+type ReissueResponse = {
+  code: string;
+  message: string;
+  data: Token;
+};
 export const reissue = async () => {
   try {
     const { data } = await axios.post<ReissueResponse>(
@@ -11,13 +17,7 @@ export const reissue = async () => {
       { withCredentials: true },
     );
     return data;
-  } catch (e) {
-    return;
+  } catch (err) {
+    alert((err as AxiosError<ErrorResponse>).response?.data.message);
   }
-};
-
-type ReissueResponse = {
-  code: string;
-  message: string;
-  data: Token;
 };

@@ -1,10 +1,10 @@
+import { useEffect, useRef, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import dayjs from 'dayjs';
+import { QueryKeys, restFetcher } from '@/queryClient';
+import userStore from '@/store/userStore';
 import { Comment } from '@/types/boardDetailType';
 import styles from './styles.module.scss';
-import dayjs from 'dayjs';
-import userStore from '@/store/userStore';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { QueryKeys, restFetcher } from '@/queryClient';
-import { useEffect, useRef, useState } from 'react';
 
 type CommentDetailProps = {
   comment: Comment;
@@ -28,7 +28,7 @@ export default function CommentDetail({
     {
       onSuccess: () => {
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
-        intro ? queryClient.refetchQueries([QueryKeys.INTRO_BOARD]) : null;
+        return intro && queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
       },
     },
   );
@@ -45,18 +45,19 @@ export default function CommentDetail({
     {
       onSuccess: () => {
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
-        intro
-          ? queryClient
-              .refetchQueries([QueryKeys.INTRO_BOARD])
-              .then(() => setIsUpdating(false))
-          : null;
+        return (
+          intro &&
+          queryClient
+            .refetchQueries([QueryKeys.INTRO_BOARD])
+            .then(() => setIsUpdating(false))
+        );
       },
     },
   );
   const resizeHeight = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (inputRef.current) {
       inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = inputRef.current.scrollHeight + 'px';
+      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
       if (e.currentTarget.value.length > 400) return;
       setUpdateContenet(e.target.value);
     }
@@ -85,15 +86,23 @@ export default function CommentDetail({
           user?.authority === 'ADMIN') &&
           (isUpdating ? (
             <span className={styles.buttonWrapper}>
-              <button onClick={() => updateComment()}>수정하기</button>
-              <button onClick={onClickCancle}>취소</button>
+              <button type="button" onClick={() => updateComment()}>
+                수정하기
+              </button>
+              <button type="button" onClick={onClickCancle}>
+                취소
+              </button>
             </span>
           ) : (
             <span className={styles.buttonWrapper}>
               {user?.nick_name === comment.nickName && (
-                <button onClick={onClickUpdate}>수정</button>
+                <button type="button" onClick={onClickUpdate}>
+                  수정
+                </button>
               )}
-              <button onClick={() => deleteComment()}>삭제</button>
+              <button type="button" onClick={() => deleteComment()}>
+                삭제
+              </button>
             </span>
           ))}
       </div>

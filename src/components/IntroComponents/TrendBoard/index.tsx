@@ -1,9 +1,9 @@
-import { BoardContent } from '@/types/boardType';
-import styles from './styles.module.scss';
-import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
-import { updownVariants } from '@/constants/variants';
 import { useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import { BoardContent } from '@/types/boardType';
+import { updownVariants } from '@/constants/variants';
+import styles from './styles.module.scss';
 
 export default function TrendBoard(props: BoardContent) {
   const navigate = useNavigate();

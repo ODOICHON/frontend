@@ -1,14 +1,9 @@
-export interface GetLikeResponse {
-  code: string;
-  message: string;
-  data: boolean;
+export interface Comment {
+  commentId: number;
+  nickName: string;
+  content: string;
+  createdAt: Date;
 }
-export interface BoardDetailResponse {
-  code: string;
-  message: string;
-  data: BoardDetailData;
-}
-
 export interface BoardDetailData {
   boardId: number;
   title: string;
@@ -22,10 +17,13 @@ export interface BoardDetailData {
   commentCount: number;
   comments: Comment[];
 }
-
-export interface Comment {
-  commentId: number;
-  nickName: string;
-  content: string;
-  createdAt: Date;
+export interface GetLikeResponse {
+  code: string;
+  message: string;
+  data: boolean;
+}
+export interface BoardDetailResponse {
+  code: string;
+  message: string;
+  data: BoardDetailData;
 }

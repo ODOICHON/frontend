@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { QueryKeys, restFetcher } from '@/queryClient';
-import { GetLikeResponse } from '@/types/boardDetailType';
-import notLove from '@/assets/common/notLove.svg';
 import love from '@/assets/common/love.svg';
-import styles from './styles.module.scss';
+import notLove from '@/assets/common/notLove.svg';
+import { QueryKeys, restFetcher } from '@/queryClient';
 import userStore from '@/store/userStore';
+import { GetLikeResponse } from '@/types/boardDetailType';
+import styles from './styles.module.scss';
 
 type LikeProps = {
   boardId: number;
@@ -52,7 +52,7 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
         // 쿼리 함수의 성공, 실패 두 경우 모두 실행.
         queryClient.refetchQueries([QueryKeys.LIKE]);
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
-        intro ? queryClient.refetchQueries([QueryKeys.INTRO_BOARD]) : null;
+        return intro && queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
       },
     },
   );
@@ -90,7 +90,7 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
         // 쿼리 함수의 성공, 실패 두 경우 모두 실행.
         queryClient.refetchQueries([QueryKeys.LIKE]);
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
-        intro ? queryClient.refetchQueries([QueryKeys.INTRO_BOARD]) : null;
+        return intro && queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
       },
     },
   );
@@ -104,6 +104,7 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
   return (
     <div className={styles.wrapper}>
       <img
+        role="presentation"
         src={data?.data ? love : notLove}
         alt="like"
         onClick={onClickButton}

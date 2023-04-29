@@ -6,8 +6,7 @@
     "plugin:react/recommended",
     "airbnb",
     "plugin:@typescript-eslint/recommended",
-    "plugin:prettier/recommended",
-    "plugin:@typescript-eslint/parser"
+    "plugin:prettier/recommended"
   ],
   "env": {
     "browser": true,
@@ -16,7 +15,7 @@
   },
   "parserOptions": {
     "project": "./tsconfig.json",
-
+    "createDefaultProgram": true,
     "ecmaFeatures": {
       "jsx": true
     },
@@ -29,8 +28,8 @@
     },
     "import/resolver": {
       "typescript": {},
-      "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      "alias": {
+        "map": [["@", "./src"]]
       }
     }
   },
@@ -132,6 +131,7 @@
         }
       }
     ],
+    "camelcase": "off",
     "import/prefer-default-export": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "jsx-a11y/label-has-associated-control": "off",
@@ -140,8 +140,19 @@
     "no-multiple-empty-lines": "error", // 여러 줄 공백 금지
     "no-console": ["error", { "allow": ["warn", "error", "info"] }], // console.log() 금지
     "dot-notation": "error", // 가능하다면 dot notation 사용
-    "no-unused-vars": "error", // 사용하지 않는 변수 금지
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }
+    ],
     "react/react-in-jsx-scope": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "react/require-default-props": "off",
+    "no-unused-expressions": ["error", { "allowTernary": true }],
+    "react/destructuring-assignment": "off",
+    "react/jsx-props-no-spreading": "off",
+    "no-useless-escape": "off",
+    "react/no-array-index-key": "off",
+    "no-param-reassign": "off"
   }
 }

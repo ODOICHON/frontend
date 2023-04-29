@@ -1,14 +1,14 @@
+import { useEffect } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { getClient } from './queryClient';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { routes } from '@/Routes';
-import { useEffect } from 'react';
-import { setInterceptor } from './utils/utils';
-import userStore from './store/userStore';
 import axios from 'axios';
+import { routes } from '@/Routes';
 import { reissue } from './apis/reissue';
+import { getClient } from './queryClient';
+import userStore from './store/userStore';
 import ScrollToTop from './utils/ScrollToTop';
+import { setInterceptor } from './utils/utils';
 
 export default function App() {
   const { token, setToken, logout } = userStore();
@@ -26,13 +26,12 @@ export default function App() {
           setToken({
             access_token: data!.data.access_token,
           });
-          axios.defaults.headers.common['Authorization'] =
-            data!.data.access_token;
+          axios.defaults.headers.common.Authorization = data!.data.access_token;
           error.config.headers.authorization = data!.data.access_token;
           refresh = false;
           return axios.request(error.config);
         } catch (e) {
-          delete axios.defaults.headers.common['Authorization'];
+          delete axios.defaults.headers.common.Authorization;
           logout();
         }
       }

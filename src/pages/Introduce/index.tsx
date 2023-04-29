@@ -4,15 +4,15 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { opacityVariants } from '@/constants/variants';
-import { BoardResponse, BoardContent } from '@/types/boardType';
-import styles from './styles.module.scss';
 import ReviewBoard from '@/components/IntroComponents/ReviewBoard';
 import TrendBoard from '@/components/IntroComponents/TrendBoard';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 import userStore from '@/store/userStore';
+import { BoardResponse, BoardContent } from '@/types/boardType';
+import { opacityVariants } from '@/constants/variants';
+import styles from './styles.module.scss';
 
 export default function IntroducePage() {
   const { user } = userStore();
@@ -22,7 +22,7 @@ export default function IntroducePage() {
   const [reviewData, setReviewData] = useState<BoardContent[]>([]);
   const [page, setPage] = useState(1);
   const [pageLength, setPageLength] = useState(1);
-  const { data } = useQuery<BoardResponse>(
+  const { data: boardList } = useQuery<BoardResponse>(
     [QueryKeys.BOARD],
     () =>
       restFetcher({
@@ -31,20 +31,20 @@ export default function IntroducePage() {
         params: { category: 'INTRO' },
       }),
     {
-      onSuccess: (data) => {
-        const response = data.data.content;
-        const trendData = response.filter(
+      onSuccess: (response) => {
+        const boardContent = response.data.content;
+        const filteredTrend = boardContent.filter(
           (content) => content.category === 'TREND',
         );
-        const reviewData = response.filter(
+        const filteredReview = boardContent.filter(
           (content) => content.category === 'REVIEW',
         );
-        setTrendData(trendData);
-        setReviewData(reviewData);
-        setPageLength(Math.ceil(trendData.length / 4));
-        response.length <= 4
-          ? setTrendSliceData(trendData)
-          : setTrendSliceData(trendData.slice(0, 4));
+        setTrendData(filteredTrend);
+        setReviewData(filteredReview);
+        setPageLength(Math.ceil(filteredTrend.length / 4));
+        boardContent.length <= 4
+          ? setTrendSliceData(filteredTrend)
+          : setTrendSliceData(filteredTrend.slice(0, 4));
       },
     },
   );
@@ -60,24 +60,24 @@ export default function IntroducePage() {
   useEffect(() => {
     const data = trendData;
     page === pageLength
-      ? setTrendSliceData(data!)
-      : setTrendSliceData(data?.slice(0, page * 4)!);
+      ? setTrendSliceData(data)
+      : setTrendSliceData(data?.slice(0, page * 4));
   }, [page]);
   useEffect(() => {
-    if (!data) return;
-    const response = data.data.content;
-    const trendData = response.filter(
+    if (!boardList) return;
+    const response = boardList.data.content;
+    const filteredTrend = response.filter(
       (content) => content.category === 'TREND',
     );
-    const reviewData = response.filter(
+    const filteredReview = response.filter(
       (content) => content.category === 'REVIEW',
     );
-    setTrendData(trendData);
-    setReviewData(reviewData);
-    setPageLength(Math.ceil(trendData.length / 4));
+    setTrendData(filteredTrend);
+    setReviewData(filteredReview);
+    setPageLength(Math.ceil(filteredTrend.length / 4));
     response.length <= 4
-      ? setTrendSliceData(trendData)
-      : setTrendSliceData(trendData.slice(0, 4));
+      ? setTrendSliceData(filteredTrend)
+      : setTrendSliceData(filteredTrend.slice(0, 4));
   }, []);
 
   return (
@@ -97,7 +97,9 @@ export default function IntroducePage() {
         <div className={styles.titleWrapper}>
           <h2>오도이촌 트렌드</h2>
           {user?.authority === 'ADMIN' && (
-            <button onClick={goToAdminWritePage}>관리자 글쓰기</button>
+            <button type="button" onClick={goToAdminWritePage}>
+              관리자 글쓰기
+            </button>
           )}
         </div>
         <p>
@@ -110,7 +112,11 @@ export default function IntroducePage() {
           ))}
         </div>
         {pageLength > page && (
-          <button className={styles.button} onClick={handleMoreTrend}>
+          <button
+            type="button"
+            className={styles.button}
+            onClick={handleMoreTrend}
+          >
             더 많은 트렌드 보기
           </button>
         )}
@@ -120,7 +126,9 @@ export default function IntroducePage() {
           <div className={styles.titleWrapper}>
             <h2>오도이촌 후기</h2>
             {user?.authority === 'ADMIN' && (
-              <button onClick={goToAdminWritePage}>관리자 글쓰기</button>
+              <button type="button" onClick={goToAdminWritePage}>
+                관리자 글쓰기
+              </button>
             )}
           </div>
           <p>

@@ -6,8 +6,6 @@ import image2 from '@/assets/main/image2.png';
 import image3 from '@/assets/main/image3.png';
 import image4 from '@/assets/main/image4.png';
 import image5 from '@/assets/main/image5.png';
-import intro1 from '@/assets/main/intro1.svg';
-import intro2 from '@/assets/main/intro2.svg';
 
 export const communityData = [
   {
@@ -94,35 +92,5 @@ export const jumbotronData = [
     생활 기반 도시를 내려놓을 수 없는 현대의 가족에게 가족간의 마음의 문을 열 수 있도록 주말의 집이 선물합니다.`,
     imageUrl: image5,
     address: '경상남도 남해군 고현면 대곡리 114',
-  },
-];
-export const odoiIntroData = [
-  {
-    category: `트랜드`,
-    title: `듀얼 라이프 생활 백서 : 경제편`,
-    content: `경제적인 부담으로 듀얼라이프를 망설이셨나요?
-  듀얼 라이프를 위한 지원금 및 정책을 알려드려요.`,
-    image: intro1,
-  },
-  {
-    category: `트랜드`,
-    title: `유기농 듀얼라이프를 위한 꿀팁`,
-    content: `식물 기르기가 대세인 요즘,
-    듀얼 라이프에서도 식물을 기르는 방법을 알려드려요.`,
-    image: intro2,
-  },
-  {
-    category: `트랜드`,
-    title: `듀얼 라이프 생활 백서 : 경제편`,
-    content: `경제적인 부담으로 듀얼라이프를 망설이셨나요?
-  듀얼 라이프를 위한 지원금 및 정책을 알려드려요.`,
-    image: intro1,
-  },
-  {
-    category: `트랜드`,
-    title: `유기농 듀얼라이프를 위한 꿀팁`,
-    content: `식물 기르기가 대세인 요즘,
-    듀얼 라이프에서도 식물을 기르는 방법을 알려드려요.`,
-    image: intro2,
   },
 ];

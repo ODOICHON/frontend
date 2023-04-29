@@ -1,11 +1,11 @@
-import removeImg from '@/assets/common/remove.png';
-import { opacityVariants } from '@/constants/variants';
-import useInput from '@/hooks/useInput';
-import { motion } from 'framer-motion';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import styles from './styles.module.scss';
+import { motion } from 'framer-motion';
+import removeImg from '@/assets/common/remove.png';
 import { LoginAPI, LoginForm } from '@/apis/login';
 import userStore from '@/store/userStore';
+import useInput from '@/hooks/useInput';
+import { opacityVariants } from '@/constants/variants';
+import styles from './styles.module.scss';
 
 export default function LoginPage() {
   const { token, setToken } = userStore();
@@ -16,7 +16,6 @@ export default function LoginPage() {
     if (e.currentTarget.parentElement?.id === 'idContainer') setId('');
     if (e.currentTarget.parentElement?.id === 'passwordContainer')
       setPassword('');
-    else return;
   };
   const handleLogin = async () => {
     const form: LoginForm = {
@@ -25,10 +24,10 @@ export default function LoginPage() {
     };
     const response = await LoginAPI(form);
     if (response?.code === 'SUCCESS') {
-      const token: Token = {
+      const tokenData: Token = {
         access_token: response?.data.access_token,
       };
-      setToken(token);
+      setToken(tokenData);
       navigate('/');
     }
   };
@@ -65,8 +64,10 @@ export default function LoginPage() {
           />
           {id !== '' && (
             <img
+              role="presentation"
               className={styles.removeImg}
               src={removeImg}
+              alt="removeImage"
               onClick={handleRemove}
             />
           )}
@@ -82,13 +83,19 @@ export default function LoginPage() {
           />
           {password !== '' && (
             <img
+              role="presentation"
               className={styles.removeImg}
               src={removeImg}
+              alt="removeImage"
               onClick={handleRemove}
             />
           )}
         </div>
-        <button className={styles.loginButton} onClick={handleLogin}>
+        <button
+          type="button"
+          className={styles.loginButton}
+          onClick={handleLogin}
+        >
           로그인
         </button>
         <span className={styles.subContainer}>

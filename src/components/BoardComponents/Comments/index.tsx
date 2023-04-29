@@ -1,11 +1,10 @@
-import { Comment } from '@/types/boardDetailType';
-import styles from './styles.module.scss';
-import useInput from '@/hooks/useInput';
+import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import userStore from '@/store/userStore';
+import { Comment } from '@/types/boardDetailType';
+import styles from './styles.module.scss';
 import CommentDetail from '../CommentDetail';
-import { useState } from 'react';
 
 type CommentsProps = {
   boardId: number;
@@ -37,12 +36,12 @@ export default function Comments({
       onSuccess: () => {
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
         setContent('');
-        intro ? queryClient.refetchQueries([QueryKeys.INTRO_BOARD]) : null;
+        return intro && queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
       },
     },
   );
   const handleContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.currentTarget.value;
+    const { value } = e.currentTarget;
     if (value.length > 400) return;
     setContent(value);
   };
@@ -68,7 +67,9 @@ export default function Comments({
         />
         <span>
           <p>{content.length}/400</p>
-          <button onClick={onClickButton}>등록</button>
+          <button type="button" onClick={onClickButton}>
+            등록
+          </button>
         </span>
       </div>
       {comments.map((comment) => (
