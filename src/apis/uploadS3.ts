@@ -1,4 +1,6 @@
 import AWS from 'aws-sdk';
+import { AxiosError } from 'axios';
+import { ErrorResponse } from '@/types/error';
 
 const {
   VITE_S3_ACCESS_KEY,
@@ -28,7 +30,6 @@ export const uploadFile = async (file: File) => {
     const { Location } = await s3.upload(params).promise();
     return Location;
   } catch (err) {
-    console.log(err);
-    throw err;
+    alert((err as AxiosError<ErrorResponse>).response?.data.message);
   }
 };

@@ -1,17 +1,17 @@
-import logoImage from '@/assets/common/logo.svg';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 import eyeImage from '@/assets/common/eye.svg';
 import eyeClosedImage from '@/assets/common/eyeClosed.svg';
-import { useForm } from 'react-hook-form';
-import styles from './styles.module.scss';
-import { useEffect, useState } from 'react';
-import Terms from '@/components/Terms';
-import { useMutation } from '@tanstack/react-query';
+import logoImage from '@/assets/common/logo.svg';
 import { restFetcher } from '@/queryClient';
-import useCheckAPI from '@/hooks/useCheckAPI';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { opacityVariants } from '@/constants/variants';
-import { motion } from 'framer-motion';
+import Terms from '@/components/Terms';
 import userStore from '@/store/userStore';
+import useCheckAPI from '@/hooks/useCheckAPI';
+import { opacityVariants } from '@/constants/variants';
+import styles from './styles.module.scss';
 
 type IForm = {
   email: string;
@@ -34,6 +34,21 @@ type ISubmitForm = {
 };
 
 export default function SignUpPage() {
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IForm>({
+    mode: 'onSubmit',
+    defaultValues: {
+      email: '',
+      password: '',
+      passwordCheck: '',
+      nick_name: '',
+      phone_num: '',
+    },
+  });
   const { mutate: idCheckAPI } = useMutation((email: string) =>
     restFetcher({
       method: 'POST',
@@ -69,21 +84,6 @@ export default function SignUpPage() {
       body: form,
     }),
   );
-  const {
-    register,
-    watch,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IForm>({
-    mode: 'onSubmit',
-    defaultValues: {
-      email: '',
-      password: '',
-      passwordCheck: '',
-      nick_name: '',
-      phone_num: '',
-    },
-  });
   const navigate = useNavigate();
   const { token } = userStore();
   const [toggle, setToggle] = useState(false); // 약관 토글
@@ -173,10 +173,12 @@ export default function SignUpPage() {
     if (!idCheck) {
       alert('아이디 중복검사를 해주세요.');
       return;
-    } else if (!nicknameCheck) {
+    }
+    if (!nicknameCheck) {
       alert('닉네임 중복검사를 해주세요.');
       return;
-    } else if (!phoneSMSCheck) {
+    }
+    if (!phoneSMSCheck) {
       alert('전화번호 인증을 해주세요.');
       return;
     }
@@ -272,6 +274,7 @@ export default function SignUpPage() {
           />
           {watch('password') !== '' && (
             <img
+              role="presentation"
               id="passwordEye"
               className={styles.eyeImage}
               src={eyeState ? eyeClosedImage : eyeImage}
@@ -301,6 +304,7 @@ export default function SignUpPage() {
           />
           {watch('passwordCheck') !== '' && (
             <img
+              role="presentation"
               id="passwordCheckEye"
               className={styles.eyeImage}
               src={eyeCheckState ? eyeClosedImage : eyeImage}
@@ -574,6 +578,7 @@ export default function SignUpPage() {
           </p>
         </div>
         <button
+          type="button"
           className={styles.signUpButton}
           onClick={handleSubmit(onSubmit)}
         >

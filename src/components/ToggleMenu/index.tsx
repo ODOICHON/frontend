@@ -1,12 +1,12 @@
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import closeImg from '@/assets/common/close.svg';
+import { menuToggleStore } from '@/store/menuToggleStore';
+import userStore from '@/store/userStore';
+import { toggleVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 import AfterLogin from '../AfterLogin';
 import BeforeLogin from '../BeforeLogin';
-import userStore from '@/store/userStore';
-import closeImg from '@/assets/common/close.svg';
-import { menuToggleStore } from '@/store/menuToggleStore';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { toggleVariants } from '@/constants/variants';
 
 export default function ToggleMenu() {
   const { token } = userStore();
@@ -28,6 +28,7 @@ export default function ToggleMenu() {
       onClick={onToggleMenu}
     >
       <div
+        role="presentation"
         id="container"
         className={styles.buttonContainer}
         onClick={(e) => {
@@ -35,6 +36,7 @@ export default function ToggleMenu() {
         }}
       >
         <img
+          role="presentation"
           className={styles.closeImg}
           onClick={() => setToggle(false)}
           src={closeImg}

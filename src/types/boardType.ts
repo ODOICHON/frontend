@@ -1,7 +1,28 @@
-export interface BoardResponse {
+export interface Sort {
+  empty: boolean;
+  sorted: boolean;
+  unsorted: boolean;
+}
+
+export interface Pageable {
+  sort: Sort;
+  offset: number;
+  pageNumber: number;
+  pageSize: number;
+  unpaged: boolean;
+  paged: boolean;
+}
+export interface BoardContent {
+  boardId: number;
+  title: string;
   code: string;
-  message: string;
-  data: BoardData;
+  oneLineContent: string;
+  nickName: string;
+  createdAt: Date;
+  imageUrl: string;
+  commentCount: number;
+  category: string;
+  prefixCategory: string;
 }
 
 export interface BoardData {
@@ -17,31 +38,8 @@ export interface BoardData {
   numberOfElements: number;
   empty: boolean;
 }
-
-export interface BoardContent {
-  boardId: number;
-  title: string;
+export interface BoardResponse {
   code: string;
-  oneLineContent: string;
-  nickName: string;
-  createdAt: Date;
-  imageUrl: string;
-  commentCount: number;
-  category: string;
-  prefixCategory: string;
-}
-
-export interface Pageable {
-  sort: Sort;
-  offset: number;
-  pageNumber: number;
-  pageSize: number;
-  unpaged: boolean;
-  paged: boolean;
-}
-
-export interface Sort {
-  empty: boolean;
-  sorted: boolean;
-  unsorted: boolean;
+  message: string;
+  data: BoardData;
 }
