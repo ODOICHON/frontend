@@ -1,11 +1,16 @@
-import { useEffect } from 'react';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Link,
+  Outlet,
+  Navigate,
+  useLocation,
+  useParams,
+} from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 export default function CommunityPage() {
-  const navigate = useNavigate();
+  const { category } = useParams();
   const location = useLocation();
   const isFocus = (menu: string) => {
     const path = location.pathname.split('/')[2];
@@ -14,9 +19,7 @@ export default function CommunityPage() {
     }
     return styles.menu;
   };
-  useEffect(() => {
-    navigate('/community/free_board');
-  }, []);
+  if (!category) return <Navigate to="/community/free_board" />;
   return (
     <motion.div variants={opacityVariants} initial="initial" animate="mount">
       <nav className={styles.container}>

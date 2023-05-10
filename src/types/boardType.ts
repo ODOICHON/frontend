@@ -19,7 +19,7 @@ export interface BoardContent {
   oneLineContent: string;
   nickName: string;
   createdAt: Date;
-  imageUrl: string;
+  imageUrl?: string;
   commentCount: number;
   category: string;
   prefixCategory: string;

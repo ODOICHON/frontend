@@ -1,0 +1,191 @@
+.container {
+  width: 100%;
+}
+.titleContainer {
+  height: 22rem;
+  background-color: var(--gray-background);
+}
+.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 1200px;
+  height: 100%;
+  padding: 0 2rem;
+  position: relative;
+  margin: 0 auto;
+  & > h1 {
+    font-family: 'NanumSquareAcEB';
+    font-size: 2rem;
+    line-height: 3.75rem;
+    word-break: break-all;
+    white-space: pre-line;
+    margin-bottom: 1rem;
+  }
+  & > p {
+    font-family: 'NanumSquareAcB';
+    font-size: 1.25rem;
+    line-height: 2.75rem;
+    word-break: break-all;
+    white-space: pre-line;
+  }
+}
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 0 2rem;
+}
+
+.categoryWrapper {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 5rem;
+}
+
+.notFocused {
+  color: var(--darkgray-color);
+}
+.focused {
+  color: var(--main-color);
+}
+
+.category {
+  @extend .notFocused;
+  font-family: 'NanumSquareAcB';
+  font-size: 1.375rem;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid var(--darkgray-color);
+  border-radius: 24px;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.focusCategory {
+  @extend .category;
+  @extend .focused;
+  color: white;
+  border: 1px solid var(--main-color);
+  background-color: var(--main-color);
+}
+
+.optionWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'NanumSquareAcB';
+  & > ul {
+    display: flex;
+    gap: 1rem;
+    font-size: 1.25rem;
+    & > li {
+      cursor: pointer;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+.searchWrapper {
+  display: flex;
+  gap: 0.5rem;
+  & > input {
+    width: 25rem;
+    height: 3.3rem;
+    padding-left: 1.25rem;
+    padding-right: 1.5rem;
+    border: 2px solid #a9afb3;
+    border-radius: 8px;
+    font-family: 'Pretendard';
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: var(--darkgray-color);
+    &:focus {
+      border-color: #4d5256;
+      background-color: var(--gray-background);
+      outline: none;
+    }
+  }
+  & > button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    color: white;
+    background-color: var(--main-color);
+    font-size: 1.2rem;
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.divider {
+  width: 2px;
+  height: 1.25rem;
+  background-color: #9a9a9a;
+}
+
+.line {
+  width: 100%;
+  height: 2px;
+  background-color: #9a9a9a;
+  border-radius: 3px;
+  margin: 1.5rem 0;
+}
+
+.writeButton {
+  width: 7.5rem;
+  height: 3.5rem;
+  align-self: flex-end;
+  margin: 2.5rem 0;
+  background-color: var(--main-color);
+  color: white;
+  font-size: 1.25rem;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.pagenation {
+  display: flex;
+  align-self: center;
+  margin-bottom: 7.5rem;
+}
+
+.pageButton {
+  width: 2.75rem;
+  height: 2.75rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  outline: none;
+  font-family: 'Pretendard';
+  font-size: 1.25rem;
+  color: #4d5256;
+  cursor: pointer;
+  & > img {
+    width: 100%;
+    height: 100%;
+  }
+  &:hover {
+    opacity: 0.8;
+    color: var(--darkgray-color);
+  }
+}
+
+.focusedPageButton {
+  @extend .pageButton;
+  background-color: var(--main-color);
+  color: white;
+  &:hover {
+    color: white;
+  }
+}
