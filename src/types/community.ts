@@ -1,10 +1,10 @@
-export interface CategoryData {
+export type CategoryData = {
   code: string;
   name: string;
-}
+};
 
-export interface CategoryResponse {
+export type CategoryResponse = {
   code: string;
   message: string;
   data: CategoryData[];
-}
+};
