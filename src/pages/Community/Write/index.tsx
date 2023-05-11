@@ -6,6 +6,9 @@ function CommunityWritePage() {
   const { category } = useParams();
   const { token } = userStore();
 
+  if (category !== 'free' && category !== 'advertisement')
+    return <Navigate to="/community/free_board" />;
+
   if (!token) {
     alert(`로그인을 해주세요! ${category}`);
     return <Navigate to="/login" />;
