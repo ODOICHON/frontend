@@ -13,7 +13,8 @@ export default function CommunityPage() {
   const { category } = useParams();
   const location = useLocation();
   const isFocus = (menu: string) => {
-    const path = location.pathname.split('/')[2];
+    const pathArr = location.pathname.split('/');
+    const path = pathArr[pathArr.length - 1];
     if (path && path.includes(menu)) {
       return styles.focusMenu;
     }
