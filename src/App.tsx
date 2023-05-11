@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { useLocation, useRoutes } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import axios from 'axios';
@@ -7,10 +7,10 @@ import { routes } from '@/Routes';
 import { reissue } from './apis/reissue';
 import { getClient } from './queryClient';
 import userStore from './store/userStore';
-import ScrollToTop from './utils/ScrollToTop';
 import { setInterceptor } from './utils/utils';
 
 export default function App() {
+  const { pathname } = useLocation();
   const { token, setToken, logout } = userStore();
   const { VITE_BASE_URL } = import.meta.env;
 
@@ -42,15 +42,20 @@ export default function App() {
 
   const queryClient = getClient();
   const elem = useRoutes(routes);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   useEffect(() => {
     if (token) {
       setInterceptor(token.access_token);
     }
   }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       {elem}
-      <ScrollToTop />
       <ReactQueryDevtools />
     </QueryClientProvider>
   );
