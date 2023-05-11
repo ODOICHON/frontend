@@ -11,6 +11,7 @@ const IntroWritePage = lazy(() => import('@/pages/IntroWrite'));
 const IntroBoardPage = lazy(() => import('@/pages/IntroBoard'));
 const CommunityPage = lazy(() => import('@/pages/Community'));
 const CommunityBoardPage = lazy(() => import('@/pages/Community/Board'));
+const CommunityWritePage = lazy(() => import('@/pages/Community/Write'));
 const TradePage = lazy(() => import('@/pages/Trade'));
 
 export const routes: RouteObject[] = [
@@ -32,6 +33,10 @@ export const routes: RouteObject[] = [
           {
             path: '/community/:category',
             element: <CommunityBoardPage />,
+          },
+          {
+            path: '/community/write/:category',
+            element: <CommunityWritePage />,
           },
         ],
       },
