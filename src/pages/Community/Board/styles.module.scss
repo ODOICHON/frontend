@@ -1,3 +1,5 @@
+@import '@/media.scss';
+
 .container {
   width: 100%;
 }
@@ -110,6 +112,9 @@
       border-color: #4d5256;
       background-color: var(--gray-background);
       outline: none;
+    }
+    @include mobile {
+      width: 17rem;
     }
   }
   & > button {
