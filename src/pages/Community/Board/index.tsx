@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import nextArrow from '@/assets/common/nextArrow.svg';
 import prevArrow from '@/assets/common/prevArrow.svg';
 import CommunityBoard from '@/components/Community/Board';
@@ -18,6 +18,7 @@ const MIN_PAGE_NUM = 1;
 
 export default function CommunityBoardPage() {
   const { category } = useParams();
+  const navigate = useNavigate();
   const CATEGORY_DATA =
     category === 'free_board' ? freeCategory : advertiseCategory;
   const DESCRIPTION_DATA =
@@ -126,7 +127,13 @@ export default function CommunityBoardPage() {
             />
           ))}
         </ul>
-        <button className={styles.writeButton} type="button">
+        <button
+          className={styles.writeButton}
+          type="button"
+          onClick={() => {
+            navigate(`/community/write/${category.split('_')[0]}`);
+          }}
+        >
           글쓰기
         </button>
         <div className={styles.pagenation}>
