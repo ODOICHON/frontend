@@ -90,7 +90,7 @@ export default function AdminWritePage() {
     () => ({
       toolbar: {
         container: [
-          [{ header: [1, 2, false] }],
+          [{ header: [1, 2, 5, false] }],
           ['bold', 'underline', 'strike', 'blockquote'],
           [
             { list: 'ordered' },
