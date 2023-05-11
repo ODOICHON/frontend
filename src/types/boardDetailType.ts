@@ -1,10 +1,10 @@
-export interface Comment {
+export type Comment = {
   commentId: number;
   nickName: string;
   content: string;
   createdAt: Date;
-}
-export interface BoardDetailData {
+};
+export type BoardDetailData = {
   boardId: number;
   title: string;
   code: string;
@@ -16,14 +16,14 @@ export interface BoardDetailData {
   prefixCategory: string;
   commentCount: number;
   comments: Comment[];
-}
-export interface GetLikeResponse {
+};
+export type GetLikeResponse = {
   code: string;
   message: string;
   data: boolean;
-}
-export interface BoardDetailResponse {
+};
+export type BoardDetailResponse = {
   code: string;
   message: string;
   data: BoardDetailData;
-}
+};

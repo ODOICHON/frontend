@@ -1,52 +1,37 @@
 import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostBoardAPI } from '@/apis/boards';
-import { uploadFile } from '@/apis/uploadS3';
-import userStore from '@/store/userStore';
 import useQuillModules from '@/hooks/useQuillModules';
 import { BoardDetailData } from '@/types/boardDetailType';
 import { BoardForm } from '@/types/boardType';
+import { freeCategory, advertiseCategory } from '@/constants/category';
 import styles from './styles.module.scss';
+import Title from '../Title';
+
+type CommunityQuillProps = {
+  queryParam: string | undefined;
+};
 
 // TODO: 이미지 10개 이상 등록 불가
 
-export default function AdminWritePage() {
-  const { user } = userStore();
+export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  // TODO: location.state에 담겨지는 로직 생각, 확인 -> 수정하기 개발 시작하면
   const boardData: BoardDetailData | null = location.state;
   const queryClient = useQueryClient();
   const QuillRef = useRef<ReactQuill>();
-  const thumbnailRef = useRef<HTMLInputElement>(null);
-  const [thumbnail, setThumbnail] = useState(
-    boardData ? boardData.imageUrls[0] : '',
-  );
-  const [thumbnailTitle, setThumbnailTitle] = useState(
-    boardData ? boardData.imageUrls[0].split('/')[3] : '',
-  );
+
   const [contents, setContents] = useState('');
   const [title, setTitle] = useState(boardData ? boardData.title : '');
   const [category, setCategory] = useState(boardData ? boardData.category : '');
-  const thumbnailHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.currentTarget.files !== null) {
-      const file = e.currentTarget.files[0];
-      setThumbnailTitle(e.currentTarget.files[0].name);
-      try {
-        const res = await uploadFile(file);
-        const url = res || '';
-        setThumbnail(url);
-      } catch (error) {
-        const err = error as AxiosError;
-        return { ...err.response, success: false };
-      }
-    }
-  };
+  const prefixCategory = queryParam === 'free' ? 'DEFAULT' : 'ADVERTISEMENT';
+  const categoryList = queryParam === 'free' ? freeCategory : advertiseCategory;
 
   // 이미지를 업로드 하기 위한 함수
 
@@ -54,6 +39,7 @@ export default function AdminWritePage() {
   const onChange = (content: string) => {
     setContents(content);
   };
+
   const { mutate } = useMutation(
     (boardForm: BoardForm) =>
       restFetcher({
@@ -83,15 +69,15 @@ export default function AdminWritePage() {
       title,
       code: contents,
       category,
-      imageUrls: [thumbnail, ...getImageUrls(contents)],
-      prefixCategory: 'INTRO',
+      imageUrls: [...getImageUrls(contents)],
+      prefixCategory,
       fixed: false,
     };
     const response = await PostBoardAPI(boardForm);
     if (response?.code === 'SUCCESS') {
-      alert('게시글이 작성되었습니다.');
+      alert('게시글이 작성되었습니다😄');
       queryClient.refetchQueries([QueryKeys.BOARD]);
-      navigate('/introduce');
+      navigate(`/community/${queryParam}`);
     }
   };
   const onUpdate = () => {
@@ -99,8 +85,8 @@ export default function AdminWritePage() {
       title,
       code: contents,
       category,
-      imageUrls: [thumbnail, ...getImageUrls(contents)],
-      prefixCategory: 'INTRO',
+      imageUrls: [...getImageUrls(contents)],
+      prefixCategory,
       fixed: false,
     };
     mutate(boardForm);
@@ -113,18 +99,14 @@ export default function AdminWritePage() {
         .clipboard.dangerouslyPasteHTML(0, boardData.code);
     }
   }, []);
-  if (user?.authority !== 'ADMIN') {
-    alert('권한이 없습니다');
-    return <Navigate to="/introduce" />;
-  }
+
   return (
     <div className={styles.container}>
-      <h1>{boardData ? '관리자 글 수정하기' : '관리자 글쓰기'}</h1>
+      <Title category={queryParam} boardData={boardData} />
       <div className={styles.sectionWrapper}>
         <section className={styles.labelSection}>
           <label>말머리</label>
           <label>제목</label>
-          <label>썸네일</label>
           <label>내용</label>
         </section>
         <section className={styles.contentSection}>
@@ -139,8 +121,11 @@ export default function AdminWritePage() {
             <option disabled value="">
               말머리를 선택하세요.
             </option>
-            <option value="TREND">트렌드</option>
-            <option value="REVIEW">후기</option>
+            {categoryList.map((item) => (
+              <option key={item.name} value={item.name}>
+                {item.code}
+              </option>
+            ))}
           </select>
           <input
             className={styles.titleInput}
@@ -151,23 +136,7 @@ export default function AdminWritePage() {
               setTitle(e.target.value)
             }
           />
-          <div className={styles.thumbnailWrapper}>
-            <input
-              type="text"
-              value={thumbnailTitle}
-              placeholder="사진을 첨부해주세요. "
-              readOnly
-            />
-            <input
-              ref={thumbnailRef}
-              style={{ display: 'none' }}
-              type="file"
-              onChange={thumbnailHandler}
-            />
-            <button type="button" onClick={() => thumbnailRef.current?.click()}>
-              업로드
-            </button>
-          </div>
+
           <ReactQuill
             className={styles.quill}
             ref={(element) => {
@@ -180,15 +149,25 @@ export default function AdminWritePage() {
           />
         </section>
       </div>
-      {boardData ? (
-        <button type="button" onClick={onUpdate}>
-          수정하기
+      <section>
+        <button
+          type="button"
+          onClick={() => {
+            alert('기능 개발중..');
+          }}
+        >
+          임시저장
         </button>
-      ) : (
-        <button type="button" onClick={onPost}>
-          등록하기
-        </button>
-      )}
+        {boardData ? (
+          <button type="button" onClick={onUpdate}>
+            수정하기
+          </button>
+        ) : (
+          <button type="button" onClick={onPost}>
+            등록하기
+          </button>
+        )}
+      </section>
     </div>
   );
 }

@@ -1,18 +1,18 @@
-export interface Sort {
+export type Sort = {
   empty: boolean;
   sorted: boolean;
   unsorted: boolean;
-}
+};
 
-export interface Pageable {
+export type Pageable = {
   sort: Sort;
   offset: number;
   pageNumber: number;
   pageSize: number;
   unpaged: boolean;
   paged: boolean;
-}
-export interface BoardContent {
+};
+export type BoardContent = {
   boardId: number;
   title: string;
   code: string;
@@ -23,9 +23,9 @@ export interface BoardContent {
   commentCount: number;
   category: string;
   prefixCategory: string;
-}
+};
 
-export interface BoardData {
+export type BoardData = {
   content: BoardContent[];
   pageable: Pageable;
   last: boolean;
@@ -37,9 +37,18 @@ export interface BoardData {
   first: boolean;
   numberOfElements: number;
   empty: boolean;
-}
-export interface BoardResponse {
+};
+export type BoardResponse = {
   code: string;
   message: string;
   data: BoardData;
-}
+};
+
+export type BoardForm = {
+  title: string;
+  code: string;
+  category: string;
+  imageUrls: string[];
+  prefixCategory: string;
+  fixed: boolean;
+};
