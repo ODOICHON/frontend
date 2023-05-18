@@ -119,7 +119,7 @@ export const COMMUNITY_BOARD: BoardResponse = {
       paged: true,
     },
     last: true,
-    totalPages: 1,
+    totalPages: 12,
     totalElements: 1,
     sort: {
       empty: true,

@@ -1,0 +1,35 @@
+.pagenation {
+  display: flex;
+  align-self: center;
+  margin-bottom: 7.5rem;
+}
+
+.pageButton {
+  width: 2.75rem;
+  height: 2.75rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  outline: none;
+  font-family: 'Pretendard';
+  font-size: 1.25rem;
+  color: #4d5256;
+  cursor: pointer;
+  & > img {
+    width: 100%;
+    height: 100%;
+  }
+  &:hover {
+    opacity: 0.8;
+    color: var(--darkgray-color);
+  }
+}
+
+.focusedPageButton {
+  @extend .pageButton;
+  background-color: var(--main-color);
+  color: white;
+  &:hover {
+    color: white;
+  }
+}

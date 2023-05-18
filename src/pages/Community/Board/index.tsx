@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import nextArrow from '@/assets/common/nextArrow.svg';
-import prevArrow from '@/assets/common/prevArrow.svg';
 import CommunityBoard from '@/components/Community/Board';
+import Pagenation from '@/components/Pagenation';
 import useInput from '@/hooks/useInput';
 import {
   freeCategory,
@@ -12,9 +11,6 @@ import {
 } from '@/constants/category';
 import { COMMUNITY_BOARD } from '@/constants/community_dummy';
 import styles from './styles.module.scss';
-
-const MAX_PAGE_NUM = 7;
-const MIN_PAGE_NUM = 1;
 
 export default function CommunityBoardPage() {
   const { category } = useParams();
@@ -26,32 +22,12 @@ export default function CommunityBoardPage() {
 
   const [focusedCategory, setFocusedCategory] = useState('DEFAULT');
   const [focusedFilter, setFocusedFilter] = useState('NEW');
-  const [totalPage, setTotalPage] = useState<number[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
   const [search, handleSearch, setSearch] = useInput('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSearch('');
   };
-
-  const handleCurrentPage = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const buttonId = e.currentTarget.id;
-    if (buttonId === 'prevPage') {
-      if (currentPage === MIN_PAGE_NUM) return;
-      setCurrentPage((prev) => prev - 1);
-    }
-    if (buttonId === 'nextPage') {
-      if (currentPage === MAX_PAGE_NUM) return;
-      setCurrentPage((prev) => prev + 1);
-      return null;
-    }
-  };
-
-  // FIXME: 페이지네이션 API 연결 전 TotalPage를 설정하기 위한 임시코드. API 연결 후 코드 삭제
-  useEffect(() => {
-    setTotalPage(Array.from({ length: MAX_PAGE_NUM }, (_, index) => index + 1));
-  }, []);
 
   if (category !== 'free_board' && category !== 'advertisement_board')
     return <Navigate to="/community" />;
@@ -136,38 +112,7 @@ export default function CommunityBoardPage() {
         >
           글쓰기
         </button>
-        <div className={styles.pagenation}>
-          <button
-            className={styles.pageButton}
-            type="button"
-            onClick={handleCurrentPage}
-          >
-            <img src={prevArrow} alt="prevPageButton" />
-          </button>
-          {totalPage?.map((page, index) => (
-            <button
-              id="prevPage"
-              type="button"
-              className={
-                page === currentPage
-                  ? styles.focusedPageButton
-                  : styles.pageButton
-              }
-              key={index}
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </button>
-          ))}
-          <button
-            id="nextPage"
-            className={styles.pageButton}
-            type="button"
-            onClick={handleCurrentPage}
-          >
-            <img src={nextArrow} alt="nextPageButton" />
-          </button>
-        </div>
+        <Pagenation totalPage={COMMUNITY_BOARD.data.totalPages} />
       </section>
     </div>
   );
