@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import nextArrow from '@/assets/common/nextArrow.svg';
 import prevArrow from '@/assets/common/prevArrow.svg';
 import styles from './styles.module.scss';
@@ -13,36 +13,42 @@ export default function Pagenation({ totalPage }: PagenationProps) {
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const getPageNumbers = (total: number, current: number, limit = 5) => {
-    const totalPageArr = Array(total)
-      .fill(undefined)
-      .map((_, idx) => idx + 1);
+  const getPageNumbers = useCallback(
+    (total: number, current: number, limit = 5) => {
+      const totalPageArr = Array(total)
+        .fill(undefined)
+        .map((_, idx) => idx + 1);
 
-    const currentPageGroup = Math.floor((current - 1) / limit);
-    const lastPageGroup = Math.floor((total - 1) / limit);
-    const currentPageGroupStartNumber = currentPageGroup * limit;
+      const currentPageGroup = Math.floor((current - 1) / limit);
+      const lastPageGroup = Math.floor((total - 1) / limit);
+      const currentPageGroupStartNumber = currentPageGroup * limit;
 
-    if (currentPageGroup === lastPageGroup) {
-      return totalPageArr.slice(currentPageGroupStartNumber, total);
-    }
-    return totalPageArr.slice(
-      currentPageGroupStartNumber,
-      currentPageGroupStartNumber + limit,
-    );
-  };
+      if (currentPageGroup === lastPageGroup) {
+        return totalPageArr.slice(currentPageGroupStartNumber, total);
+      }
+      return totalPageArr.slice(
+        currentPageGroupStartNumber,
+        currentPageGroupStartNumber + limit,
+      );
+    },
+    [],
+  );
 
-  const handleCurrentPage = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const buttonId = e.currentTarget.id;
-    if (buttonId === 'prevPage') {
-      if (currentPage === 1) return;
-      setCurrentPage((prev) => prev - 1);
-    }
-    if (buttonId === 'nextPage') {
-      if (currentPage === totalPage) return;
-      setCurrentPage((prev) => prev + 1);
-      return null;
-    }
-  };
+  const handleCurrentPage = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const buttonId = e.currentTarget.id;
+      if (buttonId === 'prevPage') {
+        if (currentPage === 1) return;
+        setCurrentPage((prev) => prev - 1);
+      }
+      if (buttonId === 'nextPage') {
+        if (currentPage === totalPage) return;
+        setCurrentPage((prev) => prev + 1);
+        return null;
+      }
+    },
+    [currentPage],
+  );
 
   useEffect(() => {
     setPageNumbers(getPageNumbers(totalPage, currentPage, PAEG_LIMIT));
@@ -54,6 +60,7 @@ export default function Pagenation({ totalPage }: PagenationProps) {
         id="prevPage"
         className={styles.pageButton}
         type="button"
+        disabled={currentPage === 1}
         onClick={handleCurrentPage}
       >
         <img src={prevArrow} alt="prevPageButton" />
@@ -75,6 +82,7 @@ export default function Pagenation({ totalPage }: PagenationProps) {
         id="nextPage"
         className={styles.pageButton}
         type="button"
+        disabled={currentPage === totalPage}
         onClick={handleCurrentPage}
       >
         <img src={nextArrow} alt="nextPageButton" />

@@ -15,13 +15,20 @@
   font-size: 1.25rem;
   color: #4d5256;
   cursor: pointer;
-  & > img {
-    width: 100%;
-    height: 100%;
-  }
   &:hover {
     opacity: 0.8;
     color: var(--darkgray-color);
+  }
+  &:disabled {
+    cursor: auto;
+    opacity: 0.3;
+    &:hover {
+      opacity: 0.3;
+    }
+  }
+  & > img {
+    width: 100%;
+    height: 100%;
   }
 }
 
