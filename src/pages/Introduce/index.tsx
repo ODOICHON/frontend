@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import ReviewBoard from '@/components/IntroComponents/ReviewBoard';
-import TrendBoard from '@/components/IntroComponents/TrendBoard';
+import ReviewBoard from '@/components/Introduce/ReviewBoard';
+import TrendBoard from '@/components/Introduce/TrendBoard';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
@@ -17,18 +17,20 @@ import styles from './styles.module.scss';
 export default function IntroducePage() {
   const { user } = userStore();
   const navigate = useNavigate();
+
   const [trendSliceData, setTrendSliceData] = useState<BoardContent[]>([]);
   const [trendData, setTrendData] = useState<BoardContent[]>([]);
   const [reviewData, setReviewData] = useState<BoardContent[]>([]);
   const [page, setPage] = useState(1);
   const [pageLength, setPageLength] = useState(1);
+
   const { data: boardList } = useQuery<BoardResponse>(
     [QueryKeys.BOARD, 'intro_board'],
     () =>
       restFetcher({
         method: 'GET',
         path: 'boards',
-        params: { category: 'INTRO' },
+        params: { prefix: 'INTRO' },
       }),
     {
       onSuccess: (response) => {

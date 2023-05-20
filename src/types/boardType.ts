@@ -23,6 +23,7 @@ export type BoardContent = {
   commentCount: number;
   category: string;
   prefixCategory: string;
+  fixed: boolean;
 };
 
 export type BoardData = {

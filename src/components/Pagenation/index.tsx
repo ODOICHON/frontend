@@ -49,8 +49,8 @@ export default function Pagenation({
       if (buttonId === 'nextPage') {
         if (currentPage === totalPage) return;
         setCurrentPage((prev) => prev + 1);
-        return null;
       }
+      window.scrollTo(0, 0);
     },
     [currentPage],
   );
@@ -78,7 +78,10 @@ export default function Pagenation({
             page === currentPage ? styles.focusedPageButton : styles.pageButton
           }
           key={page}
-          onClick={() => setCurrentPage(page)}
+          onClick={() => {
+            setCurrentPage(page);
+            window.scrollTo(0, 0);
+          }}
         >
           {page}
         </button>

@@ -24,43 +24,23 @@ export default function CommunityBoardPage() {
 
   const [categoryData, setCategoryData] = useState<BoardData | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
-  const [focusedCategory, setFocusedCategory] = useState('DEFAULT');
-  const [focusedFilter, setFocusedFilter] = useState('NEW');
+  const [focusedCategory, setFocusedCategory] = useState('ALL');
+  const [focusedFilter, setFocusedFilter] = useState('RECENT');
   const [search, handleSearch, setSearch] = useInput('');
 
-  const { data: _, refetch: refetchBoardList } = useQuery<BoardResponse>(
-    [QueryKeys.BOARD, category, currentPage],
-    () =>
-      restFetcher({
-        method: 'GET',
-        path: 'boards/category/search',
-        params: {
-          name: category === 'free_board' ? 'DEFAULT' : 'ADVERTISEMENT',
-          page: currentPage - 1,
-          keyword: search,
-        },
-      }),
-    {
-      enabled: focusedCategory === 'DEFAULT',
-      onSuccess: (res) => {
-        setCategoryData(res.data);
-      },
+  const { data: _, refetch } = useQuery<BoardResponse>(
+    [QueryKeys.BOARD, category],
+    () => {
+      const params = {
+        prefix: category === 'free_board' ? 'DEFAULT' : 'ADVERTISEMENT',
+        ...(focusedCategory !== 'ALL' && { category: focusedCategory }),
+        ...(search && { search }),
+        order: focusedFilter,
+        page: currentPage - 1,
+      };
+      return restFetcher({ method: 'GET', path: 'boards', params });
     },
-  );
-  const { data: __, refetch: refetchCategoryBoardList } = useQuery(
-    [QueryKeys.BOARD, category, focusedCategory],
-    () =>
-      restFetcher({
-        method: 'GET',
-        path: 'boards/board-category/search',
-        params: {
-          name: focusedCategory,
-          keyword: 'test',
-          page: currentPage - 1,
-        },
-      }),
     {
-      enabled: focusedCategory !== 'DEFAULT',
       onSuccess: (res) => {
         setCategoryData(res.data);
       },
@@ -69,17 +49,17 @@ export default function CommunityBoardPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    refetch();
     setSearch('');
   };
 
   useEffect(() => {
-    if (focusedCategory === 'DEFAULT') {
-      refetchBoardList();
-    } else {
-      refetchCategoryBoardList();
-    }
-    window.scrollTo(0, 0);
-  }, [currentPage, focusedCategory, category]);
+    refetch();
+  }, [category, focusedCategory, focusedFilter, currentPage]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category, focusedCategory, focusedFilter, search]);
 
   if (category !== 'free_board' && category !== 'advertisement_board')
     return <Navigate to="/community" />;
@@ -113,9 +93,9 @@ export default function CommunityBoardPage() {
             <li
               role="presentation"
               className={
-                focusedFilter === 'NEW' ? styles.focused : styles.notFocused
+                focusedFilter === 'RECENT' ? styles.focused : styles.notFocused
               }
-              onClick={() => setFocusedFilter('NEW')}
+              onClick={() => setFocusedFilter('RECENT')}
             >
               최신순
             </li>
@@ -152,6 +132,7 @@ export default function CommunityBoardPage() {
               commentCount={content.commentCount}
               nickName={content.nickName}
               createdAt={content.createdAt}
+              fixed={content.fixed}
             />
           ))}
         </ul>
