@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import CommunityBoard from '@/components/Community/Board';
 import { restFetcher, QueryKeys } from '@/queryClient';
+import Loading from '@/components/Loading';
 import Pagenation from '@/components/Pagenation';
 import useInput from '@/hooks/useInput';
-import { BoardData, BoardResponse } from '@/types/boardType';
+import { BoardResponse } from '@/types/boardType';
 import {
   freeCategory,
   advertiseCategory,
@@ -17,34 +18,37 @@ import styles from './styles.module.scss';
 export default function CommunityBoardPage() {
   const { category } = useParams();
   const navigate = useNavigate();
-  const CATEGORY_DATA =
-    category === 'free_board' ? freeCategory : advertiseCategory;
-  const DESCRIPTION_DATA =
-    category === 'free_board' ? freeBoardData : advertiseBoardData;
 
-  const [categoryData, setCategoryData] = useState<BoardData | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
   const [focusedCategory, setFocusedCategory] = useState('ALL');
   const [focusedFilter, setFocusedFilter] = useState('RECENT');
   const [search, handleSearch, setSearch] = useInput('');
 
-  const { data: _, refetch } = useQuery<BoardResponse>(
-    [QueryKeys.BOARD, category],
-    () => {
-      const params = {
-        prefix: category === 'free_board' ? 'DEFAULT' : 'ADVERTISEMENT',
-        ...(focusedCategory !== 'ALL' && { category: focusedCategory }),
-        ...(search && { search }),
-        order: focusedFilter,
-        page: currentPage - 1,
-      };
-      return restFetcher({ method: 'GET', path: 'boards', params });
-    },
-    {
-      onSuccess: (res) => {
-        setCategoryData(res.data);
-      },
-    },
+  const queryClient = useQueryClient();
+
+  const CATEGORY_DATA =
+    category === 'free_board' ? freeCategory : advertiseCategory;
+  const DESCRIPTION_DATA =
+    category === 'free_board' ? freeBoardData : advertiseBoardData;
+
+  const fetchBoardList = (page: number) => {
+    const params = {
+      prefix: category === 'free_board' ? 'DEFAULT' : 'ADVERTISEMENT',
+      ...(focusedCategory !== 'ALL' && { category: focusedCategory }),
+      ...(search && { search }),
+      order: focusedFilter,
+      page: page - 1,
+    };
+    return restFetcher({ method: 'GET', path: 'boards', params });
+  };
+
+  const {
+    data: boardListData,
+    refetch,
+    isLoading,
+  } = useQuery<BoardResponse>(
+    [QueryKeys.BOARD, category, focusedCategory, focusedFilter, currentPage],
+    () => fetchBoardList(currentPage),
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,13 +57,31 @@ export default function CommunityBoardPage() {
     setSearch('');
   };
 
+  // 게시글 페이지 데이터 API 재요청
   useEffect(() => {
     refetch();
   }, [category, focusedCategory, focusedFilter, currentPage]);
 
+  // 현재 페이지 초기화
   useEffect(() => {
     setCurrentPage(1);
   }, [category, focusedCategory, focusedFilter, search]);
+
+  // 게시글 다음 페이지 데이터 프리페칭
+  useEffect(() => {
+    if (boardListData && currentPage < boardListData.data.totalPages) {
+      queryClient.prefetchQuery(
+        [
+          QueryKeys.BOARD,
+          category,
+          focusedCategory,
+          focusedFilter,
+          currentPage + 1,
+        ],
+        () => fetchBoardList(currentPage + 1),
+      );
+    }
+  }, [currentPage, boardListData]);
 
   if (category !== 'free_board' && category !== 'advertisement_board')
     return <Navigate to="/community" />;
@@ -122,7 +144,8 @@ export default function CommunityBoardPage() {
         </div>
         <div className={styles.line} />
         <ul>
-          {categoryData?.content.map((content) => (
+          {isLoading && <Loading />}
+          {boardListData?.data.content.map((content) => (
             <CommunityBoard
               key={content.boardId}
               category={content.category}
@@ -145,9 +168,9 @@ export default function CommunityBoardPage() {
         >
           글쓰기
         </button>
-        {categoryData && categoryData.content.length > 0 && (
+        {boardListData && boardListData.data.content.length > 0 && (
           <Pagenation
-            totalPage={categoryData.totalPages}
+            totalPage={boardListData.data.totalPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />
