@@ -5,13 +5,18 @@ import styles from './styles.module.scss';
 
 type PagenationProps = {
   totalPage: number;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const PAEG_LIMIT = 5; // 한 번에 최대 5개의 페이지가 보여짐
 
-export default function Pagenation({ totalPage }: PagenationProps) {
+export default function Pagenation({
+  totalPage,
+  currentPage,
+  setCurrentPage,
+}: PagenationProps) {
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const getPageNumbers = useCallback(
     (total: number, current: number, limit = 5) => {

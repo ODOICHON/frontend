@@ -23,7 +23,7 @@ export default function IntroducePage() {
   const [page, setPage] = useState(1);
   const [pageLength, setPageLength] = useState(1);
   const { data: boardList } = useQuery<BoardResponse>(
-    [QueryKeys.BOARD],
+    [QueryKeys.BOARD, 'intro_board'],
     () =>
       restFetcher({
         method: 'GET',

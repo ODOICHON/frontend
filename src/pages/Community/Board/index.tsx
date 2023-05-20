@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import CommunityBoard from '@/components/Community/Board';
+import { restFetcher, QueryKeys } from '@/queryClient';
 import Pagenation from '@/components/Pagenation';
 import useInput from '@/hooks/useInput';
+import { BoardData, BoardResponse } from '@/types/boardType';
 import {
   freeCategory,
   advertiseCategory,
   freeBoardData,
   advertiseBoardData,
 } from '@/constants/category';
-import { COMMUNITY_BOARD } from '@/constants/community_dummy';
 import styles from './styles.module.scss';
 
 export default function CommunityBoardPage() {
@@ -20,14 +22,64 @@ export default function CommunityBoardPage() {
   const DESCRIPTION_DATA =
     category === 'free_board' ? freeBoardData : advertiseBoardData;
 
+  const [categoryData, setCategoryData] = useState<BoardData | undefined>();
+  const [currentPage, setCurrentPage] = useState(1);
   const [focusedCategory, setFocusedCategory] = useState('DEFAULT');
   const [focusedFilter, setFocusedFilter] = useState('NEW');
   const [search, handleSearch, setSearch] = useInput('');
+
+  const { data: _, refetch: refetchBoardList } = useQuery<BoardResponse>(
+    [QueryKeys.BOARD, category, currentPage],
+    () =>
+      restFetcher({
+        method: 'GET',
+        path: 'boards/category/search',
+        params: {
+          name: category === 'free_board' ? 'DEFAULT' : 'ADVERTISEMENT',
+          page: currentPage - 1,
+          keyword: search,
+        },
+      }),
+    {
+      enabled: focusedCategory === 'DEFAULT',
+      onSuccess: (res) => {
+        setCategoryData(res.data);
+      },
+    },
+  );
+  const { data: __, refetch: refetchCategoryBoardList } = useQuery(
+    [QueryKeys.BOARD, category, focusedCategory],
+    () =>
+      restFetcher({
+        method: 'GET',
+        path: 'boards/board-category/search',
+        params: {
+          name: focusedCategory,
+          keyword: 'test',
+          page: currentPage - 1,
+        },
+      }),
+    {
+      enabled: focusedCategory !== 'DEFAULT',
+      onSuccess: (res) => {
+        setCategoryData(res.data);
+      },
+    },
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSearch('');
   };
+
+  useEffect(() => {
+    if (focusedCategory === 'DEFAULT') {
+      refetchBoardList();
+    } else {
+      refetchCategoryBoardList();
+    }
+    window.scrollTo(0, 0);
+  }, [currentPage, focusedCategory, category]);
 
   if (category !== 'free_board' && category !== 'advertisement_board')
     return <Navigate to="/community" />;
@@ -90,7 +142,7 @@ export default function CommunityBoardPage() {
         </div>
         <div className={styles.line} />
         <ul>
-          {COMMUNITY_BOARD.data.content.map((content) => (
+          {categoryData?.content.map((content) => (
             <CommunityBoard
               key={content.boardId}
               category={content.category}
@@ -112,7 +164,13 @@ export default function CommunityBoardPage() {
         >
           글쓰기
         </button>
-        <Pagenation totalPage={COMMUNITY_BOARD.data.totalPages} />
+        {categoryData && categoryData.content.length > 0 && (
+          <Pagenation
+            totalPage={categoryData.totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </section>
     </div>
   );
