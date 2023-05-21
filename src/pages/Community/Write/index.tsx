@@ -5,7 +5,7 @@ import userStore from '@/store/userStore';
 function CommunityWritePage() {
   const { category } = useParams();
   const { token } = userStore();
-  if (category !== 'free' && category !== 'advertisement')
+  if (category !== 'free_board' && category !== 'advertisement_board')
     return <Navigate to="/community/free_board" />;
 
   if (!token) {
