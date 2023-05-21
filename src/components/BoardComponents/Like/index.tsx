@@ -15,8 +15,12 @@ type LikeProps = {
 export default function Like({ boardId, loveCount, intro }: LikeProps) {
   const { user } = userStore();
   const queryClient = useQueryClient();
-  const { data } = useQuery<GetLikeResponse>([QueryKeys.LIKE], () =>
-    restFetcher({ method: 'GET', path: `/loves/${boardId}` }),
+  const { data: isLove } = useQuery<GetLikeResponse>(
+    [QueryKeys.LIKE],
+    () => restFetcher({ method: 'GET', path: `/loves/${boardId}` }),
+    {
+      enabled: !!user,
+    },
   );
   const { mutate: clickLove } = useMutation(
     () => restFetcher({ method: 'PUT', path: `/loves/${boardId}` }),
@@ -56,7 +60,7 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
       },
     },
   );
-  const { mutate: cancleLove } = useMutation(
+  const { mutate: cancelLove } = useMutation(
     () => restFetcher({ method: 'DELETE', path: `/loves/${boardId}` }),
     {
       onMutate: async () => {
@@ -99,12 +103,12 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
       alert('로그인 후 이용 가능합니다.');
       return;
     }
-    data?.data ? cancleLove() : clickLove();
+    isLove?.data ? cancelLove() : clickLove();
   };
   return (
     <div className={styles.wrapper}>
       <img
-        src={data?.data ? love : notLove}
+        src={isLove?.data ? love : notLove}
         alt="like"
         onClick={onClickButton}
       />
