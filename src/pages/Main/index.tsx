@@ -31,7 +31,7 @@ export default function MainPage() {
       restFetcher({
         method: 'GET',
         path: 'boards',
-        params: { category: 'INTRO' },
+        params: { prefix: 'INTRO' },
       }),
     {
       onSuccess: (data) => {
