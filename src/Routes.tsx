@@ -11,6 +11,7 @@ const IntroWritePage = lazy(() => import('@/pages/Introduce/Write'));
 const IntroBoardPage = lazy(() => import('@/pages/Introduce/Board'));
 const CommunityPage = lazy(() => import('@/pages/Community'));
 const CommunityBoardPage = lazy(() => import('@/pages/Community/Board'));
+const CommunityBoardDetailPage = lazy(() => import('@/pages/Community/Detail'));
 const CommunityWritePage = lazy(() => import('@/pages/Community/Write'));
 const TradePage = lazy(() => import('@/pages/Trade'));
 
@@ -33,6 +34,10 @@ export const routes: RouteObject[] = [
           {
             path: '/community/:category',
             element: <CommunityBoardPage />,
+          },
+          {
+            path: '/community/:category/:id',
+            element: <CommunityBoardDetailPage />,
           },
           {
             path: '/community/write/:category',
