@@ -153,7 +153,9 @@ export default function CommunityBoardPage() {
           {boardListData?.data.content.map((content) => (
             <CommunityBoard
               key={content.boardId}
+              boardId={content.boardId}
               category={content.category}
+              prefixCategory={category || ''}
               title={content.title}
               oneLineContent={content.oneLineContent}
               imageUrl={content.imageUrl}
@@ -168,7 +170,7 @@ export default function CommunityBoardPage() {
           className={styles.writeButton}
           type="button"
           onClick={() => {
-            navigate(`/community/write/${category.split('_')[0]}`);
+            navigate(`/community/write/${category}`);
           }}
         >
           글쓰기
