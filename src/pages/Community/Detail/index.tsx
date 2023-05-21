@@ -40,7 +40,7 @@ export default function CommunityBoardDetailPage() {
     category !== getPrefixCategoryName(boardData.data.prefixCategory)
   ) {
     const prefixCategory = getPrefixCategoryName(
-      boardData?.data.prefixCategory || '',
+      boardData?.data.prefixCategory,
     );
     return <Navigate to={`/community/${prefixCategory}/${id}`} />;
   }
@@ -64,9 +64,9 @@ export default function CommunityBoardDetailPage() {
               </span>
             </p>
           </div>
-          <div className={styles.line} />
         </div>
       </div>
+      <div className={styles.line} />
 
       <div className={styles.contentWrapper}>
         <div
