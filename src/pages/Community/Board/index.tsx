@@ -55,18 +55,23 @@ export default function CommunityBoardPage() {
     e.preventDefault();
     refetch();
     setSearch('');
+    setCurrentPage(1);
   };
+
+  // 게시판 이동시 카테고리 초기화
+  useEffect(() => {
+    setFocusedCategory('ALL');
+  }, [category]);
+
+  // 현재 페이지 초기화
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category, focusedCategory, focusedFilter]);
 
   // 게시글 페이지 데이터 API 재요청
   useEffect(() => {
     refetch();
   }, [category, focusedCategory, focusedFilter, currentPage]);
-
-  // 현재 페이지 초기화
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [category, focusedCategory, focusedFilter, search]);
-
   // 게시글 다음 페이지 데이터 프리페칭
   useEffect(() => {
     if (boardListData && currentPage < boardListData.data.totalPages) {
