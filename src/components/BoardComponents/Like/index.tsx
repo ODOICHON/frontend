@@ -15,8 +15,10 @@ type LikeProps = {
 export default function Like({ boardId, loveCount, intro }: LikeProps) {
   const { user } = userStore();
   const queryClient = useQueryClient();
-  const { data } = useQuery<GetLikeResponse>([QueryKeys.LIKE], () =>
-    restFetcher({ method: 'GET', path: `/loves/${boardId}` }),
+  const { data: isLove } = useQuery<GetLikeResponse>(
+    [QueryKeys.LIKE, boardId],
+    () => restFetcher({ method: 'GET', path: `/loves/${boardId}` }),
+    { enabled: !!user },
   );
   const { mutate: clickLove } = useMutation(
     () => restFetcher({ method: 'PUT', path: `/loves/${boardId}` }),
@@ -52,11 +54,13 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
         // 쿼리 함수의 성공, 실패 두 경우 모두 실행.
         queryClient.refetchQueries([QueryKeys.LIKE]);
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
-        return intro && queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
+        return queryClient.refetchQueries([
+          intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
+        ]);
       },
     },
   );
-  const { mutate: cancleLove } = useMutation(
+  const { mutate: cancelLove } = useMutation(
     () => restFetcher({ method: 'DELETE', path: `/loves/${boardId}` }),
     {
       onMutate: async () => {
@@ -90,7 +94,9 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
         // 쿼리 함수의 성공, 실패 두 경우 모두 실행.
         queryClient.refetchQueries([QueryKeys.LIKE]);
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
-        return intro && queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
+        return queryClient.refetchQueries([
+          intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
+        ]);
       },
     },
   );
@@ -99,13 +105,13 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
       alert('로그인 후 이용 가능합니다.');
       return;
     }
-    data?.data ? cancleLove() : clickLove();
+    isLove?.data ? cancelLove() : clickLove();
   };
   return (
     <div className={styles.wrapper}>
       <img
         role="presentation"
-        src={data?.data ? love : notLove}
+        src={isLove?.data ? love : notLove}
         alt="like"
         onClick={onClickButton}
       />

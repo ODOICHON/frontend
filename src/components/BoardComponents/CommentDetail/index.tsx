@@ -21,14 +21,16 @@ export default function CommentDetail({
   const queryClient = useQueryClient();
   const [isUpdating, setIsUpdating] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [updateContent, setUpdateContenet] = useState(comment.content);
+  const [updateContent, setUpdateContent] = useState(comment.content);
   const { mutate: deleteComment } = useMutation(
     () =>
       restFetcher({ method: 'DELETE', path: `comments/${comment.commentId}` }),
     {
       onSuccess: () => {
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
-        return intro && queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
+        return queryClient.refetchQueries([
+          intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
+        ]);
       },
     },
   );
@@ -45,12 +47,11 @@ export default function CommentDetail({
     {
       onSuccess: () => {
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
-        return (
-          intro &&
-          queryClient
-            .refetchQueries([QueryKeys.INTRO_BOARD])
-            .then(() => setIsUpdating(false))
-        );
+        return queryClient
+          .refetchQueries([
+            intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
+          ])
+          .then(() => setIsUpdating(false));
       },
     },
   );
@@ -59,15 +60,15 @@ export default function CommentDetail({
       inputRef.current.style.height = 'auto';
       inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
       if (e.currentTarget.value.length > 400) return;
-      setUpdateContenet(e.target.value);
+      setUpdateContent(e.target.value);
     }
   };
   const onClickUpdate = () => {
     setIsUpdating(true);
   };
-  const onClickCancle = () => {
+  const onClickCancel = () => {
     setIsUpdating(false);
-    setUpdateContenet(comment.content);
+    setUpdateContent(comment.content);
   };
   useEffect(() => {
     const len = inputRef.current?.textLength;
@@ -89,7 +90,7 @@ export default function CommentDetail({
               <button type="button" onClick={() => updateComment()}>
                 수정하기
               </button>
-              <button type="button" onClick={onClickCancle}>
+              <button type="button" onClick={onClickCancel}>
                 취소
               </button>
             </span>

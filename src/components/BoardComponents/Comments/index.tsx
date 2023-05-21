@@ -36,7 +36,9 @@ export default function Comments({
       onSuccess: () => {
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
         setContent('');
-        return intro && queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
+        return queryClient.refetchQueries([
+          intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
+        ]);
       },
     },
   );
