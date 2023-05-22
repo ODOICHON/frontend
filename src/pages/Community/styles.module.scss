@@ -11,7 +11,8 @@
   border-bottom: 1px solid #ddd;
   z-index: 50;
   @include mobile {
-    height: 50px;
+    top: 50px;
+    height: 40px;
   }
 }
 
