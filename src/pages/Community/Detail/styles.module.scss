@@ -46,24 +46,24 @@
 
 .content {
   & h1 {
-    font-size: 2.5rem;
-    line-height: 3.5rem;
-    margin-bottom: 1rem;
-    font-family: 'NanumSquareAcB';
-  }
-  & h2 {
     font-size: 2rem;
     line-height: 3rem;
     margin-bottom: 1rem;
     font-family: 'NanumSquareAcB';
   }
-  & h5 {
-    font-size: 1.2rem;
-    line-height: 2.2rem;
-  }
-  & p {
+  & h2 {
     font-size: 1.5rem;
     line-height: 2.5rem;
+    margin-bottom: 1rem;
+    font-family: 'NanumSquareAcB';
+  }
+  & h5 {
+    font-size: 1rem;
+    line-height: 2rem;
+  }
+  & p {
+    font-size: 1.3rem;
+    line-height: 2.3rem;
   }
   & strong {
     font-family: 'NanumSquareAcB';
