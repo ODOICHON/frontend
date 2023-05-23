@@ -50,13 +50,13 @@ export default function Pagenation({
         if (currentPage === totalPage) return;
         setCurrentPage((prev) => prev + 1);
       }
-      window.scrollTo(0, 0);
     },
     [currentPage],
   );
 
   useEffect(() => {
     setPageNumbers(getPageNumbers(totalPage, currentPage, PAEG_LIMIT));
+    window.scrollTo(0, 0);
   }, [totalPage, currentPage]);
 
   return (
@@ -80,7 +80,6 @@ export default function Pagenation({
           key={page}
           onClick={() => {
             setCurrentPage(page);
-            window.scrollTo(0, 0);
           }}
         >
           {page}
