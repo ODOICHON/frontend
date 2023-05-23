@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -6,6 +7,7 @@ import { motion } from 'framer-motion';
 import Comments from '@/components/BoardComponents/Comments';
 import Like from '@/components/BoardComponents/Like';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import NotFoundPage from '@/pages/NotFound';
 import { DeleteBoardAPI } from '@/apis/boards';
 import userStore from '@/store/userStore';
 import { BoardDetailResponse } from '@/types/boardDetailType';
@@ -17,9 +19,17 @@ export default function IntroBoardPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const [isError, setIsError] = useState(false);
+
   const { data: boardData } = useQuery<BoardDetailResponse>(
     [QueryKeys.INTRO_BOARD, id],
     () => restFetcher({ method: 'GET', path: `/boards/${id}` }),
+    {
+      onError: () => {
+        setIsError(true);
+      },
+    },
   );
   const deletePost = async () => {
     const response = await DeleteBoardAPI(`${boardData?.data.boardId}`);
@@ -34,6 +44,11 @@ export default function IntroBoardPage() {
       state: boardData?.data,
     });
   };
+
+  if (isError) {
+    return <NotFoundPage />;
+  }
+
   return (
     <motion.div
       variants={opacityVariants}

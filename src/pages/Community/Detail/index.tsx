@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -5,6 +6,7 @@ import Dompurify from 'dompurify';
 import Comments from '@/components/BoardComponents/Comments';
 import Like from '@/components/BoardComponents/Like';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import NotFoundPage from '@/pages/NotFound';
 import { DeleteBoardAPI } from '@/apis/boards';
 import userStore from '@/store/userStore';
 import { getCategoryName, getPrefixCategoryName } from '@/utils/utils';
@@ -15,10 +17,18 @@ export default function CommunityBoardDetailPage() {
   const { user } = userStore();
   const { category, id } = useParams();
   const navigate = useNavigate();
+
+  const [isError, setIsError] = useState(false);
+
   const queryClient = useQueryClient();
   const { data: boardData } = useQuery<BoardDetailResponse>(
     [QueryKeys.COMMUNITY_BOARD, id],
     () => restFetcher({ method: 'GET', path: `/boards/${id}` }),
+    {
+      onError: () => {
+        setIsError(true);
+      },
+    },
   );
 
   const deletePost = async () => {
@@ -44,6 +54,11 @@ export default function CommunityBoardDetailPage() {
     );
     return <Navigate to={`/community/${prefixCategory}/${id}`} />;
   }
+
+  if (isError) {
+    return <NotFoundPage />;
+  }
+
   return (
     <section className={styles.container}>
       <div className={styles.title}>

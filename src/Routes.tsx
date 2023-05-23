@@ -14,6 +14,7 @@ const CommunityBoardPage = lazy(() => import('@/pages/Community/Board'));
 const CommunityBoardDetailPage = lazy(() => import('@/pages/Community/Detail'));
 const CommunityWritePage = lazy(() => import('@/pages/Community/Write'));
 const TradePage = lazy(() => import('@/pages/Trade'));
+const NotFoundPage = lazy(() => import('@/pages/NotFound'));
 
 export const routes: RouteObject[] = [
   {
@@ -46,7 +47,7 @@ export const routes: RouteObject[] = [
         ],
       },
       { path: '/trade', element: <TradePage /> },
-      { path: '*', element: <div>not found</div> },
+      { path: '*', element: <NotFoundPage /> },
     ],
   },
 ];
