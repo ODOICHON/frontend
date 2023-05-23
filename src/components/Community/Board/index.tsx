@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { getCategoryName } from '@/utils/utils';
 import styles from './styles.module.scss';
 
 type CommunityBoardProps = {
@@ -9,6 +10,7 @@ type CommunityBoardProps = {
   commentCount: number;
   nickName: string;
   createdAt: Date;
+  fixed: boolean;
 };
 
 export default function CommunityBoard({
@@ -19,29 +21,33 @@ export default function CommunityBoard({
   commentCount,
   nickName,
   createdAt,
+  fixed,
 }: CommunityBoardProps) {
   return (
     <>
       <li className={styles.wrapper}>
+        <span className={styles.title}>
+          {fixed && <span className={styles.advertisement}>광고</span>}
+          <h3 className={styles.category}>[{getCategoryName(category)}]</h3>
+          <h3 className={styles.titleMessage}>{title}</h3>
+        </span>
         <div className={styles.contentWrapper}>
-          <span className={styles.title}>
-            <h3>[{category}]</h3>
-            <h3>{title}</h3>
-          </span>
-          <p className={styles.oneLineContent}>{oneLineContent}</p>
-          <span className={styles.description}>
-            <p>댓글 {commentCount}</p>
-            <p>{nickName}</p>
-            <p>{dayjs(createdAt).format('YYYY.MM.DD')}</p>
-          </span>
+          <div className={styles.textContentWrapper}>
+            <p className={styles.oneLineContent}>{oneLineContent}</p>
+            <span className={styles.description}>
+              <p>댓글 {commentCount}</p>
+              <p>{nickName}</p>
+              <p>{dayjs(createdAt).format('YYYY.MM.DD')}</p>
+            </span>
+          </div>
+          {imageUrl && (
+            <img
+              className={styles.thumbnailImage}
+              src={imageUrl}
+              alt="thumbnail"
+            />
+          )}
         </div>
-        {imageUrl && (
-          <img
-            className={styles.thumbnailImage}
-            src={imageUrl}
-            alt="thumbnail"
-          />
-        )}
       </li>
       <div className={styles.divider} />
     </>

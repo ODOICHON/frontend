@@ -1,57 +1,92 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import nextArrow from '@/assets/common/nextArrow.svg';
-import prevArrow from '@/assets/common/prevArrow.svg';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import CommunityBoard from '@/components/Community/Board';
+import { restFetcher, QueryKeys } from '@/queryClient';
+import Loading from '@/components/Loading';
+import Pagenation from '@/components/Pagenation';
 import useInput from '@/hooks/useInput';
+import { BoardResponse } from '@/types/boardType';
 import {
   freeCategory,
   advertiseCategory,
   freeBoardData,
   advertiseBoardData,
 } from '@/constants/category';
-import { COMMUNITY_BOARD } from '@/constants/community_dummy';
 import styles from './styles.module.scss';
-
-const MAX_PAGE_NUM = 7;
-const MIN_PAGE_NUM = 1;
 
 export default function CommunityBoardPage() {
   const { category } = useParams();
   const navigate = useNavigate();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [focusedCategory, setFocusedCategory] = useState('ALL');
+  const [focusedFilter, setFocusedFilter] = useState('RECENT');
+  const [search, handleSearch, setSearch] = useInput('');
+
+  const queryClient = useQueryClient();
+
   const CATEGORY_DATA =
     category === 'free_board' ? freeCategory : advertiseCategory;
   const DESCRIPTION_DATA =
     category === 'free_board' ? freeBoardData : advertiseBoardData;
 
-  const [focusedCategory, setFocusedCategory] = useState('DEFAULT');
-  const [focusedFilter, setFocusedFilter] = useState('NEW');
-  const [totalPage, setTotalPage] = useState<number[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [search, handleSearch, setSearch] = useInput('');
+  const fetchBoardList = (page: number) => {
+    const params = {
+      prefix: category === 'free_board' ? 'DEFAULT' : 'ADVERTISEMENT',
+      ...(focusedCategory !== 'ALL' && { category: focusedCategory }),
+      ...(search && { search }),
+      order: focusedFilter,
+      page: page - 1,
+    };
+    return restFetcher({ method: 'GET', path: 'boards', params });
+  };
+
+  const {
+    data: boardListData,
+    refetch,
+    isLoading,
+  } = useQuery<BoardResponse>(
+    [QueryKeys.BOARD, category, focusedCategory, focusedFilter, currentPage],
+    () => fetchBoardList(currentPage),
+  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    refetch();
     setSearch('');
+    setCurrentPage(1);
   };
 
-  const handleCurrentPage = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const buttonId = e.currentTarget.id;
-    if (buttonId === 'prevPage') {
-      if (currentPage === MIN_PAGE_NUM) return;
-      setCurrentPage((prev) => prev - 1);
-    }
-    if (buttonId === 'nextPage') {
-      if (currentPage === MAX_PAGE_NUM) return;
-      setCurrentPage((prev) => prev + 1);
-      return null;
-    }
-  };
-
-  // FIXME: 페이지네이션 API 연결 전 TotalPage를 설정하기 위한 임시코드. API 연결 후 코드 삭제
+  // 게시판 이동시 카테고리 초기화
   useEffect(() => {
-    setTotalPage(Array.from({ length: MAX_PAGE_NUM }, (_, index) => index + 1));
-  }, []);
+    setFocusedCategory('ALL');
+  }, [category]);
+
+  // 현재 페이지 초기화
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [category, focusedCategory, focusedFilter]);
+
+  // 게시글 페이지 데이터 API 재요청
+  useEffect(() => {
+    refetch();
+  }, [category, focusedCategory, focusedFilter, currentPage]);
+  // 게시글 다음 페이지 데이터 프리페칭
+  useEffect(() => {
+    if (boardListData && currentPage < boardListData.data.totalPages) {
+      queryClient.prefetchQuery(
+        [
+          QueryKeys.BOARD,
+          category,
+          focusedCategory,
+          focusedFilter,
+          currentPage + 1,
+        ],
+        () => fetchBoardList(currentPage + 1),
+      );
+    }
+  }, [currentPage, boardListData]);
 
   if (category !== 'free_board' && category !== 'advertisement_board')
     return <Navigate to="/community" />;
@@ -85,9 +120,9 @@ export default function CommunityBoardPage() {
             <li
               role="presentation"
               className={
-                focusedFilter === 'NEW' ? styles.focused : styles.notFocused
+                focusedFilter === 'RECENT' ? styles.focused : styles.notFocused
               }
-              onClick={() => setFocusedFilter('NEW')}
+              onClick={() => setFocusedFilter('RECENT')}
             >
               최신순
             </li>
@@ -114,7 +149,8 @@ export default function CommunityBoardPage() {
         </div>
         <div className={styles.line} />
         <ul>
-          {COMMUNITY_BOARD.data.content.map((content) => (
+          {isLoading && <Loading />}
+          {boardListData?.data.content.map((content) => (
             <CommunityBoard
               key={content.boardId}
               category={content.category}
@@ -124,6 +160,7 @@ export default function CommunityBoardPage() {
               commentCount={content.commentCount}
               nickName={content.nickName}
               createdAt={content.createdAt}
+              fixed={content.fixed}
             />
           ))}
         </ul>
@@ -136,38 +173,13 @@ export default function CommunityBoardPage() {
         >
           글쓰기
         </button>
-        <div className={styles.pagenation}>
-          <button
-            className={styles.pageButton}
-            type="button"
-            onClick={handleCurrentPage}
-          >
-            <img src={prevArrow} alt="prevPageButton" />
-          </button>
-          {totalPage?.map((page, index) => (
-            <button
-              id="prevPage"
-              type="button"
-              className={
-                page === currentPage
-                  ? styles.focusedPageButton
-                  : styles.pageButton
-              }
-              key={index}
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </button>
-          ))}
-          <button
-            id="nextPage"
-            className={styles.pageButton}
-            type="button"
-            onClick={handleCurrentPage}
-          >
-            <img src={nextArrow} alt="nextPageButton" />
-          </button>
-        </div>
+        {boardListData && boardListData.data.content.length > 0 && (
+          <Pagenation
+            totalPage={boardListData.data.totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </section>
     </div>
   );

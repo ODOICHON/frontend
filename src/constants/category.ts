@@ -1,5 +1,5 @@
 export const freeCategory = [
-  { code: '전체', name: 'DEFAULT' },
+  { code: '전체', name: 'ALL' },
   {
     code: '질문',
     name: 'QUESTION',
@@ -10,7 +10,7 @@ export const freeCategory = [
   },
 ];
 export const advertiseCategory = [
-  { code: '전체', name: 'DEFAULT' },
+  { code: '전체', name: 'ALL' },
   {
     code: '인테리어',
     name: 'INTERIOR',

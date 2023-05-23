@@ -31,7 +31,7 @@ function DesktopMenu({
   handleLogout,
   navigate,
 }: DesktopMenuProps) {
-  const dropdownRef = useRef<HTMLUListElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleCloseModal = (e: Event | React.MouseEvent) => {
       if (
@@ -45,9 +45,9 @@ function DesktopMenu({
     return () => {
       window.removeEventListener('mousedown', handleCloseModal);
     };
-  }, [dropdownRef]);
+  }, [dropdownRef, isClicked]);
   return (
-    <div className={styles.wrapper}>
+    <div ref={dropdownRef} className={styles.wrapper}>
       <span
         role="presentation"
         className={styles.dropdownWrapper}
@@ -69,7 +69,6 @@ function DesktopMenu({
             exit="exit"
             id="dropdown"
             className={styles.dropdown}
-            ref={dropdownRef}
           >
             <li
               role="presentation"
