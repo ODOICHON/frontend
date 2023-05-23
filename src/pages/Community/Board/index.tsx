@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import CommunityBoard from '@/components/Community/Board';
 import { restFetcher, QueryKeys } from '@/queryClient';
 import Loading from '@/components/Loading';
+import NoPosts from '@/components/NoPosts';
 import Pagenation from '@/components/Pagenation';
 import useInput from '@/hooks/useInput';
 import { BoardResponse } from '@/types/boardType';
@@ -150,21 +151,25 @@ export default function CommunityBoardPage() {
         <div className={styles.line} />
         <ul>
           {isLoading && <Loading />}
-          {boardListData?.data.content.map((content) => (
-            <CommunityBoard
-              key={content.boardId}
-              boardId={content.boardId}
-              category={content.category}
-              prefixCategory={category || ''}
-              title={content.title}
-              oneLineContent={content.oneLineContent}
-              imageUrl={content.imageUrl}
-              commentCount={content.commentCount}
-              nickName={content.nickName}
-              createdAt={content.createdAt}
-              fixed={content.fixed}
-            />
-          ))}
+          {boardListData && boardListData.data.content.length > 0 ? (
+            boardListData?.data.content.map((content) => (
+              <CommunityBoard
+                key={content.boardId}
+                boardId={content.boardId}
+                category={content.category}
+                prefixCategory={category || ''}
+                title={content.title}
+                oneLineContent={content.oneLineContent}
+                imageUrl={content.imageUrl}
+                commentCount={content.commentCount}
+                nickName={content.nickName}
+                createdAt={content.createdAt}
+                fixed={content.fixed}
+              />
+            ))
+          ) : (
+            <NoPosts />
+          )}
         </ul>
         <button
           className={styles.writeButton}
