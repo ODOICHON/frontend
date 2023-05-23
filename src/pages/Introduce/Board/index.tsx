@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -20,16 +19,9 @@ export default function IntroBoardPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [isError, setIsError] = useState(false);
-
-  const { data: boardData } = useQuery<BoardDetailResponse>(
+  const { data: boardData, isError } = useQuery<BoardDetailResponse>(
     [QueryKeys.INTRO_BOARD, id],
     () => restFetcher({ method: 'GET', path: `/boards/${id}` }),
-    {
-      onError: () => {
-        setIsError(true);
-      },
-    },
   );
   const deletePost = async () => {
     const response = await DeleteBoardAPI(`${boardData?.data.boardId}`);
@@ -45,9 +37,7 @@ export default function IntroBoardPage() {
     });
   };
 
-  if (isError) {
-    return <NotFoundPage />;
-  }
+  if (isError) return <NotFoundPage />;
 
   return (
     <motion.div

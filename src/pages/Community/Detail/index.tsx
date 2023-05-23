@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -18,17 +17,10 @@ export default function CommunityBoardDetailPage() {
   const { category, id } = useParams();
   const navigate = useNavigate();
 
-  const [isError, setIsError] = useState(false);
-
   const queryClient = useQueryClient();
-  const { data: boardData } = useQuery<BoardDetailResponse>(
+  const { data: boardData, isError } = useQuery<BoardDetailResponse>(
     [QueryKeys.COMMUNITY_BOARD, id],
     () => restFetcher({ method: 'GET', path: `/boards/${id}` }),
-    {
-      onError: () => {
-        setIsError(true);
-      },
-    },
   );
 
   const deletePost = async () => {
@@ -55,9 +47,7 @@ export default function CommunityBoardDetailPage() {
     return <Navigate to={`/community/${prefixCategory}/${id}`} />;
   }
 
-  if (isError) {
-    return <NotFoundPage />;
-  }
+  if (isError) return <NotFoundPage />;
 
   return (
     <section className={styles.container}>
