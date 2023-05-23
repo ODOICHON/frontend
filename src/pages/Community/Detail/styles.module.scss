@@ -2,13 +2,16 @@
   width: 100%;
   max-width: 1140px;
   min-height: 100vh;
+  padding: 0 3rem;
   margin: 0 auto;
 }
+
 .title {
   width: 100%;
   padding-left: 0.5rem;
   margin-bottom: 1.5rem;
 }
+
 .innerTitle {
   display: flex;
   flex-direction: column;
@@ -19,6 +22,7 @@
   height: 100%;
   color: black;
   font-family: 'Pretendard';
+
   & > div {
     display: flex;
     gap: 1rem;
@@ -28,7 +32,6 @@
       font-weight: 400;
       & > span {
         font-weight: 200;
-        // opacity: 0.7;
       }
     }
   }
@@ -40,7 +43,6 @@
 .contentWrapper {
   width: 100%;
   max-width: 1200px;
-
   padding: 0 0.5rem;
 }
 
@@ -91,6 +93,7 @@
     display: list-item;
     text-align: -webkit-match-parent;
   }
+
   & img {
     max-width: 100%;
     margin-top: 0.5rem;
@@ -102,7 +105,6 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 3rem;
 }
 
 .line {
@@ -118,6 +120,7 @@
   justify-content: flex-end;
   margin-top: -1rem;
   margin-bottom: 3rem;
+
   & > button {
     background-color: white;
     color: var(--darkgray-color);
@@ -127,6 +130,7 @@
     border: 1px solid var(--darkgray-color);
     border-radius: 24px;
     cursor: pointer;
+
     &:hover {
       opacity: 0.8;
     }
@@ -139,11 +143,9 @@
 
   & > a {
     height: 2.5rem;
-    width: 100px;
     padding: 0.625rem 1.8rem;
     margin: 0 auto;
     border-radius: 5px;
-
     color: white;
     background-color: var(--main-color);
   }
