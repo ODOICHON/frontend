@@ -30,8 +30,10 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   const [contents, setContents] = useState('');
   const [title, setTitle] = useState(boardData ? boardData.title : '');
   const [category, setCategory] = useState(boardData ? boardData.category : '');
-  const prefixCategory = queryParam === 'free' ? 'DEFAULT' : 'ADVERTISEMENT';
-  const categoryList = queryParam === 'free' ? freeCategory : advertiseCategory;
+  const prefixCategory =
+    queryParam === 'free_board' ? 'DEFAULT' : 'ADVERTISEMENT';
+  const categoryList =
+    queryParam === 'free_board' ? freeCategory : advertiseCategory;
 
   // 이미지를 업로드 하기 위한 함수
 
@@ -53,11 +55,11 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
       onSuccess: () => {
         alert('게시글을 수정하였습니다.');
         queryClient.refetchQueries([
-          QueryKeys.INTRO_BOARD,
+          QueryKeys.COMMUNITY_BOARD,
           `${boardData?.boardId}`,
         ]);
         queryClient.refetchQueries([QueryKeys.BOARD]);
-        navigate(`/intro_board/${boardData?.boardId}`);
+        navigate(`/community/${queryParam}/${boardData?.boardId}`);
       },
       onError: () => {
         alert('게시글 수정을 실패했습니다.');
@@ -150,14 +152,6 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
         </section>
       </div>
       <section>
-        <button
-          type="button"
-          onClick={() => {
-            alert('기능 개발중..');
-          }}
-        >
-          임시저장
-        </button>
         {boardData ? (
           <button type="button" onClick={onUpdate}>
             수정하기

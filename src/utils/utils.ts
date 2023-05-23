@@ -27,3 +27,14 @@ export const getCategoryName = (category: string) => {
       return '';
   }
 };
+
+export const getPrefixCategoryName = (category: string) => {
+  switch (category) {
+    case 'DEFAULT':
+      return 'free_board';
+    case 'ADVERTISEMENT':
+      return 'advertisement_board';
+    default:
+      return '';
+  }
+};

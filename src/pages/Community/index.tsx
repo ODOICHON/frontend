@@ -12,15 +12,17 @@ import styles from './styles.module.scss';
 export default function CommunityPage() {
   const { category } = useParams();
   const location = useLocation();
+
   const isFocus = (menu: string) => {
     const pathArr = location.pathname.split('/');
-    const path = pathArr[pathArr.length - 1];
-    if (path && path.includes(menu)) {
-      return styles.focusMenu;
-    }
-    return styles.menu;
+    const [path] = pathArr.filter(
+      (item) => item === 'free_board' || item === 'advertisement_board',
+    );
+    return path && path.includes(menu) ? styles.focusMenu : styles.menu;
   };
+
   if (!category) return <Navigate to="/community/free_board" />;
+
   return (
     <motion.div variants={opacityVariants} initial="initial" animate="mount">
       <nav className={styles.container}>

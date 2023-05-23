@@ -1,10 +1,13 @@
+import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { getCategoryName } from '@/utils/utils';
 import styles from './styles.module.scss';
 
 type CommunityBoardProps = {
-  category: string;
+  boardId: number;
   title: string;
+  category: string;
+  prefixCategory: string;
   oneLineContent: string;
   imageUrl?: string;
   commentCount: number;
@@ -14,8 +17,10 @@ type CommunityBoardProps = {
 };
 
 export default function CommunityBoard({
-  category,
+  boardId,
   title,
+  category,
+  prefixCategory,
   oneLineContent,
   imageUrl,
   commentCount,
@@ -23,9 +28,15 @@ export default function CommunityBoard({
   createdAt,
   fixed,
 }: CommunityBoardProps) {
+  const navigate = useNavigate();
+
   return (
     <>
-      <li className={styles.wrapper}>
+      <li
+        role="presentation"
+        className={styles.wrapper}
+        onClick={() => navigate(`/community/${prefixCategory}/${boardId}`)}
+      >
         <span className={styles.title}>
           {fixed && <span className={styles.advertisement}>광고</span>}
           <h3 className={styles.category}>[{getCategoryName(category)}]</h3>
