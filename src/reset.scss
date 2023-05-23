@@ -186,24 +186,24 @@ html {
 }
 .ql-editor {
   & h1 {
-    font-size: 2.5rem !important;
-    line-height: 3.5rem;
-    font-family: 'NanumSquareAcB';
-    margin-bottom: 1rem !important;
-  }
-  & h2 {
     font-size: 2rem !important;
     line-height: 3rem;
     font-family: 'NanumSquareAcB';
     margin-bottom: 1rem !important;
   }
-  & h5 {
-    font-size: 1.2rem !important;
-    line-height: 2.2rem;
-  }
-  & p {
+  & h2 {
     font-size: 1.5rem !important;
     line-height: 2.5rem;
+    font-family: 'NanumSquareAcB';
+    margin-bottom: 1rem !important;
+  }
+  & h5 {
+    font-size: 1rem !important;
+    line-height: 2rem;
+  }
+  & p {
+    font-size: 1.3rem !important;
+    line-height: 2.3rem;
   }
   & strong {
     font-family: 'NanumSquareAcB';
