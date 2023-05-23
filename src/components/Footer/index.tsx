@@ -5,6 +5,7 @@ export default function Footer() {
     <div className={styles.container}>
       <div className={styles.lower}>
         <p>주말의 집 by 오이리 © 2022 ALL RIGHTS RESERVED. </p>
+        <p>문의사항 : 5do2chonri@gmail.com </p>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import Comments from '@/components/BoardComponents/Comments';
 import Like from '@/components/BoardComponents/Like';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import NotFoundPage from '@/pages/NotFound';
 import { DeleteBoardAPI } from '@/apis/boards';
 import userStore from '@/store/userStore';
 import { BoardDetailResponse } from '@/types/boardDetailType';
@@ -17,7 +18,8 @@ export default function IntroBoardPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { data: boardData } = useQuery<BoardDetailResponse>(
+
+  const { data: boardData, isError } = useQuery<BoardDetailResponse>(
     [QueryKeys.INTRO_BOARD, id],
     () => restFetcher({ method: 'GET', path: `/boards/${id}` }),
   );
@@ -34,6 +36,9 @@ export default function IntroBoardPage() {
       state: boardData?.data,
     });
   };
+
+  if (isError) return <NotFoundPage />;
+
   return (
     <motion.div
       variants={opacityVariants}
