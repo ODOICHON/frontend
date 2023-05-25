@@ -1,8 +1,8 @@
-import Preparation from '@/components/Preparation';
-import { opacityVariants } from '@/constants/variants';
-import userStore from '@/store/userStore';
-import { motion } from 'framer-motion';
 import { Navigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import Preparation from '@/components/Preparation';
+import userStore from '@/store/userStore';
+import { opacityVariants } from '@/constants/variants';
 
 export default function MyPage() {
   const { token } = userStore();

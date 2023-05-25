@@ -1,0 +1,49 @@
+@import '@/media.scss';
+
+.container {
+  position: sticky;
+  top: 77px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 70px;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  z-index: 50;
+  @include mobile {
+    top: 50px;
+    height: 40px;
+  }
+}
+
+.innerContainer {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 3rem;
+  font-family: 'NanumSquareAcEB';
+  font-size: 1.25rem;
+}
+
+.menuWrapper {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.menu {
+  color: var(--darkgray-color);
+}
+
+.focusMenu {
+  color: var(--main-color);
+}
+
+.divider {
+  width: 1.5px;
+  height: 1.25rem;
+  background-color: black;
+}

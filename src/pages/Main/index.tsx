@@ -1,19 +1,19 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import styles from './styles.module.scss';
-import { Autoplay, Pagination, Navigation } from 'swiper';
-import { communityData, jumbotronData } from '@/constants/main_dummy';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
-import { opacityVariants } from '@/constants/variants';
+import { Autoplay, Pagination, Navigation } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import footer from '@/assets/common/footer.png';
-import { useQuery } from '@tanstack/react-query';
-import { BoardContent, BoardResponse } from '@/types/boardType';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { BoardContent, BoardResponse } from '@/types/boardType';
+import { communityData, jumbotronData } from '@/constants/main_dummy';
+import { opacityVariants } from '@/constants/variants';
+import styles from './styles.module.scss';
 
 export default function MainPage() {
   const [_, updateState] = useState(false);
@@ -34,16 +34,16 @@ export default function MainPage() {
         params: { prefix: 'INTRO' },
       }),
     {
-      onSuccess: (data) => {
-        const response = data.data.content;
-        const trendData = response.filter(
+      onSuccess: (response) => {
+        const introData = response.data.content;
+        const filteredTrend = introData.filter(
           (content) => content.category === 'TREND',
         );
-        const reviewData = response.filter(
+        const filteredReview = introData.filter(
           (content) => content.category === 'REVIEW',
         );
-        setTrendData(trendData);
-        setReviewData(reviewData);
+        setTrendData(filteredTrend);
+        setReviewData(filteredReview);
       },
     },
   );
@@ -53,14 +53,14 @@ export default function MainPage() {
   useEffect(() => {
     if (!odoiIntroData) return;
     const response = odoiIntroData.data.content;
-    const trendData = response.filter(
+    const filteredTrend = response.filter(
       (content) => content.category === 'TREND',
     );
-    const reviewData = response.filter(
+    const filteredReview = response.filter(
       (content) => content.category === 'REVIEW',
     );
-    setTrendData(trendData);
-    setReviewData(reviewData);
+    setTrendData(filteredTrend);
+    setReviewData(filteredReview);
   }, []);
   return (
     <motion.div
@@ -72,7 +72,7 @@ export default function MainPage() {
       <Swiper
         spaceBetween={30}
         touchStartPreventDefault={false}
-        centeredSlides={true}
+        centeredSlides
         autoplay={{
           delay: 5000,
           disableOnInteraction: false,
@@ -93,7 +93,7 @@ export default function MainPage() {
             }}
           >
             <h3>0{idx + 1}</h3>
-            <h1 dangerouslySetInnerHTML={{ __html: data.title }}></h1>
+            <h1 dangerouslySetInnerHTML={{ __html: data.title }} />
             <p>{data.content}</p>
           </SwiperSlide>
         ))}
@@ -108,12 +108,14 @@ export default function MainPage() {
           </div>
           <div className={styles.odoiIntro_buttons}>
             <button
+              type="button"
               className={introToggle === 'trend' ? '' : styles.button_disabled}
               onClick={() => setIntroToggle('trend')}
             >
               트랜드
             </button>
             <button
+              type="button"
               className={introToggle === 'review' ? '' : styles.button_disabled}
               onClick={() => setIntroToggle('review')}
             >
@@ -123,7 +125,7 @@ export default function MainPage() {
           <div className={styles.odoiIntro_bottom}>
             <Link to="/introduce">더 알아보기</Link>
             <div className={styles.slideButton}>
-              <button ref={introPrevRef}>
+              <button type="button" ref={introPrevRef}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -136,7 +138,7 @@ export default function MainPage() {
                   />
                 </svg>
               </button>
-              <button ref={introNextRef}>
+              <button type="button" ref={introNextRef}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -170,6 +172,7 @@ export default function MainPage() {
           {(introToggle === 'trend' ? trendData : reviewData).map((data) => (
             <SwiperSlide key={data.boardId}>
               <div
+                role="presentation"
                 className={styles.odoiIntro_slide}
                 onClick={() => navigate(`/intro_board/${data.boardId}`)}
               >
@@ -183,6 +186,7 @@ export default function MainPage() {
                 <img
                   className={styles.odoiIntro_slide_image}
                   src={data.imageUrl}
+                  alt="ThumbnailImage"
                 />
               </div>
             </SwiperSlide>
@@ -221,6 +225,7 @@ export default function MainPage() {
             {communityData.map((data, idx) => (
               <SwiperSlide style={{ width: '100%' }} key={idx}>
                 <div
+                  role="presentation"
                   className={styles.odoiCommunity}
                   style={{
                     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.35)),
@@ -238,7 +243,11 @@ export default function MainPage() {
               </SwiperSlide>
             ))}
           </Swiper>
-          <button className={styles.commuPrevBtn} ref={commuPrevRef}>
+          <button
+            type="button"
+            className={styles.commuPrevBtn}
+            ref={commuPrevRef}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -251,7 +260,11 @@ export default function MainPage() {
               />
             </svg>
           </button>
-          <button className={styles.commuNextBtn} ref={commuNextRef}>
+          <button
+            type="button"
+            className={styles.commuNextBtn}
+            ref={commuNextRef}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"

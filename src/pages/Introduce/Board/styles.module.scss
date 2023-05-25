@@ -4,11 +4,11 @@
 }
 .banner {
   width: 100%;
-  height: 60rem;
+  height: 40vh;
+  max-height: 60rem;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-attachment: fixed;
 }
 .innerBanner {
   display: flex;
@@ -16,7 +16,7 @@
   justify-content: flex-end;
   margin: 0 auto;
   padding: 0 3rem;
-  padding-bottom: 7.5rem;
+  padding-bottom: 3.5rem;
   max-width: 1200px;
   height: 100%;
   color: white;
@@ -54,18 +54,24 @@
 
 .content {
   & h1 {
-    font-size: 2.5rem;
-    line-height: 3.5rem;
+    font-size: 2rem;
+    line-height: 3rem;
+    margin-bottom: 1rem;
     font-family: 'NanumSquareAcB';
   }
   & h2 {
-    font-size: 2rem;
-    line-height: 3rem;
-    font-family: 'NanumSquareAcB';
-  }
-  & p {
     font-size: 1.5rem;
     line-height: 2.5rem;
+    margin-bottom: 1rem;
+    font-family: 'NanumSquareAcB';
+  }
+  & h5 {
+    font-size: 1rem;
+    line-height: 2rem;
+  }
+  & p {
+    font-size: 1.3rem;
+    line-height: 2.3rem;
   }
   & strong {
     font-family: 'NanumSquareAcB';
@@ -95,6 +101,8 @@
   }
   & img {
     max-width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 }
 

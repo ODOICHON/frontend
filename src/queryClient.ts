@@ -44,7 +44,7 @@ export const restFetcher = async ({
     if (body) axiosConfig.data = body;
     if (params) {
       const searchParams = new URLSearchParams(params);
-      url += '?' + searchParams.toString();
+      url += `?${searchParams.toString()}`;
     }
     const res = await axios(url, axiosConfig);
     return res.data;
@@ -57,5 +57,6 @@ export const QueryKeys = {
   USER: 'USER',
   BOARD: 'BOARD',
   INTRO_BOARD: 'INTRO_BOARD',
+  COMMUNITY_BOARD: 'COMMUNITY_BOARD',
   LIKE: 'LIKE',
 };

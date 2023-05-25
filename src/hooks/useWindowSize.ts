@@ -1,5 +1,5 @@
-import { debounce } from 'lodash';
 import { useState } from 'react';
+import { debounce } from 'lodash';
 
 type WindowSize = {
   width: number;

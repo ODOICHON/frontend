@@ -1,0 +1,159 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "createDefaultProgram": true,
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {},
+      "alias": {
+        "map": [["@", "./src"]]
+      }
+    }
+  },
+  "rules": {
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "react/jsx-filename-extension": [
+      2,
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling"],
+          "index",
+          "unknown"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react*",
+            "group": "builtin",
+            "position": "after"
+          },
+          {
+            "pattern": "react*/**",
+            "group": "builtin",
+            "position": "after"
+          },
+          {
+            "pattern": "@/pages/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@/components/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@/apis/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@/store/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@/hooks/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@/utils/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@/mocks/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@/types/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@/assets/*",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "@/constants/*",
+            "group": "internal",
+            "position": "after"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react*", "react*/**"],
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ],
+    "camelcase": "off",
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "no-alert": "off",
+    "no-var": "error", // var 금지
+    "no-multiple-empty-lines": "error", // 여러 줄 공백 금지
+    "no-console": ["warn", { "allow": ["warn", "error", "info"] }], // console.log() 금지
+    "dot-notation": "error", // 가능하다면 dot notation 사용
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }
+    ],
+    "react/react-in-jsx-scope": "off",
+    "consistent-return": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "react/require-default-props": "off",
+    "no-unused-expressions": ["error", { "allowTernary": true }],
+    "react/destructuring-assignment": "off",
+    "react/jsx-props-no-spreading": "off",
+    "no-useless-escape": "off",
+    "react/no-array-index-key": "off",
+    "no-param-reassign": "off",
+    "react/no-danger": "off"
+  }
+}

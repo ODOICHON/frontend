@@ -9,8 +9,9 @@
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
   padding-left: 11rem;
   background-color: #4d5256;
   color: white;

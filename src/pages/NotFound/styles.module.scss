@@ -1,0 +1,53 @@
+@import '@/media.scss';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  height: calc(100vh - 77px - 12.375rem);
+  font-family: 'Pretendard';
+  font-weight: 600;
+  color: var(--darkgray-color);
+  @include mobile {
+    height: calc(100vh - 50px - 12.375rem);
+  }
+  & > img {
+    width: 7.5rem;
+  }
+  & > h1 {
+    font-size: 2rem;
+  }
+  & > p {
+    font-size: 1.75rem;
+  }
+}
+
+.communityWrapper {
+  @extend .wrapper;
+  height: calc(100vh - (77px + 70px) - 12.375rem);
+  @include mobile {
+    height: calc(100vh - (50px + 40px) - 12.375rem);
+  }
+}
+
+.errorCode {
+  color: var(--main-color);
+}
+
+.goToMainButton {
+  background-color: transparent;
+  border: 2px solid var(--main-color);
+  border-radius: 6rem;
+  padding: 1rem 2.5rem;
+  font-family: 'Pretendard';
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--main-color);
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+}
