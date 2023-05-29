@@ -9,59 +9,51 @@ import { motion } from 'framer-motion';
 import { Autoplay, Pagination, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import footer from '@/assets/common/footer.png';
-import { QueryKeys, restFetcher } from '@/queryClient';
-import { BoardContent, BoardResponse } from '@/types/boardType';
-import { communityData, jumbotronData } from '@/constants/main_dummy';
+import { restFetcher } from '@/queryClient';
+import { BoardMainResponse } from '@/types/boardType';
+import { jumbotronData } from '@/constants/main_dummy';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 export default function MainPage() {
   const [_, updateState] = useState(false);
-  const [trendData, setTrendData] = useState<BoardContent[]>([]);
-  const [reviewData, setReviewData] = useState<BoardContent[]>([]);
   const [introToggle, setIntroToggle] = useState<'trend' | 'review'>('trend');
   const navigate = useNavigate();
   const introNextRef = useRef<HTMLButtonElement>(null);
   const introPrevRef = useRef<HTMLButtonElement>(null);
   const commuNextRef = useRef<HTMLButtonElement>(null);
   const commuPrevRef = useRef<HTMLButtonElement>(null);
-  const { data: odoiIntroData } = useQuery<BoardResponse>(
-    [QueryKeys.BOARD],
+
+  const { data: introData } = useQuery<BoardMainResponse>(
+    ['PREVIEW_BOARD', introToggle],
     () =>
       restFetcher({
         method: 'GET',
-        path: 'boards',
-        params: { prefix: 'INTRO' },
+        path: 'boards/preview',
+        params: {
+          prefix: 'INTRO',
+          limit: 5,
+          category: introToggle.toUpperCase(),
+        },
       }),
-    {
-      onSuccess: (response) => {
-        const introData = response.data.content;
-        const filteredTrend = introData.filter(
-          (content) => content.category === 'TREND',
-        );
-        const filteredReview = introData.filter(
-          (content) => content.category === 'REVIEW',
-        );
-        setTrendData(filteredTrend);
-        setReviewData(filteredReview);
-      },
-    },
   );
+  const { data: communityData } = useQuery<BoardMainResponse>(
+    ['PREVIEW_BOARD', 'COMMUNITY'],
+    () =>
+      restFetcher({
+        method: 'GET',
+        path: 'boards/preview',
+        params: {
+          prefix: 'COMMUNITY',
+          limit: 5,
+        },
+      }),
+  );
+
   useEffect(() => {
     updateState(true);
   }, [introNextRef, commuNextRef]);
-  useEffect(() => {
-    if (!odoiIntroData) return;
-    const response = odoiIntroData.data.content;
-    const filteredTrend = response.filter(
-      (content) => content.category === 'TREND',
-    );
-    const filteredReview = response.filter(
-      (content) => content.category === 'REVIEW',
-    );
-    setTrendData(filteredTrend);
-    setReviewData(filteredReview);
-  }, []);
+
   return (
     <motion.div
       className={styles.container}
@@ -169,7 +161,7 @@ export default function MainPage() {
           modules={[Navigation]}
           className={styles.sectionSwiper}
         >
-          {(introToggle === 'trend' ? trendData : reviewData).map((data) => (
+          {introData?.data.map((data) => (
             <SwiperSlide key={data.boardId}>
               <div
                 role="presentation"
@@ -222,7 +214,7 @@ export default function MainPage() {
             modules={[Pagination, Navigation]}
             className={styles.communitySwiper}
           >
-            {communityData.map((data, idx) => (
+            {communityData?.data.map((data, idx) => (
               <SwiperSlide style={{ width: '100%' }} key={idx}>
                 <div
                   role="presentation"
@@ -234,10 +226,11 @@ export default function MainPage() {
                   onClick={() => navigate('/community')}
                 >
                   <h1>{data.title}</h1>
-                  <p>{data.content}</p>
+                  {/* TDOO: data.content 대체 할 속성이 무엇인가? */}
+                  <p>{data.oneLineContent}</p>
                   <div className={styles.commuMeta}>
-                    <p>{dayjs(data.date).format('YYYY-MM-DD')}</p>
-                    <p>{data.author}님</p>
+                    <p>{dayjs(data.createdAt).format('YYYY-MM-DD')}</p>
+                    <p>{data.nickName}님</p>
                   </div>
                 </div>
               </SwiperSlide>
