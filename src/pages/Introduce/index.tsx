@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
@@ -10,77 +10,55 @@ import { QueryKeys, restFetcher } from '@/queryClient';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 import userStore from '@/store/userStore';
-import { BoardResponse, BoardContent } from '@/types/boardType';
+import { BoardMainResponse } from '@/types/boardType';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 export default function IntroducePage() {
   const { user } = userStore();
   const navigate = useNavigate();
-
-  const [trendSliceData, setTrendSliceData] = useState<BoardContent[]>([]);
-  const [trendData, setTrendData] = useState<BoardContent[]>([]);
-  const [reviewData, setReviewData] = useState<BoardContent[]>([]);
   const [page, setPage] = useState(1);
-  const [pageLength, setPageLength] = useState(1);
 
-  const { data: boardList } = useQuery<BoardResponse>(
-    [QueryKeys.BOARD, 'intro_board'],
+  const fetchTrendList = (nowPage: number) => {
+    const params = {
+      prefix: 'INTRO',
+      limit: 4 * nowPage,
+      category: 'TREND',
+    };
+    return restFetcher({ method: 'GET', path: 'boards/preview', params });
+  };
+
+  const { data: trendData } = useQuery<BoardMainResponse>(
+    [QueryKeys.INTRO_BOARD, 'TREND', page],
+    () => fetchTrendList(page),
+  );
+
+  const { data: prefetchTrendData } = useQuery<BoardMainResponse>(
+    [QueryKeys.INTRO_BOARD, 'TREND', page + 1],
+    () => fetchTrendList(page + 1),
+  );
+
+  const { data: reviewData } = useQuery<BoardMainResponse>(
+    [QueryKeys.INTRO_BOARD, 'REVIEW'],
     () =>
       restFetcher({
         method: 'GET',
-        path: 'boards',
-        params: { prefix: 'INTRO' },
+        path: 'boards/preview',
+        params: {
+          prefix: 'INTRO',
+          limit: 4,
+          category: 'REVIEW',
+        },
       }),
-    {
-      onSuccess: (response) => {
-        const boardContent = response.data.content;
-        const filteredTrend = boardContent.filter(
-          (content) => content.category === 'TREND',
-        );
-        const filteredReview = boardContent.filter(
-          (content) => content.category === 'REVIEW',
-        );
-        setTrendData(filteredTrend);
-        setReviewData(filteredReview);
-        setPageLength(Math.ceil(filteredTrend.length / 4));
-        boardContent.length <= 4
-          ? setTrendSliceData(filteredTrend)
-          : setTrendSliceData(filteredTrend.slice(0, 4));
-      },
-    },
   );
+
   const handleMoreTrend = () => {
-    if (pageLength <= page) return;
     setPage((prev) => prev + 1);
   };
 
   const goToAdminWritePage = () => {
     navigate('/intro_write');
   };
-
-  useEffect(() => {
-    const data = trendData;
-    page === pageLength
-      ? setTrendSliceData(data)
-      : setTrendSliceData(data?.slice(0, page * 4));
-  }, [page]);
-  useEffect(() => {
-    if (!boardList) return;
-    const response = boardList.data.content;
-    const filteredTrend = response.filter(
-      (content) => content.category === 'TREND',
-    );
-    const filteredReview = response.filter(
-      (content) => content.category === 'REVIEW',
-    );
-    setTrendData(filteredTrend);
-    setReviewData(filteredReview);
-    setPageLength(Math.ceil(filteredTrend.length / 4));
-    response.length <= 4
-      ? setTrendSliceData(filteredTrend)
-      : setTrendSliceData(filteredTrend.slice(0, 4));
-  }, []);
 
   return (
     <motion.div
@@ -109,11 +87,11 @@ export default function IntroducePage() {
 주말의집이 이런 분들을 위해 준비했습니다. 오도이촌의 다양한 트렌드를 빠르게 제공해 드립니다.`}
         </p>
         <div className={styles.trendWrapper}>
-          {trendSliceData?.map((board) => (
+          {trendData?.data.map((board) => (
             <TrendBoard key={board.boardId} {...board} />
           ))}
         </div>
-        {pageLength > page && (
+        {trendData?.data.length !== prefetchTrendData?.data.length && (
           <button
             type="button"
             className={styles.button}
@@ -151,7 +129,7 @@ export default function IntroducePage() {
             modules={[Scrollbar]}
             className={styles.reviewSwiper}
           >
-            {reviewData?.map((board) => (
+            {reviewData?.data.map((board) => (
               <SwiperSlide key={board.boardId}>
                 <ReviewBoard {...board} />
               </SwiperSlide>
