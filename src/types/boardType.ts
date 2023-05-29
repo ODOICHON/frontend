@@ -45,6 +45,12 @@ export type BoardResponse = {
   data: BoardData;
 };
 
+export type BoardMainResponse = {
+  code: string;
+  message: string;
+  data: BoardContent[];
+};
+
 export type BoardForm = {
   title: string;
   code: string;
