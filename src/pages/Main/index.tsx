@@ -223,7 +223,11 @@ export default function MainPage() {
                     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.35)),
                 url(${data.imageUrl})`,
                   }}
-                  onClick={() => navigate('/community')}
+                  onClick={() =>
+                    navigate(
+                      `/community/${data.prefixCategory}/${data.boardId}`,
+                    )
+                  }
                 >
                   <h1>{data.title}</h1>
                   {/* TDOO: data.content 대체 할 속성이 무엇인가? */}
