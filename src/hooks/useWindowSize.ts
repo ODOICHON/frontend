@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { debounce } from 'lodash';
+import { throttle } from 'lodash';
 
 type WindowSize = {
   width: number;
@@ -13,12 +13,12 @@ const useWindowSize = (): ReturnType => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
-  const resizeViewPort = debounce(() => {
+  const resizeViewPort = throttle(() => {
     setWindowSize({
       width: window.innerWidth,
       height: window.innerHeight,
     });
-  }, 500);
+  }, 300);
   const eventListener = () => {
     window.addEventListener('resize', resizeViewPort);
     return () => {
