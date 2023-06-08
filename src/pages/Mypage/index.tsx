@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Preparation from '@/components/Preparation';
+import Preparation from '@/components/Common/Preparation';
 import userStore from '@/store/userStore';
 import { opacityVariants } from '@/constants/variants';
 
