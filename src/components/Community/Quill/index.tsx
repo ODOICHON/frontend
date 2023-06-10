@@ -7,6 +7,7 @@ import { QueryKeys, restFetcher } from '@/queryClient';
 import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostBoardAPI } from '@/apis/boards';
 import useQuillModules from '@/hooks/useQuillModules';
+import { checkBeforePost } from '@/utils/utils';
 import { BoardDetailData } from '@/types/boardDetailType';
 import { BoardForm } from '@/types/boardType';
 import { freeCategory, advertiseCategory } from '@/constants/category';
@@ -68,11 +69,14 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   };
 
   const onPost = async () => {
+    const imageUrls = [...getImageUrls(contents)];
+    if (!checkBeforePost(title, contents, category)) return;
+
     const boardForm: BoardForm = {
       title,
       code: contents,
       category,
-      imageUrls: [...getImageUrls(contents)],
+      imageUrls,
       prefixCategory,
       fixed: false,
     };

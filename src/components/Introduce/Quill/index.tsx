@@ -9,6 +9,7 @@ import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostBoardAPI } from '@/apis/boards';
 import { uploadFile } from '@/apis/uploadS3';
 import useQuillModules from '@/hooks/useQuillModules';
+import { checkBeforePost } from '@/utils/utils';
 import { BoardDetailData } from '@/types/boardDetailType';
 import { BoardForm } from '@/types/boardType';
 import styles from './styles.module.scss';
@@ -82,11 +83,14 @@ export default function IntroduceQuill() {
   };
 
   const onPost = async () => {
+    const imageUrls = [thumbnail, ...getImageUrls(contents)];
+    if (!checkBeforePost(title, contents, category, imageUrls)) return;
+
     const boardForm: BoardForm = {
       title,
       code: contents,
       category,
-      imageUrls: [thumbnail, ...getImageUrls(contents)],
+      imageUrls,
       prefixCategory: 'INTRO',
       fixed: false,
     };
