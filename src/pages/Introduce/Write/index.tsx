@@ -70,7 +70,7 @@ export default function AdminWritePage() {
           QueryKeys.INTRO_BOARD,
           `${boardData?.boardId}`,
         ]);
-        queryClient.refetchQueries([QueryKeys.BOARD]);
+        queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
         navigate(`/intro_board/${boardData?.boardId}`);
       },
       onError: () => {
@@ -90,7 +90,7 @@ export default function AdminWritePage() {
     const response = await PostBoardAPI(boardForm);
     if (response?.code === 'SUCCESS') {
       alert('게시글이 작성되었습니다.');
-      queryClient.refetchQueries([QueryKeys.BOARD]);
+      queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
       navigate('/introduce');
     }
   };

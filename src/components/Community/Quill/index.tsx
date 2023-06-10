@@ -58,7 +58,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
           QueryKeys.COMMUNITY_BOARD,
           `${boardData?.boardId}`,
         ]);
-        queryClient.refetchQueries([QueryKeys.BOARD]);
+        queryClient.refetchQueries([QueryKeys.COMMUNITY_BOARD]);
         navigate(`/community/${queryParam}/${boardData?.boardId}`);
       },
       onError: () => {
@@ -78,7 +78,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
     const response = await PostBoardAPI(boardForm);
     if (response?.code === 'SUCCESS') {
       alert('게시글이 작성되었습니다😄');
-      queryClient.refetchQueries([QueryKeys.BOARD]);
+      queryClient.refetchQueries([QueryKeys.COMMUNITY_BOARD]);
       navigate(`/community/${queryParam}`);
     }
   };
