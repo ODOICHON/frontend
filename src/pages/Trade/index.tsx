@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import Preparation from '@/components/Preparation';
+import Preparation from '@/components/Common/Preparation';
 import { opacityVariants } from '@/constants/variants';
 
 export default function TradePage() {
