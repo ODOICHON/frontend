@@ -130,11 +130,13 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
             <option disabled value="">
               말머리를 선택하세요.
             </option>
-            {categoryList.map((item) => (
-              <option key={item.name} value={item.name}>
-                {item.code}
-              </option>
-            ))}
+            {categoryList
+              .filter((cat) => cat.name !== 'ALL')
+              .map((item) => (
+                <option key={item.name} value={item.name}>
+                  {item.code}
+                </option>
+              ))}
           </select>
           <input
             className={styles.titleInput}
