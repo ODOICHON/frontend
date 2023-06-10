@@ -46,7 +46,7 @@ export default function IntroducePage() {
         path: 'boards/preview',
         params: {
           prefix: 'INTRO',
-          limit: 4,
+          limit: 100,
           category: 'REVIEW',
         },
       }),
