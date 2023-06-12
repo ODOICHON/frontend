@@ -149,7 +149,7 @@ table {
   box-sizing: border-box;
 }
 html {
-  font-size: 52.5%; // 1rem = 8.4px;
+  font-size: 53.125%; // 1rem = 8.5px;
   @include tablet {
     font-size: 62.5%; // 1rem = 10px;
   }
