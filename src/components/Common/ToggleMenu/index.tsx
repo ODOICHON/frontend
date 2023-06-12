@@ -5,8 +5,8 @@ import { menuToggleStore } from '@/store/menuToggleStore';
 import userStore from '@/store/userStore';
 import { toggleVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
-import AfterLogin from '../AfterLogin';
-import BeforeLogin from '../BeforeLogin';
+import AfterLogin from '../../Login/AfterLogin';
+import BeforeLogin from '../../Login/BeforeLogin';
 
 export default function ToggleMenu() {
   const { token } = userStore();

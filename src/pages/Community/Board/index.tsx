@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import Loading from '@/components/Common/Loading';
+import Pagenation from '@/components/Common/Pagenation';
 import CommunityBoard from '@/components/Community/Board';
+import NoPosts from '@/components/Community/NoPosts';
 import { restFetcher, QueryKeys } from '@/queryClient';
-import Loading from '@/components/Loading';
-import NoPosts from '@/components/NoPosts';
-import Pagenation from '@/components/Pagenation';
 import useInput from '@/hooks/useInput';
 import { BoardResponse } from '@/types/boardType';
 import {
