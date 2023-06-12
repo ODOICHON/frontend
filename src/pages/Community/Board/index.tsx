@@ -48,7 +48,13 @@ export default function CommunityBoardPage() {
     refetch,
     isLoading,
   } = useQuery<BoardResponse>(
-    [QueryKeys.BOARD, category, focusedCategory, focusedFilter, currentPage],
+    [
+      QueryKeys.COMMUNITY_BOARD,
+      category,
+      focusedCategory,
+      focusedFilter,
+      currentPage,
+    ],
     () => fetchBoardList(currentPage),
   );
 
@@ -78,7 +84,7 @@ export default function CommunityBoardPage() {
     if (boardListData && currentPage < boardListData.data.totalPages) {
       queryClient.prefetchQuery(
         [
-          QueryKeys.BOARD,
+          QueryKeys.COMMUNITY_BOARD,
           category,
           focusedCategory,
           focusedFilter,

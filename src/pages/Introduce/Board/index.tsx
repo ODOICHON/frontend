@@ -27,7 +27,7 @@ export default function IntroBoardPage() {
     const response = await DeleteBoardAPI(`${boardData?.data.boardId}`);
     if (response) {
       alert('게시글이 삭제되었습니다.');
-      queryClient.refetchQueries([QueryKeys.BOARD]);
+      queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
       navigate('/introduce');
     }
   };

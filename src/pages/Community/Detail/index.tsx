@@ -27,7 +27,7 @@ export default function CommunityBoardDetailPage() {
     const response = await DeleteBoardAPI(`${boardData?.data.boardId}`);
     if (response) {
       alert('게시글이 삭제되었습니다.');
-      queryClient.refetchQueries([QueryKeys.BOARD]);
+      queryClient.refetchQueries([QueryKeys.COMMUNITY_BOARD]);
       navigate(`/community/${category}`);
     }
   };
