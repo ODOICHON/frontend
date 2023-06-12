@@ -42,7 +42,7 @@ function DesktopNavbar({
         <Link
           className={isFocus('community')}
           ref={communityRef}
-          to="/community"
+          to="/community/free_board"
         >
           커뮤니티
         </Link>
