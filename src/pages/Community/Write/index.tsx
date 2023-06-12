@@ -5,12 +5,12 @@ import userStore from '@/store/userStore';
 function CommunityWritePage() {
   const { category } = useParams();
   const { token } = userStore();
+
+  if (!token) return <Navigate to="/login" />;
+
   if (category !== 'free_board' && category !== 'advertisement_board')
     return <Navigate to="/community/free_board" />;
 
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
   return <CommunityQuill queryParam={category} />;
 }
 

@@ -6,6 +6,7 @@ import Pagenation from '@/components/Common/Pagenation';
 import CommunityBoard from '@/components/Community/Board';
 import NoPosts from '@/components/Community/NoPosts';
 import { restFetcher, QueryKeys } from '@/queryClient';
+import userStore from '@/store/userStore';
 import useInput from '@/hooks/useInput';
 import { BoardResponse } from '@/types/boardType';
 import {
@@ -19,6 +20,7 @@ import styles from './styles.module.scss';
 export default function CommunityBoardPage() {
   const { category } = useParams();
   const navigate = useNavigate();
+  const { token } = userStore();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [focusedCategory, setFocusedCategory] = useState('ALL');
@@ -181,7 +183,9 @@ export default function CommunityBoardPage() {
           className={styles.writeButton}
           type="button"
           onClick={() => {
-            navigate(`/community/write/${category}`);
+            token
+              ? navigate(`/community/write/${category}`)
+              : navigate('/login');
           }}
         >
           글쓰기
