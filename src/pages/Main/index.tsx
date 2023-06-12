@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { Autoplay, Pagination, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import footer from '@/assets/common/footer.png';
-import { restFetcher } from '@/queryClient';
+import { QueryKeys, restFetcher } from '@/queryClient';
 import { getPrefixCategoryName } from '@/utils/utils';
 import { BoardMainResponse } from '@/types/boardType';
 import { jumbotronData } from '@/constants/main_dummy';
@@ -26,7 +26,7 @@ export default function MainPage() {
   const commuPrevRef = useRef<HTMLButtonElement>(null);
 
   const { data: introData } = useQuery<BoardMainResponse>(
-    ['PREVIEW_BOARD', introToggle],
+    [QueryKeys.PREVIEW_BOARD, QueryKeys.INTRO_BOARD, introToggle],
     () =>
       restFetcher({
         method: 'GET',
@@ -39,7 +39,7 @@ export default function MainPage() {
       }),
   );
   const { data: communityData } = useQuery<BoardMainResponse>(
-    ['PREVIEW_BOARD', 'COMMUNITY'],
+    [QueryKeys.PREVIEW_BOARD, QueryKeys.COMMUNITY_BOARD],
     () =>
       restFetcher({
         method: 'GET',
@@ -233,7 +233,6 @@ export default function MainPage() {
                   }}
                 >
                   <h1>{data.title}</h1>
-                  {/* TDOO: data.content 대체 할 속성이 무엇인가? */}
                   <p>{data.oneLineContent}</p>
                   <div className={styles.commuMeta}>
                     <p>{dayjs(data.createdAt).format('YYYY-MM-DD')}</p>
