@@ -29,9 +29,15 @@ export default function Layout() {
       <AnimatePresence>
         {windowSize.width <= 500 && toggle && <ToggleMenu />}
       </AnimatePresence>
-      <Navbar />
-      <Outlet />
-      <Footer />
+      <main
+        style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+      >
+        <Navbar />
+        <section style={{ flexGrow: '1' }}>
+          <Outlet />
+        </section>
+        <Footer />
+      </main>
     </Suspense>
   );
 }
