@@ -1,10 +1,10 @@
 import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import Footer from '@/components/Footer';
-import Loading from '@/components/Loading';
-import Navbar from '@/components/Navbar';
-import ToggleMenu from '@/components/ToggleMenu';
+import Footer from '@/components/Common/Footer';
+import Loading from '@/components/Common/Loading';
+import Navbar from '@/components/Common/Navbar';
+import ToggleMenu from '@/components/Common/ToggleMenu';
 import { menuToggleStore } from '@/store/menuToggleStore';
 import useAxiosInterceptor from '@/hooks/useAxiosInterceptor';
 import useWindowSize from '@/hooks/useWindowSize';
@@ -29,9 +29,15 @@ export default function Layout() {
       <AnimatePresence>
         {windowSize.width <= 500 && toggle && <ToggleMenu />}
       </AnimatePresence>
-      <Navbar />
-      <Outlet />
-      <Footer />
+      <main
+        style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+      >
+        <Navbar />
+        <section style={{ flexGrow: '1' }}>
+          <Outlet />
+        </section>
+        <Footer />
+      </main>
     </Suspense>
   );
 }

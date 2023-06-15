@@ -5,8 +5,8 @@ import { menuToggleStore } from '@/store/menuToggleStore';
 import userStore from '@/store/userStore';
 import { toggleVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
-import AfterLogin from '../AfterLogin';
-import BeforeLogin from '../BeforeLogin';
+import AfterLogin from '../../Login/AfterLogin';
+import BeforeLogin from '../../Login/BeforeLogin';
 
 export default function ToggleMenu() {
   const { token } = userStore();
@@ -44,7 +44,7 @@ export default function ToggleMenu() {
         />
         <Link to="/introduce">오도이촌 소개</Link>
         <Link to="/trade">빈집거래</Link>
-        <Link to="/community">커뮤니티</Link>
+        <Link to="/community/free_board">커뮤니티</Link>
         {token ? <AfterLogin /> : <BeforeLogin />}
       </div>
     </motion.div>

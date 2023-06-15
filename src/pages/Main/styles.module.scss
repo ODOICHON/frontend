@@ -2,7 +2,6 @@
 
 .container {
   width: 100%;
-  min-height: 100vh;
 }
 .swiperContainer {
   width: 100%;
@@ -201,6 +200,18 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
   }
+
+  @include mobile {
+    padding-top: 5rem;
+    font-size: 2.3rem;
+    & h3 {
+      line-height: 2.8rem;
+    }
+    & p {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+  }
 }
 .odoiIntro_slide_image {
   flex-grow: 1;
@@ -240,7 +251,7 @@
     white-space: pre-line;
   }
   @include mobile {
-    padding: 3rem 6rem;
+    padding: 3rem;
   }
 }
 .communitySwiper {

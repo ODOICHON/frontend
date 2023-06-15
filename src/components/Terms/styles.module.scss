@@ -45,21 +45,21 @@
       opacity: 0.8;
     }
   }
+  & article {
+    margin-bottom: 1rem;
+    line-height: 1.5rem;
+  }
+  & ul {
+    padding-left: 1rem;
+    list-style: disc;
+  }
+  & ol {
+    list-style: decimal;
+    padding-left: 1rem;
+  }
 }
 .title {
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-}
-article {
-  margin-bottom: 1rem;
-  line-height: 1.5rem;
-}
-ul {
-  padding-left: 1rem;
-  list-style: disc;
-}
-ol {
-  list-style: decimal;
-  padding-left: 1rem;
 }

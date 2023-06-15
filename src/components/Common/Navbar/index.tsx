@@ -6,8 +6,8 @@ import { menuToggleStore } from '@/store/menuToggleStore';
 import userStore from '@/store/userStore';
 import useWindowSize from '@/hooks/useWindowSize';
 import styles from './styles.module.scss';
-import AfterLogin from '../AfterLogin';
-import BeforeLogin from '../BeforeLogin';
+import AfterLogin from '../../Login/AfterLogin';
+import BeforeLogin from '../../Login/BeforeLogin';
 
 type DesktopNavbarProps = {
   token: Token | null;
@@ -42,7 +42,7 @@ function DesktopNavbar({
         <Link
           className={isFocus('community')}
           ref={communityRef}
-          to="/community"
+          to="/community/free_board"
         >
           커뮤니티
         </Link>

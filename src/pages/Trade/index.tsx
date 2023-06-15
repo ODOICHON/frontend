@@ -1,11 +1,3 @@
-import { motion } from 'framer-motion';
-import Preparation from '@/components/Preparation';
-import { opacityVariants } from '@/constants/variants';
-
 export default function TradePage() {
-  return (
-    <motion.div variants={opacityVariants} initial="initial" animate="mount">
-      <Preparation />
-    </motion.div>
-  );
+  return <div>빈집 거래 메인페이지</div>;
 }

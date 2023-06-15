@@ -3,8 +3,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import Dompurify from 'dompurify';
 import { motion } from 'framer-motion';
-import Comments from '@/components/BoardComponents/Comments';
-import Like from '@/components/BoardComponents/Like';
+import Comments from '@/components/Board/Comments';
+import Like from '@/components/Board/Like';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import NotFoundPage from '@/pages/NotFound';
 import { DeleteBoardAPI } from '@/apis/boards';
@@ -27,7 +27,7 @@ export default function IntroBoardPage() {
     const response = await DeleteBoardAPI(`${boardData?.data.boardId}`);
     if (response) {
       alert('게시글이 삭제되었습니다.');
-      queryClient.refetchQueries([QueryKeys.BOARD]);
+      queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
       navigate('/introduce');
     }
   };

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import Loading from '@/components/Common/Loading';
+import Pagenation from '@/components/Common/Pagenation';
 import CommunityBoard from '@/components/Community/Board';
+import NoPosts from '@/components/Community/NoPosts';
 import { restFetcher, QueryKeys } from '@/queryClient';
-import Loading from '@/components/Loading';
-import NoPosts from '@/components/NoPosts';
-import Pagenation from '@/components/Pagenation';
+import userStore from '@/store/userStore';
 import useInput from '@/hooks/useInput';
 import { BoardResponse } from '@/types/boardType';
 import {
@@ -19,6 +20,7 @@ import styles from './styles.module.scss';
 export default function CommunityBoardPage() {
   const { category } = useParams();
   const navigate = useNavigate();
+  const { token } = userStore();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [focusedCategory, setFocusedCategory] = useState('ALL');
@@ -48,7 +50,13 @@ export default function CommunityBoardPage() {
     refetch,
     isLoading,
   } = useQuery<BoardResponse>(
-    [QueryKeys.BOARD, category, focusedCategory, focusedFilter, currentPage],
+    [
+      QueryKeys.COMMUNITY_BOARD,
+      category,
+      focusedCategory,
+      focusedFilter,
+      currentPage,
+    ],
     () => fetchBoardList(currentPage),
   );
 
@@ -78,7 +86,7 @@ export default function CommunityBoardPage() {
     if (boardListData && currentPage < boardListData.data.totalPages) {
       queryClient.prefetchQuery(
         [
-          QueryKeys.BOARD,
+          QueryKeys.COMMUNITY_BOARD,
           category,
           focusedCategory,
           focusedFilter,
@@ -175,7 +183,9 @@ export default function CommunityBoardPage() {
           className={styles.writeButton}
           type="button"
           onClick={() => {
-            navigate(`/community/write/${category}`);
+            token
+              ? navigate(`/community/write/${category}`)
+              : navigate('/login');
           }}
         >
           글쓰기
