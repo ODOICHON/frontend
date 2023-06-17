@@ -1,0 +1,239 @@
+.container {
+  width: 100%;
+  max-width: 1140px;
+  min-height: 100vh;
+  padding: 0 3rem;
+  margin: 0 auto;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 0.5rem;
+  padding-top: 7.5rem;
+  margin-bottom: 1.5rem;
+
+  & > svg {
+    align-self: flex-end;
+    margin-right: 2rem;
+    font-size: 3rem;
+  }
+}
+
+.innerTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  max-width: 1200px;
+  height: 100%;
+  color: black;
+  font-family: 'Pretendard';
+
+  & > div {
+    display: flex;
+    gap: 1rem;
+    // justify-content: space-between;
+    & > p {
+      font-size: 1.25rem;
+      font-weight: 400;
+      & > span {
+        font-weight: 200;
+      }
+    }
+  }
+  & > h1 {
+    font-size: 2rem;
+  }
+}
+
+.swiperContainer {
+  & > div:nth-child(2) {
+    color: whitesmoke;
+  }
+  & > div:nth-child(3) {
+    color: whitesmoke;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+
+  & > span {
+    background-color: var(--main-color);
+  }
+}
+
+.infoContainer {
+  margin-bottom: 3rem;
+}
+.categoryList {
+  display: flex;
+  gap: 0.5rem;
+
+  & > li {
+    font-family: 'NanumSquareAcB';
+    font-size: 1.375rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--main-color);
+    background-color: var(--main-color);
+    color: white;
+    border-radius: 24px;
+  }
+}
+
+.contentWrapper {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 0.5rem;
+}
+
+.content {
+  & h1 {
+    font-size: 2rem;
+    line-height: 3rem;
+    margin-bottom: 1rem;
+    font-family: 'NanumSquareAcB';
+  }
+  & h2 {
+    font-size: 1.5rem;
+    line-height: 2.5rem;
+    margin-bottom: 1rem;
+    font-family: 'NanumSquareAcB';
+  }
+  & h5 {
+    font-size: 1rem;
+    line-height: 2rem;
+  }
+  & p {
+    font-size: 1.3rem;
+    line-height: 2.3rem;
+  }
+  & blockquote {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  & blockquote:before {
+    content: '\201C';
+    font-family: Georgia;
+    font-size: 2rem;
+    color: #bcbcbc;
+    float: left;
+    margin: -0.5rem 0.3rem 0 0;
+  }
+  & strong {
+    font-family: 'NanumSquareAcB';
+  }
+  & strong {
+    font-family: 'NanumSquareAcB';
+  }
+  & ol {
+    display: block;
+    list-style-type: decimal;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+  }
+  & ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+  }
+
+  & li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+  }
+
+  & img {
+    max-width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.commentWrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.line {
+  width: 100%;
+  height: 2px;
+  margin-bottom: 2rem;
+  background: #e9ecef;
+}
+
+.buttonBox {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: -1rem;
+  margin-bottom: 3rem;
+
+  & > button {
+    background-color: white;
+    color: var(--darkgray-color);
+    font-family: 'NanumSquareAcB';
+    font-size: 1.375rem;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid var(--darkgray-color);
+    border-radius: 24px;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.kakao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+  margin-top: 13rem;
+  & > span {
+    align-self: flex-start;
+    max-width: 1000px;
+    font-size: 1.375rem;
+    font-weight: bold;
+    color: var(--main-color);
+  }
+}
+
+.process {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.375rem;
+  margin-top: 15rem;
+  margin-bottom: 6.875rem;
+  & > span {
+    font-size: 1.375rem;
+    color: var(--darkgray-color);
+  }
+  & > button {
+    font-family: 'NanumSquareAcB';
+    font-size: 1.375rem;
+    padding: 1rem 2rem;
+    border: 1px solid var(--main-color);
+    background-color: var(--main-color);
+    color: white;
+    border-radius: 24px;
+  }
+}
