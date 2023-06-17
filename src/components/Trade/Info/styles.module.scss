@@ -1,0 +1,28 @@
+.infoContainer {
+  display: flex;
+  padding: 3.75rem 4.375rem;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+
+  & > article {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    font-size: 1.375rem;
+    font-weight: bold;
+    gap: 2rem;
+    & > span {
+      color: var(--main-color);
+      margin-bottom: 1rem;
+    }
+    & > div {
+      display: flex;
+      color: #4d5256;
+      gap: 1rem;
+      & > p {
+        color: #63676a;
+        font-weight: none;
+      }
+    }
+  }
+}
