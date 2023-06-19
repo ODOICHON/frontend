@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BsBookmark } from 'react-icons/bs';
 import Dompurify from 'dompurify';
@@ -17,7 +17,13 @@ const HTML_MOCK_DATA =
 
 export default function TradeBoardPage() {
   const navigate = useNavigate();
+  const [_, updateState] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    updateState(true);
+  }, []);
+
   return (
     <section className={styles.container}>
       <div className={styles.title}>
@@ -53,7 +59,7 @@ export default function TradeBoardPage() {
         scrollbar={{ draggable: true }}
       >
         {/* TODO: 실제 데이터로 바꾸기, /test.png 삭제하기 */}
-        {[1, 2, 3].map((_, index) => (
+        {[1, 2, 3].map((index) => (
           <SwiperSlide key={index}>
             <img
               style={{ width: '100%', height: '42.25rem' }}
