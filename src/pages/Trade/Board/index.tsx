@@ -61,11 +61,7 @@ export default function TradeBoardPage() {
         {/* TODO: 실제 데이터로 바꾸기, /test.png 삭제하기 */}
         {[1, 2, 3].map((index) => (
           <SwiperSlide key={index}>
-            <img
-              style={{ width: '100%', height: '42.25rem' }}
-              src="/trade_board_test.png"
-              alt="s"
-            />
+            <img src="/trade_board_test.png" alt="trade_board_img" />
           </SwiperSlide>
         ))}
       </Swiper>
