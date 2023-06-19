@@ -54,9 +54,15 @@
 .swiperContainer {
   & > div:nth-child(2) {
     color: whitesmoke;
+    @include mobile {
+      transform: scale(0.6);
+    }
   }
   & > div:nth-child(3) {
     color: whitesmoke;
+    @include mobile {
+      transform: scale(0.6);
+    }
   }
   img {
     width: 100%;
