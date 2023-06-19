@@ -1,0 +1,12 @@
+@import '@/media.scss';
+
+.kakaoMapImage {
+  // 지도의 크기
+  width: 100%;
+  max-width: 44.5rem;
+  height: 44.5rem;
+
+  @include mobile {
+    height: 35rem;
+  }
+}
