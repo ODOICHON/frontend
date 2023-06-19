@@ -1,18 +1,14 @@
 import { StaticMap } from 'react-kakao-maps-sdk';
+import styles from './styles.module.scss';
 
 function KakaoMapImage() {
   return (
     <StaticMap // 지도를 표시할 Container
+      className={styles.kakaoMapImage}
       center={{
         // 지도의 중심좌표
         lat: 33.450701,
         lng: 126.570667,
-      }}
-      style={{
-        // 지도의 크기
-        width: '100%',
-        maxWidth: '44.5rem',
-        height: '44.5rem',
       }}
       marker={{
         position: {
