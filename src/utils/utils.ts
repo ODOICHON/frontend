@@ -39,6 +39,20 @@ export const getPrefixCategoryName = (category: string) => {
   }
 };
 
+// 매매 타입 이름 가져오기
+export const getRentalName = (rental: string) => {
+  switch (rental) {
+    case 'MONTHLYRENT':
+      return '월세';
+    case 'JEONSE':
+      return '전세';
+    case 'SALE':
+      return '매매';
+    default:
+      return '';
+  }
+};
+
 export const checkBeforePost = (
   title: string,
   contents: string,
