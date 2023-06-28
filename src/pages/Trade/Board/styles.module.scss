@@ -36,12 +36,17 @@
   & > div {
     display: flex;
     gap: 1rem;
-    // justify-content: space-between;
-    & > p {
-      font-size: 1.25rem;
-      font-weight: 400;
-      & > span {
-        font-weight: 200;
+    font-size: 1.25rem;
+    font-weight: 400;
+
+    span {
+      font-weight: 200;
+    }
+
+    & > div > span {
+      cursor: pointer;
+      &:hover {
+        color: var(--main-color);
       }
     }
   }
