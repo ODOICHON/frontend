@@ -2,6 +2,7 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import Dompurify from 'dompurify';
+import { motion } from 'framer-motion';
 import Comments from '@/components/Board/Comments';
 import Like from '@/components/Board/Like';
 import { QueryKeys, restFetcher } from '@/queryClient';
@@ -10,6 +11,7 @@ import { DeleteBoardAPI } from '@/apis/boards';
 import userStore from '@/store/userStore';
 import { getCategoryName, getPrefixCategoryName } from '@/utils/utils';
 import { BoardDetailResponse } from '@/types/boardDetailType';
+import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 export default function CommunityBoardDetailPage() {
@@ -50,66 +52,68 @@ export default function CommunityBoardDetailPage() {
   if (isError) return <NotFoundPage />;
 
   return (
-    <section className={styles.container}>
-      <div className={styles.title}>
-        <div className={styles.innerTitle}>
-          <h1>
-            [{getCategoryName(boardData?.data.category || '')}]{' '}
-            {boardData?.data.title}
-          </h1>
-          <div>
-            <p>
-              작성자<span> | {boardData?.data.nickName}</span>
-            </p>
-            <p>
-              작성일
-              <span>
-                {' '}
-                | {dayjs(boardData?.data.createdAt).format('YYYY.MM.DD')}
-              </span>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div className={styles.line} />
-
-      <div className={styles.contentWrapper}>
-        <div
-          className={styles.content}
-          dangerouslySetInnerHTML={{
-            __html: Dompurify.sanitize(boardData?.data.code || ''),
-          }}
-        />
-      </div>
-
-      {boardData && (
-        <div className={styles.commentWrapper}>
-          <Like
-            boardId={boardData.data.boardId}
-            loveCount={boardData.data.loveCount}
-          />
-
-          <div className={styles.line} />
-          {user?.nick_name === boardData.data.nickName && (
-            <div className={styles.buttonBox}>
-              <button type="button" onClick={onUpdateClick}>
-                수정
-              </button>
-              <button type="button" onClick={deletePost}>
-                삭제
-              </button>
+    <motion.div variants={opacityVariants} initial="initial" animate="mount">
+      <section className={styles.container}>
+        <div className={styles.title}>
+          <div className={styles.innerTitle}>
+            <h1>
+              [{getCategoryName(boardData?.data.category || '')}]{' '}
+              {boardData?.data.title}
+            </h1>
+            <div>
+              <p>
+                작성자<span> | {boardData?.data.nickName}</span>
+              </p>
+              <p>
+                작성일
+                <span>
+                  {' '}
+                  | {dayjs(boardData?.data.createdAt).format('YYYY.MM.DD')}
+                </span>
+              </p>
             </div>
-          )}
-          <Comments
-            boardId={boardData.data.boardId}
-            comments={boardData.data.comments}
-            count={boardData.data.commentCount}
-          />
-          <div className={styles.link}>
-            <Link to={`/community/${category}`}>목록</Link>
           </div>
         </div>
-      )}
-    </section>
+        <div className={styles.line} />
+
+        <div className={styles.contentWrapper}>
+          <div
+            className={styles.content}
+            dangerouslySetInnerHTML={{
+              __html: Dompurify.sanitize(boardData?.data.code || ''),
+            }}
+          />
+        </div>
+
+        {boardData && (
+          <div className={styles.commentWrapper}>
+            <Like
+              boardId={boardData.data.boardId}
+              loveCount={boardData.data.loveCount}
+            />
+
+            <div className={styles.line} />
+            {user?.nick_name === boardData.data.nickName && (
+              <div className={styles.buttonBox}>
+                <button type="button" onClick={onUpdateClick}>
+                  수정
+                </button>
+                <button type="button" onClick={deletePost}>
+                  삭제
+                </button>
+              </div>
+            )}
+            <Comments
+              boardId={boardData.data.boardId}
+              comments={boardData.data.comments}
+              count={boardData.data.commentCount}
+            />
+            <div className={styles.link}>
+              <Link to={`/community/${category}`}>목록</Link>
+            </div>
+          </div>
+        )}
+      </section>
+    </motion.div>
   );
 }

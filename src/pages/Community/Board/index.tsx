@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 import Loading from '@/components/Common/Loading';
 import Pagenation from '@/components/Common/Pagenation';
 import CommunityBoard from '@/components/Community/Board';
@@ -15,6 +16,7 @@ import {
   freeBoardData,
   advertiseBoardData,
 } from '@/constants/category';
+import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 export default function CommunityBoardPage() {
@@ -100,104 +102,110 @@ export default function CommunityBoardPage() {
   if (category !== 'free_board' && category !== 'advertisement_board')
     return <Navigate to="/community" />;
   return (
-    <div className={styles.container}>
-      <section className={styles.titleContainer}>
-        <div className={styles.title}>
-          <h1>{DESCRIPTION_DATA.title}</h1>
-          <p>{DESCRIPTION_DATA.description}</p>
-        </div>
-      </section>
-      <section className={styles.contentWrapper}>
-        <ul className={styles.categoryWrapper}>
-          {CATEGORY_DATA.map((menu) => (
-            <li
-              className={
-                focusedCategory === menu.name
-                  ? styles.focusCategory
-                  : styles.category
-              }
-              role="presentation"
-              key={menu.name}
-              onClick={() => setFocusedCategory(menu.name)}
-            >
-              {menu.code}
-            </li>
-          ))}
-        </ul>
-        <div className={styles.optionWrapper}>
-          <ul>
-            <li
-              role="presentation"
-              className={
-                focusedFilter === 'RECENT' ? styles.focused : styles.notFocused
-              }
-              onClick={() => setFocusedFilter('RECENT')}
-            >
-              최신순
-            </li>
-            <div className={styles.divider} />
-            <li
-              role="presentation"
-              className={
-                focusedFilter === 'POPULAR' ? styles.focused : styles.notFocused
-              }
-              onClick={() => setFocusedFilter('POPULAR')}
-            >
-              인기순
-            </li>
+    <motion.div variants={opacityVariants} initial="initial" animate="mount">
+      <div className={styles.container}>
+        <section className={styles.titleContainer}>
+          <div className={styles.title}>
+            <h1>{DESCRIPTION_DATA.title}</h1>
+            <p>{DESCRIPTION_DATA.description}</p>
+          </div>
+        </section>
+        <section className={styles.contentWrapper}>
+          <ul className={styles.categoryWrapper}>
+            {CATEGORY_DATA.map((menu) => (
+              <li
+                className={
+                  focusedCategory === menu.name
+                    ? styles.focusCategory
+                    : styles.category
+                }
+                role="presentation"
+                key={menu.name}
+                onClick={() => setFocusedCategory(menu.name)}
+              >
+                {menu.code}
+              </li>
+            ))}
           </ul>
-          <form className={styles.searchWrapper} onSubmit={handleSubmit}>
-            <input
-              value={search}
-              onChange={handleSearch}
-              type="text"
-              placeholder="검색어를 입력해주세요."
-            />
-            <button type="submit">검색</button>
-          </form>
-        </div>
-        <div className={styles.line} />
-        <ul>
-          {isLoading && <Loading />}
-          {boardListData && boardListData.data.content.length > 0 ? (
-            boardListData?.data.content.map((content) => (
-              <CommunityBoard
-                key={content.boardId}
-                boardId={content.boardId}
-                category={content.category}
-                prefixCategory={category || ''}
-                title={content.title}
-                oneLineContent={content.oneLineContent}
-                imageUrl={content.imageUrl}
-                commentCount={content.commentCount}
-                nickName={content.nickName}
-                createdAt={content.createdAt}
-                fixed={content.fixed}
+          <div className={styles.optionWrapper}>
+            <ul>
+              <li
+                role="presentation"
+                className={
+                  focusedFilter === 'RECENT'
+                    ? styles.focused
+                    : styles.notFocused
+                }
+                onClick={() => setFocusedFilter('RECENT')}
+              >
+                최신순
+              </li>
+              <div className={styles.divider} />
+              <li
+                role="presentation"
+                className={
+                  focusedFilter === 'POPULAR'
+                    ? styles.focused
+                    : styles.notFocused
+                }
+                onClick={() => setFocusedFilter('POPULAR')}
+              >
+                인기순
+              </li>
+            </ul>
+            <form className={styles.searchWrapper} onSubmit={handleSubmit}>
+              <input
+                value={search}
+                onChange={handleSearch}
+                type="text"
+                placeholder="검색어를 입력해주세요."
               />
-            ))
-          ) : (
-            <NoPosts />
+              <button type="submit">검색</button>
+            </form>
+          </div>
+          <div className={styles.line} />
+          <ul>
+            {isLoading && <Loading />}
+            {boardListData && boardListData.data.content.length > 0 ? (
+              boardListData?.data.content.map((content) => (
+                <CommunityBoard
+                  key={content.boardId}
+                  boardId={content.boardId}
+                  category={content.category}
+                  prefixCategory={category || ''}
+                  title={content.title}
+                  oneLineContent={content.oneLineContent}
+                  imageUrl={content.imageUrl}
+                  commentCount={content.commentCount}
+                  nickName={content.nickName}
+                  createdAt={content.createdAt}
+                  fixed={content.fixed}
+                />
+              ))
+            ) : (
+              <NoPosts />
+            )}
+          </ul>
+          <button
+            className={styles.writeButton}
+            type="button"
+            onClick={() => {
+              token
+                ? navigate(`/community/write/${category}`)
+                : navigate('/login');
+            }}
+          >
+            글쓰기
+          </button>
+          {boardListData && boardListData.data.content.length > 0 && (
+            <Pagenation
+              totalPage={boardListData.data.totalPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
           )}
-        </ul>
-        <button
-          className={styles.writeButton}
-          type="button"
-          onClick={() => {
-            token
-              ? navigate(`/community/write/${category}`)
-              : navigate('/login');
-          }}
-        >
-          글쓰기
-        </button>
-        {boardListData && boardListData.data.content.length > 0 && (
-          <Pagenation
-            totalPage={boardListData.data.totalPages}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
-        )}
-      </section>
-    </div>
+        </section>
+      </div>
+    </motion.div>
   );
 }
