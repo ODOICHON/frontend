@@ -17,7 +17,9 @@ export type TradeBoardDetailData = {
   imageUrls: string[];
   nickName: string;
   createdAt: Date;
+  userType: string;
   isCompleted: boolean;
+  isScraped: boolean;
 };
 
 export type TradeBoardDetailResponse = {
