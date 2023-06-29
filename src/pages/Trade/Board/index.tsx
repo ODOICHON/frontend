@@ -27,78 +27,81 @@ export default function TradeBoardPage() {
   }, []);
 
   return (
-    <motion.div variants={opacityVariants} initial="initial" animate="mount">
-      <section className={styles.container}>
-        <div className={styles.title}>
-          <div className={styles.innerTitle}>
-            <ul className={styles.categoryList}>
-              {/* TODO: 실제 데이터로 바꾸기 */}
-              {['매매', '전세', '월세'].map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
-            <h1>바다 앞에 위치한 포근한 집, 듀얼리 하우스 2호점</h1>
-            <div>
-              <p>
-                작성자<span> | 해피부동산</span>
-              </p>
-              <p>
-                작성일
-                <span> | 2023.06.15</span>
-              </p>
-            </div>
+    <motion.div
+      className={styles.container}
+      variants={opacityVariants}
+      initial="initial"
+      animate="mount"
+    >
+      <div className={styles.title}>
+        <div className={styles.innerTitle}>
+          <ul className={styles.categoryList}>
+            {/* TODO: 실제 데이터로 바꾸기 */}
+            {['매매', '전세', '월세'].map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+          <h1>바다 앞에 위치한 포근한 집, 듀얼리 하우스 2호점</h1>
+          <div>
+            <p>
+              작성자<span> | 해피부동산</span>
+            </p>
+            <p>
+              작성일
+              <span> | 2023.06.15</span>
+            </p>
           </div>
-          <BsBookmark style={{ cursor: 'pointer' }} />
         </div>
-        <div className={styles.line} />
+        <BsBookmark style={{ cursor: 'pointer' }} />
+      </div>
+      <div className={styles.line} />
 
-        <Swiper
-          className={styles.swiperContainer}
-          modules={[Navigation, Pagination, Scrollbar, A11y]}
-          spaceBetween={50}
-          slidesPerView={1}
-          navigation
-          pagination={{ el: ref.current }}
-          scrollbar={{ draggable: true }}
+      <Swiper
+        className={styles.swiperContainer}
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={50}
+        slidesPerView={1}
+        navigation
+        pagination={{ el: ref.current }}
+        scrollbar={{ draggable: true }}
+      >
+        {/* TODO: 실제 데이터로 바꾸기, /test.png 삭제하기 */}
+        {[1, 2, 3].map((index) => (
+          <SwiperSlide key={index}>
+            <img src="/trade_board_test.png" alt="trade_board_img" />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+      <div className={styles.pagination} ref={ref} />
+
+      <section className={styles.infoContainer}>
+        <TradeBoardInfo />
+      </section>
+
+      <div className={styles.contentWrapper}>
+        <div
+          className={styles.content}
+          dangerouslySetInnerHTML={{
+            __html: Dompurify.sanitize(HTML_MOCK_DATA || ''),
+          }}
+        />
+      </div>
+
+      <section className={styles.kakao}>
+        <span>지도 API</span>
+        <KakaoMapImage />
+      </section>
+
+      <section className={styles.process}>
+        <span>빈집거래 프로세스가 궁금하신가요?</span>
+        <button
+          type="button"
+          onClick={() => {
+            navigate('/trade/process');
+          }}
         >
-          {/* TODO: 실제 데이터로 바꾸기, /test.png 삭제하기 */}
-          {[1, 2, 3].map((index) => (
-            <SwiperSlide key={index}>
-              <img src="/trade_board_test.png" alt="trade_board_img" />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        <div className={styles.pagination} ref={ref} />
-
-        <section className={styles.infoContainer}>
-          <TradeBoardInfo />
-        </section>
-
-        <div className={styles.contentWrapper}>
-          <div
-            className={styles.content}
-            dangerouslySetInnerHTML={{
-              __html: Dompurify.sanitize(HTML_MOCK_DATA || ''),
-            }}
-          />
-        </div>
-
-        <section className={styles.kakao}>
-          <span>지도 API</span>
-          <KakaoMapImage />
-        </section>
-
-        <section className={styles.process}>
-          <span>빈집거래 프로세스가 궁금하신가요?</span>
-          <button
-            type="button"
-            onClick={() => {
-              navigate('/trade/process');
-            }}
-          >
-            중계 프로세스 확인하기
-          </button>
-        </section>
+          중계 프로세스 확인하기
+        </button>
       </section>
     </motion.div>
   );
