@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { AiOutlineAlert } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -8,54 +9,50 @@ import { A11y, Navigation, Pagination, Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import TradeBoardInfo from '@/components/Trade/Info';
 import KakaoMapImage from '@/components/Trade/KakaoMapImage';
+import ReportModal from '@/components/Trade/ReportModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { TradeBoardDetailResponse } from '@/types/Board/Trade/boardDetailType';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { DeleteScrapAPI, PutScrapAPI } from '@/apis/boards';
 import userStore from '@/store/userStore';
-import { getRentalName } from '@/utils/utils';
+import { getMoveInType, getRentalName, getUserType } from '@/utils/utils';
 import styles from './styles.module.scss';
 
 export default function TradeBoardPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = userStore();
-  const { data } = useQuery<TradeBoardDetailResponse>(
+  const { data, refetch } = useQuery<TradeBoardDetailResponse>(
     [QueryKeys.TRADE_BOARD, id],
-    () => restFetcher({ method: 'GET', path: `/houses/${id}` }),
+    () =>
+      restFetcher({
+        method: 'GET',
+        path: `/houses${user ? '/user-scrap' : ''}/${id}`,
+      }),
   );
   const [_, updateState] = useState(false);
+  const [modal, setModal] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     updateState(true);
   }, []);
 
-  // const [position, setPosition] = useState({ lat: 0, lng: 0 });
-
-  // useEffect(() => {
-  //   const geocoder = new window.kakao.maps.services.Geocoder();
-  //   geocoder.addressSearch(
-  //     data?.data.city || '제주특별시 제주시 첨단로 242',
-  //     (result: any, status: any) => {
-  //       if (status === window.kakao.maps.services.Status.OK) {
-  //         console.log(+result[0].x, +result[0].y);
-  //         const a = new window.kakao.maps.LatLng(+result[0].x, +result[0].y);
-  //         console.log(a.getLat(), a.getLng());
-  //         setPosition({ lat: +result[0].y, lng: +result[0].x });
-  //       }
-  //     },
-  //   );
-  // }, [data]);
-
   return (
     <section className={styles.container}>
+      {modal && (
+        <ReportModal id={data?.data.houseId || 0} setModal={setModal} />
+      )}
       <div className={styles.title}>
         <div className={styles.innerTitle}>
           <ul className={styles.categoryList}>
             <li>{getRentalName(data?.data.rentalType || '')}</li>
-            {/* TODO: 공인중개사 매물인지 확인하는 태그 구현하기, 피그마 참고 */}
+            <li>{getMoveInType(data?.data.isCompleted || false)}</li>
+            <li className={styles.userType}>
+              {getUserType(data?.data.userType || '')}
+            </li>
           </ul>
           <h1>{data?.data.title}</h1>
           <div>
@@ -74,10 +71,40 @@ export default function TradeBoardPage() {
             ) : null}
           </div>
         </div>
-        <BsBookmark style={{ cursor: 'pointer' }} />
+
+        {user ? (
+          <article>
+            <div>
+              <AiOutlineAlert
+                style={{
+                  cursor: 'pointer',
+                }}
+                onClick={() => setModal(true)}
+              />
+              <span>신고하기</span>
+            </div>
+            <div>
+              <BsBookmark
+                style={{
+                  cursor: 'pointer',
+                  color: data?.data.isScraped ? '#ec6130' : '',
+                }}
+                onClick={async () => {
+                  if (data?.data.isScraped === true) {
+                    await DeleteScrapAPI(data?.data.houseId);
+                    await refetch();
+                  } else if (data?.data.isScraped === false) {
+                    await PutScrapAPI(data?.data.houseId);
+                    await refetch();
+                  }
+                }}
+              />
+              <span>스크랩</span>
+            </div>
+          </article>
+        ) : null}
       </div>
       <div className={styles.line} />
-
       <Swiper
         className={styles.swiperContainer}
         modules={[Navigation, Pagination, Scrollbar, A11y]}
@@ -87,7 +114,6 @@ export default function TradeBoardPage() {
         pagination={{ el: ref.current }}
         scrollbar={{ draggable: true }}
       >
-        {/* TODO: 실제 데이터로 바꾸기, /test.png 삭제하기 */}
         {data?.data.imageUrls.map((url, index) => (
           <SwiperSlide key={index}>
             <img src={url} alt="trade_board_img" />
@@ -95,11 +121,9 @@ export default function TradeBoardPage() {
         ))}
       </Swiper>
       <div className={styles.pagination} ref={ref} />
-
       <section className={styles.infoContainer}>
         <TradeBoardInfo info={data?.data} />
       </section>
-
       <div className={styles.contentWrapper}>
         <div
           className={styles.content}
@@ -111,9 +135,8 @@ export default function TradeBoardPage() {
 
       <section className={styles.kakao}>
         <span>지도 API</span>
-        <KakaoMapImage />
+        <KakaoMapImage address={data?.data.city || ''} />
       </section>
-
       <section className={styles.process}>
         <span>빈집거래 프로세스가 궁금하신가요?</span>
         <button
