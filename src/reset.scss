@@ -10,6 +10,7 @@
   --darkgray-color: #878d91;
   --gray-background: #eaeeef;
   --background-color: #f8fafb;
+  --sub-color: #5772ff;
 }
 
 html,
@@ -249,5 +250,11 @@ html {
   & img {
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+  }
+}
+
+#react-kakao-maps-sdk-staticmap-container {
+  & > a:first-child {
+    display: none;
   }
 }
