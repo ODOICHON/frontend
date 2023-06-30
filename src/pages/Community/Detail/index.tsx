@@ -2,6 +2,7 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import Dompurify from 'dompurify';
+import { motion } from 'framer-motion';
 import Comments from '@/components/Board/Comments';
 import Like from '@/components/Board/Like';
 import { QueryKeys, restFetcher } from '@/queryClient';
@@ -10,6 +11,7 @@ import { DeleteBoardAPI } from '@/apis/boards';
 import userStore from '@/store/userStore';
 import { getCategoryName, getPrefixCategoryName } from '@/utils/utils';
 import { BoardDetailResponse } from '@/types/boardDetailType';
+import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 export default function CommunityBoardDetailPage() {
@@ -50,7 +52,12 @@ export default function CommunityBoardDetailPage() {
   if (isError) return <NotFoundPage />;
 
   return (
-    <section className={styles.container}>
+    <motion.div
+      className={styles.container}
+      variants={opacityVariants}
+      initial="initial"
+      animate="mount"
+    >
       <div className={styles.title}>
         <div className={styles.innerTitle}>
           <h1>
@@ -110,6 +117,6 @@ export default function CommunityBoardDetailPage() {
           </div>
         </div>
       )}
-    </section>
+    </motion.div>
   );
 }

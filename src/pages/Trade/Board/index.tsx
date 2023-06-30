@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BsBookmark } from 'react-icons/bs';
 import Dompurify from 'dompurify';
+import { motion } from 'framer-motion';
 import { A11y, Navigation, Pagination, Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -9,6 +10,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import TradeBoardInfo from '@/components/Trade/Info';
 import KakaoMapImage from '@/components/Trade/KakaoMapImage';
+import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 // TODO: 실제 데이터로 바꾸기
@@ -25,7 +27,12 @@ export default function TradeBoardPage() {
   }, []);
 
   return (
-    <section className={styles.container}>
+    <motion.div
+      className={styles.container}
+      variants={opacityVariants}
+      initial="initial"
+      animate="mount"
+    >
       <div className={styles.title}>
         <div className={styles.innerTitle}>
           <ul className={styles.categoryList}>
@@ -96,6 +103,6 @@ export default function TradeBoardPage() {
           중계 프로세스 확인하기
         </button>
       </section>
-    </section>
+    </motion.div>
   );
 }
