@@ -22,7 +22,7 @@ export default function Terms({ setToggle }: TermsProps) {
           <article>
             <h1 className={styles.title}>제 1조(목적)</h1>
             <p>
-              주말의집 서비스 이용약관은 주말의집 (이하 “회사”)가 서비스를
+              주말내집 서비스 이용약관은 주말내집 (이하 “회사”)가 서비스를
               제공함에 있어, 회사와 회원 간의 권리, 의무 및 책임 사항 등을
               규정함을 목적으로 합니다.
             </p>

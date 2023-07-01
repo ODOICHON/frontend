@@ -84,7 +84,7 @@ export default function IntroducePage() {
         </div>
         <p>
           {`‘오도이촌' 막상 준비하려 하니 무엇부터 해야 할지 모르시겠다고요?
-주말의집이 이런 분들을 위해 준비했습니다. 오도이촌의 다양한 트렌드를 빠르게 제공해 드립니다.`}
+주말내집이 이런 분들을 위해 준비했습니다. 오도이촌의 다양한 트렌드를 빠르게 제공해 드립니다.`}
         </p>
         <div className={styles.trendWrapper}>
           {trendData?.data.map((board) => (
