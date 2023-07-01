@@ -3,6 +3,11 @@ import ReactQuill, { Quill } from 'react-quill';
 import { ImageResize } from 'quill-image-resize-module-ts';
 import imageHandler from '@/utils/Quill/imageHandler';
 
+const Align = ReactQuill.Quill.import('formats/align');
+Align.whitelist = ['left', 'center', 'right', 'justify'];
+const Icons = ReactQuill.Quill.import('ui/icons');
+Icons.align.left = Icons.align[''];
+
 Quill.register('modules/imageResize', ImageResize);
 
 const useQuillModules = (
@@ -22,6 +27,7 @@ const useQuillModules = (
         container: [
           [{ header: [1, 2, 5, false] }],
           ['bold', 'underline', 'strike', 'blockquote'],
+          [{ align: ['left', 'center', 'right', 'justify'] }],
           [
             { list: 'ordered' },
             { list: 'bullet' },

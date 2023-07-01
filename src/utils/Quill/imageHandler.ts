@@ -17,17 +17,13 @@ const imageHandler = (
       const file = input.files[0];
       try {
         const res = await uploadFile(file);
-        const url = res || '';
+        const url = res?.Location || '';
         const range = QuillRef.current?.getEditor().getSelection()?.index;
         if (range !== null && range !== undefined) {
           const quill = QuillRef.current?.getEditor();
-
-          quill?.setSelection(range, 1);
-
-          quill?.clipboard.dangerouslyPasteHTML(
-            range,
-            `<img src=${url} alt="이미지" />`,
-          );
+          quill?.insertEmbed(range, 'image', url);
+          quill?.insertText(range + 1, '\n');
+          quill?.setSelection({ index: range + 2, length: 0 });
         }
       } catch (error) {
         alert((error as AxiosError<ErrorResponse>).response?.data.message);
