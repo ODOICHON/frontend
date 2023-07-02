@@ -126,14 +126,9 @@ export default function IntroduceQuill() {
   return (
     <div className={styles.container}>
       <h1>{boardData ? '관리자 글 수정하기' : '관리자 글쓰기'}</h1>
-      <div className={styles.sectionWrapper}>
-        <section className={styles.labelSection}>
+      <section className={styles.sectionWrapper}>
+        <span className={styles.inputWrapper}>
           <label>말머리</label>
-          <label>제목</label>
-          <label>썸네일</label>
-          <label>내용</label>
-        </section>
-        <section className={styles.contentSection}>
           <select
             className={styles.categoryInput}
             name="category"
@@ -148,6 +143,9 @@ export default function IntroduceQuill() {
             <option value="TREND">트렌드</option>
             <option value="REVIEW">후기</option>
           </select>
+        </span>
+        <span className={styles.inputWrapper}>
+          <label>제목</label>
           <input
             className={styles.titleInput}
             type="text"
@@ -157,6 +155,9 @@ export default function IntroduceQuill() {
               setTitle(e.target.value)
             }
           />
+        </span>
+        <span className={styles.inputWrapper}>
+          <label>썸네일</label>
           <div className={styles.thumbnailWrapper}>
             <input
               type="text"
@@ -174,6 +175,9 @@ export default function IntroduceQuill() {
               업로드
             </button>
           </div>
+        </span>
+        <span className={styles.inputWrapper}>
+          <label>내용</label>
           <ReactQuill
             className={styles.quill}
             ref={(element) => {
@@ -184,8 +188,8 @@ export default function IntroduceQuill() {
             onChange={onChange}
             modules={modules}
           />
-        </section>
-      </div>
+        </span>
+      </section>
       {boardData ? (
         <button type="button" onClick={onUpdate}>
           수정하기

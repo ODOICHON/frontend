@@ -28,7 +28,7 @@ export const uploadFile = async (file: File) => {
   };
   try {
     const { Location } = await s3.upload(params).promise();
-    return Location;
+    return { Location, name };
   } catch (err) {
     alert((err as AxiosError<ErrorResponse>).response?.data.message);
   }
