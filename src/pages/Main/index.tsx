@@ -289,7 +289,7 @@ export default function MainPage() {
           그날까지
         </p>
         <h1>
-          <b>주말의집</b>과 함께해요.
+          <b>주말내집</b>과 함께해요.
         </h1>
       </div>
     </motion.div>
