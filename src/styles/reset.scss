@@ -179,10 +179,11 @@ html {
 .ql-toolbar {
   position: sticky;
   z-index: 50;
+  border-radius: 8px 8px 0 0;
 }
 .ql-container {
-  overflow-y: scroll;
   padding-bottom: 3rem;
+  border-radius: 0 0 8px 8px;
 }
 .ql-editor {
   @import '@/styles/editor.scss';

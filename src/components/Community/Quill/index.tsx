@@ -112,13 +112,9 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   return (
     <div className={styles.container}>
       <Title category={queryParam} boardData={boardData} />
-      <div className={styles.sectionWrapper}>
-        <section className={styles.labelSection}>
+      <section className={styles.sectionWrapper}>
+        <span className={styles.inputWrapper}>
           <label>말머리</label>
-          <label>제목</label>
-          <label>내용</label>
-        </section>
-        <section className={styles.contentSection}>
           <select
             className={styles.categoryInput}
             name="category"
@@ -138,6 +134,9 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
                 </option>
               ))}
           </select>
+        </span>
+        <span className={styles.inputWrapper}>
+          <label>제목</label>
           <input
             className={styles.titleInput}
             type="text"
@@ -147,7 +146,9 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
               setTitle(e.target.value)
             }
           />
-
+        </span>
+        <span className={styles.inputWrapper}>
+          <label>내용</label>
           <ReactQuill
             className={styles.quill}
             ref={(element) => {
@@ -158,8 +159,8 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
             onChange={onChange}
             modules={modules}
           />
-        </section>
-      </div>
+        </span>
+      </section>
       <section>
         {boardData ? (
           <button type="button" onClick={onUpdate}>
