@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { CommentType } from '@/types/Board/boardType';
 import userStore from '@/store/userStore';
-import { Comment } from '@/types/boardDetailType';
 import styles from './styles.module.scss';
 import CommentDetail from '../CommentDetail';
 
 type CommentsProps = {
   boardId: number;
-  comments: Comment[];
+  comments: CommentType[];
   count: number;
   intro?: boolean;
 };

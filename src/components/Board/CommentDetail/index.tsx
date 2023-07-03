@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { CommentType } from '@/types/Board/boardType';
 import userStore from '@/store/userStore';
-import { Comment } from '@/types/boardDetailType';
+
 import styles from './styles.module.scss';
 
 type CommentDetailProps = {
-  comment: Comment;
+  comment: CommentType;
   boardId: number;
   intro?: boolean;
 };

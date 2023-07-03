@@ -7,9 +7,10 @@ import Pagenation from '@/components/Common/Pagenation';
 import CommunityBoard from '@/components/Community/Board';
 import NoPosts from '@/components/Community/NoPosts';
 import { restFetcher, QueryKeys } from '@/queryClient';
+import { CommunityBoardPageType } from '@/types/Board/communityType';
 import userStore from '@/store/userStore';
 import useInput from '@/hooks/useInput';
-import { BoardResponse } from '@/types/boardType';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import {
   freeCategory,
   advertiseCategory,
@@ -51,7 +52,7 @@ export default function CommunityBoardPage() {
     data: boardListData,
     refetch,
     isLoading,
-  } = useQuery<BoardResponse>(
+  } = useQuery<ApiResponseWithDataType<CommunityBoardPageType>>(
     [
       QueryKeys.COMMUNITY_BOARD,
       category,

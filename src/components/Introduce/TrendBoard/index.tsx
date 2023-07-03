@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { BoardContent } from '@/types/boardType';
+import { IntroBoardType } from '@/types/Board/introType';
 import { updownVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
-export default function TrendBoard(props: BoardContent) {
+type TrendBoardProps = IntroBoardType;
+
+export default function TrendBoard(props: TrendBoardProps) {
   const navigate = useNavigate();
   const [isMouseOver, setIsMouseOver] = useState(false);
   return (

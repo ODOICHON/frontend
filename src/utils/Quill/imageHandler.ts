@@ -1,7 +1,7 @@
 import ReactQuill from 'react-quill';
 import { AxiosError } from 'axios';
 import { uploadFile } from '@/apis/uploadS3';
-import { ErrorResponse } from '@/types/error';
+import { ApiResponseType } from '@/types/apiResponseType';
 import { DEFAULT_OPTIONS } from '@/constants/image';
 
 const { VITE_S3_DOMAIN, VITE_CLOUD_FRONT_DOMAIN } = import.meta.env;
@@ -32,7 +32,7 @@ const imageHandler = (
           quill?.setSelection({ index: range + 2, length: 0 });
         }
       } catch (error) {
-        alert((error as AxiosError<ErrorResponse>).response?.data.message);
+        alert((error as AxiosError<ApiResponseType>).response?.data.message);
       }
     }
   };

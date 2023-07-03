@@ -9,8 +9,9 @@ import TrendBoard from '@/components/Introduce/TrendBoard';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
+import { IntroBoardType } from '@/types/Board/introType';
 import userStore from '@/store/userStore';
-import { BoardMainResponse } from '@/types/boardType';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -28,28 +29,26 @@ export default function IntroducePage() {
     return restFetcher({ method: 'GET', path: 'boards/preview', params });
   };
 
-  const { data: trendData } = useQuery<BoardMainResponse>(
-    [QueryKeys.INTRO_BOARD, 'TREND', page],
-    () => fetchTrendList(page),
-  );
+  const { data: trendData } = useQuery<
+    ApiResponseWithDataType<IntroBoardType[]>
+  >([QueryKeys.INTRO_BOARD, 'TREND', page], () => fetchTrendList(page));
 
-  const { data: prefetchTrendData } = useQuery<BoardMainResponse>(
-    [QueryKeys.INTRO_BOARD, 'TREND', page + 1],
-    () => fetchTrendList(page + 1),
-  );
+  const { data: prefetchTrendData } = useQuery<
+    ApiResponseWithDataType<IntroBoardType[]>
+  >([QueryKeys.INTRO_BOARD, 'TREND', page + 1], () => fetchTrendList(page + 1));
 
-  const { data: reviewData } = useQuery<BoardMainResponse>(
-    [QueryKeys.INTRO_BOARD, 'REVIEW'],
-    () =>
-      restFetcher({
-        method: 'GET',
-        path: 'boards/preview',
-        params: {
-          prefix: 'INTRO',
-          limit: 100,
-          category: 'REVIEW',
-        },
-      }),
+  const { data: reviewData } = useQuery<
+    ApiResponseWithDataType<IntroBoardType[]>
+  >([QueryKeys.INTRO_BOARD, 'REVIEW'], () =>
+    restFetcher({
+      method: 'GET',
+      path: 'boards/preview',
+      params: {
+        prefix: 'INTRO',
+        limit: 100,
+        category: 'REVIEW',
+      },
+    }),
   );
 
   const handleMoreTrend = () => {

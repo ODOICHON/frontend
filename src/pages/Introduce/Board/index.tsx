@@ -6,10 +6,11 @@ import { motion } from 'framer-motion';
 import Comments from '@/components/Board/Comments';
 import Like from '@/components/Board/Like';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { IntroBoardDetailType } from '@/types/Board/introType';
 import NotFoundPage from '@/pages/NotFound';
 import { DeleteBoardAPI } from '@/apis/boards';
 import userStore from '@/store/userStore';
-import { BoardDetailResponse } from '@/types/boardDetailType';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -19,9 +20,10 @@ export default function IntroBoardPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: boardData, isError } = useQuery<BoardDetailResponse>(
-    [QueryKeys.INTRO_BOARD, id],
-    () => restFetcher({ method: 'GET', path: `/boards/${id}` }),
+  const { data: boardData, isError } = useQuery<
+    ApiResponseWithDataType<IntroBoardDetailType>
+  >([QueryKeys.INTRO_BOARD, id], () =>
+    restFetcher({ method: 'GET', path: `/boards/${id}` }),
   );
   const deletePost = async () => {
     const response = await DeleteBoardAPI(`${boardData?.data.boardId}`);

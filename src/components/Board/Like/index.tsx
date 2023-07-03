@@ -3,7 +3,7 @@ import love from '@/assets/common/love.svg';
 import notLove from '@/assets/common/notLove.svg';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import userStore from '@/store/userStore';
-import { GetLikeResponse } from '@/types/boardDetailType';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import styles from './styles.module.scss';
 
 type LikeProps = {
@@ -15,7 +15,7 @@ type LikeProps = {
 export default function Like({ boardId, loveCount, intro }: LikeProps) {
   const { user } = userStore();
   const queryClient = useQueryClient();
-  const { data: isLove } = useQuery<GetLikeResponse>(
+  const { data: isLove } = useQuery<ApiResponseWithDataType<boolean>>(
     [QueryKeys.LIKE, boardId],
     () => restFetcher({ method: 'GET', path: `/loves/${boardId}` }),
     { enabled: !!user },

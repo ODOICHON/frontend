@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { BoardContent } from '@/types/boardType';
+import { IntroBoardType } from '@/types/Board/introType';
 import styles from './styles.module.scss';
 
-export default function ReviewBoard(props: BoardContent) {
+type ReviewBoardProps = IntroBoardType;
+
+export default function ReviewBoard(props: ReviewBoardProps) {
   const navigate = useNavigate();
   return (
     <div

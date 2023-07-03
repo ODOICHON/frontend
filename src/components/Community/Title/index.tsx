@@ -1,8 +1,8 @@
-import { BoardDetailData } from '@/types/boardDetailType';
+import { CommunityBoardDetailType } from '@/types/Board/communityType';
 
 type TitleProps = {
   category: string | undefined;
-  boardData: BoardDetailData | null;
+  boardData: CommunityBoardDetailType | null;
 };
 
 export default function Title({ category, boardData }: TitleProps) {

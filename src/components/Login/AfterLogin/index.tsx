@@ -10,12 +10,12 @@ import { LogoutAPI } from '@/apis/logout';
 import { menuToggleStore } from '@/store/menuToggleStore';
 import userStore from '@/store/userStore';
 import useWindowSize from '@/hooks/useWindowSize';
-import { GetUserData } from '@/types/userType';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { dropdownVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 type DesktopMenuProps = {
-  userInfo: GetUserData | undefined;
+  userInfo: ApiResponseWithDataType<User> | undefined;
   isClicked: boolean;
   setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
   onMenuClick: () => void;
@@ -46,6 +46,7 @@ function DesktopMenu({
       window.removeEventListener('mousedown', handleCloseModal);
     };
   }, [dropdownRef, isClicked]);
+
   return (
     <div ref={dropdownRef} className={styles.wrapper}>
       <span
@@ -111,7 +112,7 @@ function MobileMenu({ handleLogout }: MobileMenuProps) {
 export default function AfterLogin() {
   const queryClient = useQueryClient();
   const { logout, setUser } = userStore();
-  const { data: userInfo } = useQuery<GetUserData>(
+  const { data: userInfo } = useQuery<ApiResponseWithDataType<User>>(
     [QueryKeys.USER],
     () => restFetcher({ method: 'GET', path: '/users' }),
     {

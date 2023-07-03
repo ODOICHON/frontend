@@ -1,23 +1,26 @@
 import axios, { AxiosError } from 'axios';
-import { ErrorResponse } from '@/types/error';
+import {
+  ApiResponseType,
+  ApiResponseWithDataType,
+} from '@/types/apiResponseType';
 
-export type LoginSuccess = {
-  code: string;
-  message: string;
-  data: Token;
-};
 export type LoginForm = {
   email: string;
   password: string;
 };
+
 export const LoginAPI = async (form: LoginForm) => {
   try {
-    const { data } = await axios.post<LoginSuccess>('/users/sign-in', form, {
-      withCredentials: true,
-    });
+    const { data } = await axios.post<ApiResponseWithDataType<Token>>(
+      '/users/sign-in',
+      form,
+      {
+        withCredentials: true,
+      },
+    );
     axios.defaults.headers.common.Authorization = data.data.access_token;
     return data;
   } catch (err) {
-    alert((err as AxiosError<ErrorResponse>).response?.data.message);
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
   }
 };
