@@ -6,11 +6,12 @@ import { motion } from 'framer-motion';
 import Comments from '@/components/Board/Comments';
 import Like from '@/components/Board/Like';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { CommunityBoardDetailType } from '@/types/Board/communityType';
 import NotFoundPage from '@/pages/NotFound';
 import { DeleteBoardAPI } from '@/apis/boards';
 import userStore from '@/store/userStore';
 import { getCategoryName, getPrefixCategoryName } from '@/utils/utils';
-import { BoardDetailResponse } from '@/types/boardDetailType';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -20,9 +21,10 @@ export default function CommunityBoardDetailPage() {
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
-  const { data: boardData, isError } = useQuery<BoardDetailResponse>(
-    [QueryKeys.COMMUNITY_BOARD, id],
-    () => restFetcher({ method: 'GET', path: `/boards/${id}` }),
+  const { data: boardData, isError } = useQuery<
+    ApiResponseWithDataType<CommunityBoardDetailType>
+  >([QueryKeys.COMMUNITY_BOARD, id], () =>
+    restFetcher({ method: 'GET', path: `/boards/${id}` }),
   );
 
   const deletePost = async () => {

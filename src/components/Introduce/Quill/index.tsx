@@ -5,13 +5,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { BoardFormType } from '@/types/Board/boardType';
+import { IntroBoardDetailType } from '@/types/Board/introType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostBoardAPI } from '@/apis/boards';
 import { uploadFile } from '@/apis/uploadS3';
 import useQuillModules from '@/hooks/useQuillModules';
 import { checkBeforePost } from '@/utils/utils';
-import { BoardDetailData } from '@/types/boardDetailType';
-import { BoardForm } from '@/types/boardType';
 import styles from './styles.module.scss';
 
 // TODO: 이미지 10개 이상 등록 불가
@@ -19,7 +19,7 @@ import styles from './styles.module.scss';
 export default function IntroduceQuill() {
   const navigate = useNavigate();
   const location = useLocation();
-  const boardData: BoardDetailData | null = location.state;
+  const boardData: IntroBoardDetailType | null = location.state;
 
   const QuillRef = useRef<ReactQuill>();
   const thumbnailRef = useRef<HTMLInputElement>(null);
@@ -37,12 +37,12 @@ export default function IntroduceQuill() {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(
-    (boardForm: BoardForm) =>
+    (BoardForm: BoardFormType) =>
       restFetcher({
         method: 'PUT',
         path: `boards/${boardData?.boardId}`,
         body: {
-          ...boardForm,
+          ...BoardForm,
         },
       }),
     {
@@ -67,7 +67,7 @@ export default function IntroduceQuill() {
       setThumbnailTitle(e.currentTarget.files[0].name);
       try {
         const res = await uploadFile(file);
-        const url = res || '';
+        const url = res?.Location || '';
         setThumbnail(url);
       } catch (error) {
         const err = error as AxiosError;
@@ -86,7 +86,7 @@ export default function IntroduceQuill() {
     const imageUrls = [thumbnail, ...getImageUrls(contents)];
     if (!checkBeforePost(title, contents, category, imageUrls)) return;
 
-    const boardForm: BoardForm = {
+    const BoardForm: BoardFormType = {
       title,
       code: contents,
       category,
@@ -94,7 +94,7 @@ export default function IntroduceQuill() {
       prefixCategory: 'INTRO',
       fixed: false,
     };
-    const response = await PostBoardAPI(boardForm);
+    const response = await PostBoardAPI(BoardForm);
     if (response?.code === 'SUCCESS') {
       alert('게시글이 작성되었습니다.');
       queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
@@ -103,7 +103,7 @@ export default function IntroduceQuill() {
   };
 
   const onUpdate = () => {
-    const boardForm: BoardForm = {
+    const BoardForm: BoardFormType = {
       title,
       code: contents,
       category,
@@ -111,7 +111,7 @@ export default function IntroduceQuill() {
       prefixCategory: 'INTRO',
       fixed: false,
     };
-    mutate(boardForm);
+    mutate(BoardForm);
   };
 
   useEffect(() => {

@@ -10,8 +10,10 @@ import { Autoplay, Pagination, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import footer from '@/assets/common/footer.png';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { CommunityBoardType } from '@/types/Board/communityType';
+import { IntroBoardType } from '@/types/Board/introType';
 import { getPrefixCategoryName } from '@/utils/utils';
-import { BoardMainResponse } from '@/types/boardType';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { jumbotronData } from '@/constants/main_dummy';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
@@ -25,30 +27,30 @@ export default function MainPage() {
   const commuNextRef = useRef<HTMLButtonElement>(null);
   const commuPrevRef = useRef<HTMLButtonElement>(null);
 
-  const { data: introData } = useQuery<BoardMainResponse>(
-    [QueryKeys.PREVIEW_BOARD, QueryKeys.INTRO_BOARD, introToggle],
-    () =>
-      restFetcher({
-        method: 'GET',
-        path: 'boards/preview',
-        params: {
-          prefix: 'INTRO',
-          limit: 5,
-          category: introToggle.toUpperCase(),
-        },
-      }),
+  const { data: introData } = useQuery<
+    ApiResponseWithDataType<IntroBoardType[]>
+  >([QueryKeys.PREVIEW_BOARD, QueryKeys.INTRO_BOARD, introToggle], () =>
+    restFetcher({
+      method: 'GET',
+      path: 'boards/preview',
+      params: {
+        prefix: 'INTRO',
+        limit: 5,
+        category: introToggle.toUpperCase(),
+      },
+    }),
   );
-  const { data: communityData } = useQuery<BoardMainResponse>(
-    [QueryKeys.PREVIEW_BOARD, QueryKeys.COMMUNITY_BOARD],
-    () =>
-      restFetcher({
-        method: 'GET',
-        path: 'boards/preview',
-        params: {
-          prefix: 'COMMUNITY',
-          limit: 5,
-        },
-      }),
+  const { data: communityData } = useQuery<
+    ApiResponseWithDataType<CommunityBoardType[]>
+  >([QueryKeys.PREVIEW_BOARD, QueryKeys.COMMUNITY_BOARD], () =>
+    restFetcher({
+      method: 'GET',
+      path: 'boards/preview',
+      params: {
+        prefix: 'COMMUNITY',
+        limit: 5,
+      },
+    }),
   );
 
   useEffect(() => {

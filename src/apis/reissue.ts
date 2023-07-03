@@ -1,14 +1,12 @@
 import axios, { AxiosError } from 'axios';
-import { ErrorResponse } from '@/types/error';
+import {
+  ApiResponseType,
+  ApiResponseWithDataType,
+} from '@/types/apiResponseType';
 
-type ReissueResponse = {
-  code: string;
-  message: string;
-  data: Token;
-};
 export const reissue = async () => {
   try {
-    const { data } = await axios.post<ReissueResponse>(
+    const { data } = await axios.post<ApiResponseWithDataType<Token>>(
       '/users/reissue',
       {
         access_token: JSON.parse(localStorage.getItem('user')!).state.token
@@ -18,6 +16,6 @@ export const reissue = async () => {
     );
     return data;
   } catch (err) {
-    alert((err as AxiosError<ErrorResponse>).response?.data.message);
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
   }
 };
