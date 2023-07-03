@@ -1,11 +1,19 @@
 @import '@/styles/media.scss';
+
 .quill {
   display: flex;
   flex-direction: column;
   width: 100%;
   min-height: 40rem;
-  overflow-y: auto;
   font-family: 'NanumSquareAcR';
+
+  & > div:first-child {
+    top: 77px;
+
+    @include mobile {
+      top: 50px;
+    }
+  }
 }
 
 // 페이지 스타일링
