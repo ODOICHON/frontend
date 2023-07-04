@@ -1,3 +1,3 @@
 export const DEFAULT_OPTIONS = '?f=webp&q=80';
 
-export const COMMUNITY_THUMBNAIL_SIZE_OPTION = '&w=300';
+export const THUMBNAIL_SIZE_OPTION = '&w=600';
