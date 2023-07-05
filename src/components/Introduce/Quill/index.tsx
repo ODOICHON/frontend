@@ -5,21 +5,24 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { BoardFormType } from '@/types/Board/boardType';
+import { IntroBoardDetailType } from '@/types/Board/introType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostBoardAPI } from '@/apis/boards';
 import { uploadFile } from '@/apis/uploadS3';
 import useQuillModules from '@/hooks/useQuillModules';
 import { checkBeforePost } from '@/utils/utils';
-import { BoardDetailData } from '@/types/boardDetailType';
-import { BoardForm } from '@/types/boardType';
+import { DEFAULT_OPTIONS } from '@/constants/image';
 import styles from './styles.module.scss';
 
 // TODO: 이미지 10개 이상 등록 불가
 
+const { VITE_S3_DOMAIN, VITE_CLOUD_FRONT_DOMAIN } = import.meta.env;
+
 export default function IntroduceQuill() {
   const navigate = useNavigate();
   const location = useLocation();
-  const boardData: BoardDetailData | null = location.state;
+  const boardData: IntroBoardDetailType | null = location.state;
 
   const QuillRef = useRef<ReactQuill>();
   const thumbnailRef = useRef<HTMLInputElement>(null);
@@ -37,12 +40,12 @@ export default function IntroduceQuill() {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(
-    (boardForm: BoardForm) =>
+    (BoardForm: BoardFormType) =>
       restFetcher({
         method: 'PUT',
         path: `boards/${boardData?.boardId}`,
         body: {
-          ...boardForm,
+          ...BoardForm,
         },
       }),
     {
@@ -67,8 +70,10 @@ export default function IntroduceQuill() {
       setThumbnailTitle(e.currentTarget.files[0].name);
       try {
         const res = await uploadFile(file);
-        const url = res || '';
-        setThumbnail(url);
+        const url = res?.Location || '';
+        const imageName = url.split(VITE_S3_DOMAIN)[1];
+        const imageUrl = VITE_CLOUD_FRONT_DOMAIN + imageName + DEFAULT_OPTIONS;
+        setThumbnail(imageUrl);
       } catch (error) {
         const err = error as AxiosError;
         return { ...err.response, success: false };
@@ -86,7 +91,7 @@ export default function IntroduceQuill() {
     const imageUrls = [thumbnail, ...getImageUrls(contents)];
     if (!checkBeforePost(title, contents, category, imageUrls)) return;
 
-    const boardForm: BoardForm = {
+    const BoardForm: BoardFormType = {
       title,
       code: contents,
       category,
@@ -94,7 +99,7 @@ export default function IntroduceQuill() {
       prefixCategory: 'INTRO',
       fixed: false,
     };
-    const response = await PostBoardAPI(boardForm);
+    const response = await PostBoardAPI(BoardForm);
     if (response?.code === 'SUCCESS') {
       alert('게시글이 작성되었습니다.');
       queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
@@ -103,7 +108,7 @@ export default function IntroduceQuill() {
   };
 
   const onUpdate = () => {
-    const boardForm: BoardForm = {
+    const BoardForm: BoardFormType = {
       title,
       code: contents,
       category,
@@ -111,7 +116,7 @@ export default function IntroduceQuill() {
       prefixCategory: 'INTRO',
       fixed: false,
     };
-    mutate(boardForm);
+    mutate(BoardForm);
   };
 
   useEffect(() => {
@@ -126,14 +131,9 @@ export default function IntroduceQuill() {
   return (
     <div className={styles.container}>
       <h1>{boardData ? '관리자 글 수정하기' : '관리자 글쓰기'}</h1>
-      <div className={styles.sectionWrapper}>
-        <section className={styles.labelSection}>
+      <section className={styles.sectionWrapper}>
+        <span className={styles.inputWrapper}>
           <label>말머리</label>
-          <label>제목</label>
-          <label>썸네일</label>
-          <label>내용</label>
-        </section>
-        <section className={styles.contentSection}>
           <select
             className={styles.categoryInput}
             name="category"
@@ -148,6 +148,9 @@ export default function IntroduceQuill() {
             <option value="TREND">트렌드</option>
             <option value="REVIEW">후기</option>
           </select>
+        </span>
+        <span className={styles.inputWrapper}>
+          <label>제목</label>
           <input
             className={styles.titleInput}
             type="text"
@@ -157,6 +160,9 @@ export default function IntroduceQuill() {
               setTitle(e.target.value)
             }
           />
+        </span>
+        <span className={styles.inputWrapper}>
+          <label>썸네일</label>
           <div className={styles.thumbnailWrapper}>
             <input
               type="text"
@@ -174,6 +180,9 @@ export default function IntroduceQuill() {
               업로드
             </button>
           </div>
+        </span>
+        <span className={styles.inputWrapper}>
+          <label>내용</label>
           <ReactQuill
             className={styles.quill}
             ref={(element) => {
@@ -184,8 +193,8 @@ export default function IntroduceQuill() {
             onChange={onChange}
             modules={modules}
           />
-        </section>
-      </div>
+        </span>
+      </section>
       {boardData ? (
         <button type="button" onClick={onUpdate}>
           수정하기

@@ -1,39 +1,27 @@
 import axios, { AxiosError } from 'axios';
-import { ErrorResponse } from '@/types/error';
+import { BoardFormType } from '@/types/Board/boardType';
+import {
+  ApiResponseType,
+  ApiResponseWithDataType,
+} from '@/types/apiResponseType';
 
-type BoardForm = {
-  title: string;
-  code: string;
-  category: string;
-  imageUrls: string[];
-  prefixCategory: string;
-  fixed: boolean;
-};
-
-type BoardPostResponse = {
-  code: string;
-  message: string;
-  data: number;
-};
-
-type Response = {
-  code: string;
-  message: string;
-};
-export const PostBoardAPI = async (form: BoardForm) => {
+export const PostBoardAPI = async (form: BoardFormType) => {
   try {
-    const { data } = await axios.post<BoardPostResponse>('/boards', form);
+    const { data } = await axios.post<ApiResponseWithDataType<number>>(
+      '/boards',
+      form,
+    );
     return data;
   } catch (err) {
-    alert((err as AxiosError<ErrorResponse>).response?.data.message);
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
   }
 };
 
 export const DeleteBoardAPI = async (id: string) => {
   try {
-    const { data } = await axios.delete<Response>(`/boards/${id}`);
+    const { data } = await axios.delete<ApiResponseType>(`/boards/${id}`);
     return data;
   } catch (err) {
-    alert((err as AxiosError<ErrorResponse>).response?.data.message);
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
   }
 };

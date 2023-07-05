@@ -4,12 +4,12 @@ import 'react-quill/dist/quill.snow.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { BoardFormType } from '@/types/Board/boardType';
+import { CommunityBoardDetailType } from '@/types/Board/communityType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostBoardAPI } from '@/apis/boards';
 import useQuillModules from '@/hooks/useQuillModules';
 import { checkBeforePost } from '@/utils/utils';
-import { BoardDetailData } from '@/types/boardDetailType';
-import { BoardForm } from '@/types/boardType';
 import { freeCategory, advertiseCategory } from '@/constants/category';
 import styles from './styles.module.scss';
 import Title from '../Title';
@@ -23,7 +23,7 @@ type CommunityQuillProps = {
 export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const boardData: BoardDetailData | null = location.state;
+  const boardData: CommunityBoardDetailType | null = location.state;
 
   const QuillRef = useRef<ReactQuill>();
 
@@ -38,12 +38,12 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation(
-    (boardForm: BoardForm) =>
+    (BoardForm: BoardFormType) =>
       restFetcher({
         method: 'PUT',
         path: `boards/${boardData?.boardId}`,
         body: {
-          ...boardForm,
+          ...BoardForm,
         },
       }),
     {
@@ -72,7 +72,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
     const imageUrls = [...getImageUrls(contents)];
     if (!checkBeforePost(title, contents, category)) return;
 
-    const boardForm: BoardForm = {
+    const BoardForm: BoardFormType = {
       title,
       code: contents,
       category,
@@ -80,7 +80,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
       prefixCategory,
       fixed: false,
     };
-    const response = await PostBoardAPI(boardForm);
+    const response = await PostBoardAPI(BoardForm);
     if (response?.code === 'SUCCESS') {
       alert('게시글이 작성되었습니다😄');
       queryClient.refetchQueries([QueryKeys.COMMUNITY_BOARD]);
@@ -89,7 +89,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   };
 
   const onUpdate = () => {
-    const boardForm: BoardForm = {
+    const BoardForm: BoardFormType = {
       title,
       code: contents,
       category,
@@ -97,7 +97,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
       prefixCategory,
       fixed: false,
     };
-    mutate(boardForm);
+    mutate(BoardForm);
   };
 
   useEffect(() => {
@@ -112,13 +112,9 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   return (
     <div className={styles.container}>
       <Title category={queryParam} boardData={boardData} />
-      <div className={styles.sectionWrapper}>
-        <section className={styles.labelSection}>
+      <section className={styles.sectionWrapper}>
+        <span className={styles.inputWrapper}>
           <label>말머리</label>
-          <label>제목</label>
-          <label>내용</label>
-        </section>
-        <section className={styles.contentSection}>
           <select
             className={styles.categoryInput}
             name="category"
@@ -138,6 +134,9 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
                 </option>
               ))}
           </select>
+        </span>
+        <span className={styles.inputWrapper}>
+          <label>제목</label>
           <input
             className={styles.titleInput}
             type="text"
@@ -147,7 +146,9 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
               setTitle(e.target.value)
             }
           />
-
+        </span>
+        <span className={styles.inputWrapper}>
+          <label>내용</label>
           <ReactQuill
             className={styles.quill}
             ref={(element) => {
@@ -158,8 +159,8 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
             onChange={onChange}
             modules={modules}
           />
-        </section>
-      </div>
+        </span>
+      </section>
       <section>
         {boardData ? (
           <button type="button" onClick={onUpdate}>

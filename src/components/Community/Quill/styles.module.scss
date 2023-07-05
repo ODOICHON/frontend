@@ -1,10 +1,18 @@
-@import '@/media.scss';
+@import '@/styles/media.scss';
+
 .quill {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-height: 40rem;
   font-family: 'NanumSquareAcR';
-  height: 40rem;
-  overflow-y: scroll;
+  & > div:first-child {
+    top: calc(77px + 70px);
+
+    @include mobile {
+      top: calc(50px + 40px);
+    }
+  }
 }
 
 // 페이지 스타일링
@@ -15,7 +23,6 @@
   max-width: 1200px;
   margin: 0 auto;
   margin-bottom: 4.5rem;
-
   padding: 1rem;
 
   & > h1 {
@@ -54,11 +61,25 @@
   }
 }
 
+.sectionWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 2rem;
+  & > span:last-child {
+    min-height: 40rem;
+    height: 100%;
+  }
+}
+
 .labelStyle {
+  flex-shrink: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 3.75rem;
+  height: 100%;
   background-color: var(--gray-color);
   font-family: 'Pretendard';
   font-size: 1.375rem;
@@ -71,48 +92,41 @@
   align-items: center;
   height: 3.75rem;
   padding: 0 1rem;
-  border: 1px solid var(--darkgray-color);
+  border: 1px solid #ccc;
   border-radius: 8px;
   outline: none;
 }
 
-.sectionWrapper {
+.inputWrapper {
   display: flex;
   gap: 1rem;
-  width: 100%;
-  margin-bottom: 2rem;
-}
-.labelSection {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 11rem;
-  & > label {
-    @extend .labelStyle;
+  height: 3.75rem;
+  &:last-child {
+    & > label {
+      min-height: 40rem;
+      height: auto;
+    }
   }
-  & > label:last-child {
-    height: 40rem;
+  & > input {
+    @extend .contentStyle;
+    width: 100%;
   }
-  @include mobile {
-    display: none;
-  }
-}
-
-.contentSection {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  & > .thumbnailWrapper input,
-  & > input,
   & > select {
     @extend .contentStyle;
   }
-  & > .categoryInput {
-    width: 18rem;
-    & > option[value=''][disabled] {
+  & > label {
+    @extend .labelStyle;
+    width: 11rem;
+
+    @include mobile {
       display: none;
     }
+  }
+}
+
+.categoryInput {
+  width: 18rem;
+  & > option[value=''][disabled] {
+    display: none;
   }
 }
