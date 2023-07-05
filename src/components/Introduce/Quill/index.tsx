@@ -70,7 +70,7 @@ export default function IntroduceQuill() {
       setThumbnailTitle(e.currentTarget.files[0].name);
       try {
         const res = await uploadFile(file);
-        const url = res?.Location || '';
+        const url = res || '';
         const imageName = url.split(VITE_S3_DOMAIN)[1];
         const imageUrl = VITE_CLOUD_FRONT_DOMAIN + imageName + DEFAULT_OPTIONS;
         setThumbnail(imageUrl);
