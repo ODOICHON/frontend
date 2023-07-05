@@ -189,3 +189,12 @@ html {
 .ql-editor {
   @import '@/styles/editor.scss';
 }
+.ql-align-center {
+  text-align: center;
+}
+.ql-align-right {
+  text-align: right;
+}
+.ql-align-justify {
+  text-align: justify;
+}
