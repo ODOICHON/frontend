@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
 import { AxiosError } from 'axios';
-import { v1 } from 'uuid';
+import { v4 } from 'uuid';
 import { ApiResponseType } from '@/types/apiResponseType';
 
 const {
@@ -22,7 +22,7 @@ export const uploadFile = async (file: File) => {
   const { type, name } = file;
   const params = {
     Bucket: bucketName,
-    Key: `${name}/${v1().toString().replace('-', '')}.${
+    Key: `${name}/${v4().toString().replace('-', '')}.${
       file.type.split('/')[1]
     }`,
     Body: file,
