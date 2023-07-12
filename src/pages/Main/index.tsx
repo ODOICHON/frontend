@@ -10,8 +10,11 @@ import { Autoplay, Pagination, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import footer from '@/assets/common/footer.png';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { CommunityBoardType } from '@/types/Board/communityType';
+import { IntroBoardType } from '@/types/Board/introType';
 import { getPrefixCategoryName } from '@/utils/utils';
-import { BoardMainResponse } from '@/types/boardType';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
+import { THUMBNAIL_SIZE_OPTION } from '@/constants/image';
 import { jumbotronData } from '@/constants/main_dummy';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
@@ -25,30 +28,30 @@ export default function MainPage() {
   const commuNextRef = useRef<HTMLButtonElement>(null);
   const commuPrevRef = useRef<HTMLButtonElement>(null);
 
-  const { data: introData } = useQuery<BoardMainResponse>(
-    [QueryKeys.PREVIEW_BOARD, QueryKeys.INTRO_BOARD, introToggle],
-    () =>
-      restFetcher({
-        method: 'GET',
-        path: 'boards/preview',
-        params: {
-          prefix: 'INTRO',
-          limit: 5,
-          category: introToggle.toUpperCase(),
-        },
-      }),
+  const { data: introData } = useQuery<
+    ApiResponseWithDataType<IntroBoardType[]>
+  >([QueryKeys.PREVIEW_BOARD, QueryKeys.INTRO_BOARD, introToggle], () =>
+    restFetcher({
+      method: 'GET',
+      path: 'boards/preview',
+      params: {
+        prefix: 'INTRO',
+        limit: 5,
+        category: introToggle.toUpperCase(),
+      },
+    }),
   );
-  const { data: communityData } = useQuery<BoardMainResponse>(
-    [QueryKeys.PREVIEW_BOARD, QueryKeys.COMMUNITY_BOARD],
-    () =>
-      restFetcher({
-        method: 'GET',
-        path: 'boards/preview',
-        params: {
-          prefix: 'COMMUNITY',
-          limit: 5,
-        },
-      }),
+  const { data: communityData } = useQuery<
+    ApiResponseWithDataType<CommunityBoardType[]>
+  >([QueryKeys.PREVIEW_BOARD, QueryKeys.COMMUNITY_BOARD], () =>
+    restFetcher({
+      method: 'GET',
+      path: 'boards/preview',
+      params: {
+        prefix: 'COMMUNITY',
+        limit: 5,
+      },
+    }),
   );
 
   useEffect(() => {
@@ -178,7 +181,7 @@ export default function MainPage() {
                 </div>
                 <img
                   className={styles.odoiIntro_slide_image}
-                  src={data.imageUrl}
+                  src={data.imageUrl + THUMBNAIL_SIZE_OPTION}
                   alt="ThumbnailImage"
                 />
               </div>
@@ -222,7 +225,7 @@ export default function MainPage() {
                   className={styles.odoiCommunity}
                   style={{
                     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.35)),
-                url(${data.imageUrl})`,
+                url(${data.imageUrl + THUMBNAIL_SIZE_OPTION})`,
                   }}
                   onClick={() => {
                     navigate(
@@ -289,7 +292,7 @@ export default function MainPage() {
           그날까지
         </p>
         <h1>
-          <b>주말의집</b>과 함께해요.
+          <b>주말내집</b>과 함께해요.
         </h1>
       </div>
     </motion.div>

@@ -1,70 +1,60 @@
 import axios, { AxiosError } from 'axios';
-import { ErrorResponse } from '@/types/error';
+import { BoardFormType } from '@/types/Board/boardType';
+import {
+  ApiResponseType,
+  ApiResponseWithDataType,
+} from '@/types/apiResponseType';
 
-type BoardForm = {
-  title: string;
-  code: string;
-  category: string;
-  imageUrls: string[];
-  prefixCategory: string;
-  fixed: boolean;
-};
-
-type BoardPostResponse = {
-  code: string;
-  message: string;
-  data: number;
-};
-
-type Response = {
-  code: string;
-  message: string;
-};
-export const PostBoardAPI = async (form: BoardForm) => {
+export const PostBoardAPI = async (form: BoardFormType) => {
   try {
-    const { data } = await axios.post<BoardPostResponse>('/boards', form);
+    const { data } = await axios.post<ApiResponseWithDataType<number>>(
+      '/boards',
+      form,
+    );
     return data;
   } catch (err) {
-    alert((err as AxiosError<ErrorResponse>).response?.data.message);
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
   }
 };
 
 export const DeleteBoardAPI = async (id: string) => {
   try {
-    const { data } = await axios.delete<Response>(`/boards/${id}`);
+    const { data } = await axios.delete<ApiResponseType>(`/boards/${id}`);
     return data;
   } catch (err) {
-    alert((err as AxiosError<ErrorResponse>).response?.data.message);
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
   }
 };
 
 // trade board 관련
 export const PutScrapAPI = async (id: number) => {
   try {
-    const { data } = await axios.put<BoardPostResponse>(`/scraps/${id}`);
+    const { data } = await axios.put<ApiResponseWithDataType<number>>(
+      `/scraps/${id}`,
+    );
     return data;
   } catch (err) {
-    alert((err as AxiosError<ErrorResponse>).response?.data.message);
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
   }
 };
 
 export const DeleteScrapAPI = async (id: number) => {
   try {
-    const { data } = await axios.delete<BoardPostResponse>(`/scraps/${id}`);
+    const { data } = await axios.delete<ApiResponseType>(`/scraps/${id}`);
     return data;
   } catch (err) {
-    alert((err as AxiosError<ErrorResponse>).response?.data.message);
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
   }
 };
 
 // 신고하기 함수
 export const PutReportAPI = async (id: number, reportReason: string) => {
   try {
-    const { data } = await axios.put<BoardPostResponse>(`houses/report/${id}`, {
+    const { data } = await axios.put<ApiResponseType>(`houses/report/${id}`, {
       reportReason,
     });
     return data;
   } catch (err) {
-    alert((err as AxiosError<ErrorResponse>).response?.data.message);
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
   }
 };

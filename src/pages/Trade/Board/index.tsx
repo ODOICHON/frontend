@@ -4,13 +4,13 @@ import { AiOutlineAlert } from 'react-icons/ai';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import Dompurify from 'dompurify';
+import { motion } from 'framer-motion';
 import { A11y, Navigation, Pagination, Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import TradeBoardInfo from '@/components/Trade/Info';
 import KakaoMapImage from '@/components/Trade/KakaoMapImage';
 import ReportModal from '@/components/Trade/ReportModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
-import { TradeBoardDetailResponse } from '@/types/Board/Trade/boardDetailType';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -18,18 +18,21 @@ import userStore from '@/store/userStore';
 import { getMoveInType, getRentalName, getUserType } from '@/utils/utils';
 import styles from './styles.module.scss';
 import Scrap from '@/components/Trade/Scrap';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
+import { TradeBoardDetailType } from '@/types/Board/tradeType';
+import { opacityVariants } from '@/constants/variants';
 
 export default function TradeBoardPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = userStore();
-  const { data, refetch } = useQuery<TradeBoardDetailResponse>(
-    [QueryKeys.TRADE_BOARD, id],
-    () =>
-      restFetcher({
-        method: 'GET',
-        path: `/houses${user ? '/user-scrap' : ''}/${id}`,
-      }),
+  const { data, refetch } = useQuery<
+    ApiResponseWithDataType<TradeBoardDetailType>
+  >([QueryKeys.TRADE_BOARD, id], () =>
+    restFetcher({
+      method: 'GET',
+      path: `/houses${user ? '/user-scrap' : ''}/${id}`,
+    }),
   );
   const [_, updateState] = useState(false);
   const [modal, setModal] = useState(false);
@@ -40,7 +43,12 @@ export default function TradeBoardPage() {
   }, []);
 
   return (
-    <section className={styles.container}>
+    <motion.div
+      className={styles.container}
+      variants={opacityVariants}
+      initial="initial"
+      animate="mount"
+    >
       {modal && (
         <ReportModal
           id={data?.data.houseId || 0}
@@ -49,6 +57,7 @@ export default function TradeBoardPage() {
           nickName={data?.data.nickName || ''}
         />
       )}
+
       <div className={styles.title}>
         <div className={styles.innerTitle}>
           <ul className={styles.categoryList}>
@@ -139,6 +148,6 @@ export default function TradeBoardPage() {
           중계 프로세스 확인하기
         </button>
       </section>
-    </section>
+    </motion.div>
   );
 }

@@ -1,5 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import crashLogo from '@/assets/common/crash-logo.svg';
+import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 export default function NotFoundPage() {
@@ -7,8 +9,11 @@ export default function NotFoundPage() {
   const { pathname } = useLocation();
   const isCommunityNotfound = pathname.split('/')[1] === 'community';
   return (
-    <div
+    <motion.div
       className={isCommunityNotfound ? styles.communityWrapper : styles.wrapper}
+      variants={opacityVariants}
+      initial="initial"
+      animate="mount"
     >
       <img src={crashLogo} alt="crashLogo" />
       <h1 className={styles.errorCode}>404 ERROR</h1>
@@ -21,6 +26,6 @@ export default function NotFoundPage() {
       >
         메인으로 돌아가기
       </button>
-    </div>
+    </motion.div>
   );
 }

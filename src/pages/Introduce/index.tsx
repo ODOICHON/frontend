@@ -9,8 +9,9 @@ import TrendBoard from '@/components/Introduce/TrendBoard';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import 'swiper/css';
 import 'swiper/css/scrollbar';
+import { IntroBoardType } from '@/types/Board/introType';
 import userStore from '@/store/userStore';
-import { BoardMainResponse } from '@/types/boardType';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -28,28 +29,26 @@ export default function IntroducePage() {
     return restFetcher({ method: 'GET', path: 'boards/preview', params });
   };
 
-  const { data: trendData } = useQuery<BoardMainResponse>(
-    [QueryKeys.INTRO_BOARD, 'TREND', page],
-    () => fetchTrendList(page),
-  );
+  const { data: trendData } = useQuery<
+    ApiResponseWithDataType<IntroBoardType[]>
+  >([QueryKeys.INTRO_BOARD, 'TREND', page], () => fetchTrendList(page));
 
-  const { data: prefetchTrendData } = useQuery<BoardMainResponse>(
-    [QueryKeys.INTRO_BOARD, 'TREND', page + 1],
-    () => fetchTrendList(page + 1),
-  );
+  const { data: prefetchTrendData } = useQuery<
+    ApiResponseWithDataType<IntroBoardType[]>
+  >([QueryKeys.INTRO_BOARD, 'TREND', page + 1], () => fetchTrendList(page + 1));
 
-  const { data: reviewData } = useQuery<BoardMainResponse>(
-    [QueryKeys.INTRO_BOARD, 'REVIEW'],
-    () =>
-      restFetcher({
-        method: 'GET',
-        path: 'boards/preview',
-        params: {
-          prefix: 'INTRO',
-          limit: 100,
-          category: 'REVIEW',
-        },
-      }),
+  const { data: reviewData } = useQuery<
+    ApiResponseWithDataType<IntroBoardType[]>
+  >([QueryKeys.INTRO_BOARD, 'REVIEW'], () =>
+    restFetcher({
+      method: 'GET',
+      path: 'boards/preview',
+      params: {
+        prefix: 'INTRO',
+        limit: 100,
+        category: 'REVIEW',
+      },
+    }),
   );
 
   const handleMoreTrend = () => {
@@ -84,7 +83,7 @@ export default function IntroducePage() {
         </div>
         <p>
           {`‘오도이촌' 막상 준비하려 하니 무엇부터 해야 할지 모르시겠다고요?
-주말의집이 이런 분들을 위해 준비했습니다. 오도이촌의 다양한 트렌드를 빠르게 제공해 드립니다.`}
+주말내집이 이런 분들을 위해 준비했습니다. 오도이촌의 다양한 트렌드를 빠르게 제공해 드립니다.`}
         </p>
         <div className={styles.trendWrapper}>
           {trendData?.data.map((board) => (

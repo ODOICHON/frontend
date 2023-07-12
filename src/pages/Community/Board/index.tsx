@@ -1,20 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 import Loading from '@/components/Common/Loading';
 import Pagenation from '@/components/Common/Pagenation';
 import CommunityBoard from '@/components/Community/Board';
 import NoPosts from '@/components/Community/NoPosts';
 import { restFetcher, QueryKeys } from '@/queryClient';
+import { CommunityBoardPageType } from '@/types/Board/communityType';
 import userStore from '@/store/userStore';
 import useInput from '@/hooks/useInput';
-import { BoardResponse } from '@/types/boardType';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import {
   freeCategory,
   advertiseCategory,
   freeBoardData,
   advertiseBoardData,
 } from '@/constants/category';
+import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 export default function CommunityBoardPage() {
@@ -49,7 +52,7 @@ export default function CommunityBoardPage() {
     data: boardListData,
     refetch,
     isLoading,
-  } = useQuery<BoardResponse>(
+  } = useQuery<ApiResponseWithDataType<CommunityBoardPageType>>(
     [
       QueryKeys.COMMUNITY_BOARD,
       category,
@@ -100,7 +103,12 @@ export default function CommunityBoardPage() {
   if (category !== 'free_board' && category !== 'advertisement_board')
     return <Navigate to="/community" />;
   return (
-    <div className={styles.container}>
+    <motion.div
+      className={styles.container}
+      variants={opacityVariants}
+      initial="initial"
+      animate="mount"
+    >
       <section className={styles.titleContainer}>
         <div className={styles.title}>
           <h1>{DESCRIPTION_DATA.title}</h1>
@@ -198,6 +206,6 @@ export default function CommunityBoardPage() {
           />
         )}
       </section>
-    </div>
+    </motion.div>
   );
 }

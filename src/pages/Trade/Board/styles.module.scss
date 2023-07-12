@@ -1,4 +1,4 @@
-@import '@/media.scss';
+@import '@/styles/media.scss';
 
 .container {
   width: 100%;
@@ -159,17 +159,23 @@
     line-height: 2.3rem;
   }
   & blockquote {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    margin-bottom: 0.5rem;
-  }
-  & blockquote:before {
-    content: '\201C';
-    font-family: Georgia;
-    font-size: 2rem;
-    color: #bcbcbc;
-    float: left;
-    margin: -0.5rem 0.3rem 0 0;
+    position: relative;
+    width: 40rem;
+    max-width: 100%;
+    margin: 4rem auto 3rem;
+    padding: 0.5rem 1rem;
+    line-height: 1.7;
+    font-size: 1.1em;
+    color: #666;
+    background: #fff;
+    border-left: 6px solid darkred;
+    &::before,
+    &::after {
+      position: absolute;
+      left: 0;
+      font-size: 1rem;
+      color: rgba(darkred, 0.6);
+    }
   }
   & strong {
     font-family: 'NanumSquareAcB';
