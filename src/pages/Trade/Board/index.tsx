@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AiOutlineAlert } from 'react-icons/ai';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import Dompurify from 'dompurify';
@@ -15,24 +14,25 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import userStore from '@/store/userStore';
-import { getMoveInType, getRentalName, getUserType } from '@/utils/utils';
-import styles from './styles.module.scss';
+import Report from '@/components/Trade/Report';
 import Scrap from '@/components/Trade/Scrap';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { TradeBoardDetailType } from '@/types/Board/tradeType';
+import { getMoveInType, getRentalName, getUserType } from '@/utils/utils';
 import { opacityVariants } from '@/constants/variants';
+import styles from './styles.module.scss';
 
 export default function TradeBoardPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = userStore();
-  const { data, refetch } = useQuery<
-    ApiResponseWithDataType<TradeBoardDetailType>
-  >([QueryKeys.TRADE_BOARD, id], () =>
-    restFetcher({
-      method: 'GET',
-      path: `/houses${user ? '/user-scrap' : ''}/${id}`,
-    }),
+  const { data } = useQuery<ApiResponseWithDataType<TradeBoardDetailType>>(
+    [QueryKeys.TRADE_BOARD, id],
+    () =>
+      restFetcher({
+        method: 'GET',
+        path: `/houses${user ? '/user-scrap' : ''}/${id}`,
+      }),
   );
   const [_, updateState] = useState(false);
   const [modal, setModal] = useState(false);
@@ -87,16 +87,7 @@ export default function TradeBoardPage() {
 
         {user ? (
           <article>
-            <div>
-              <AiOutlineAlert
-                style={{
-                  cursor: 'pointer',
-                }}
-                onClick={() => setModal(true)}
-              />
-              <span>신고하기</span>
-            </div>
-
+            <Report setModal={setModal} />
             <Scrap
               boardId={id || ''}
               isScraped={data?.data.isScraped || false}
