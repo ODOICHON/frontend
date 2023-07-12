@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AiOutlineAlert } from 'react-icons/ai';
-import { BsBookmark } from 'react-icons/bs';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import Dompurify from 'dompurify';
@@ -15,10 +14,10 @@ import { TradeBoardDetailResponse } from '@/types/Board/Trade/boardDetailType';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { DeleteScrapAPI, PutScrapAPI } from '@/apis/boards';
 import userStore from '@/store/userStore';
 import { getMoveInType, getRentalName, getUserType } from '@/utils/utils';
 import styles from './styles.module.scss';
+import Scrap from '@/components/Trade/Scrap';
 
 export default function TradeBoardPage() {
   const navigate = useNavigate();
@@ -43,7 +42,12 @@ export default function TradeBoardPage() {
   return (
     <section className={styles.container}>
       {modal && (
-        <ReportModal id={data?.data.houseId || 0} setModal={setModal} />
+        <ReportModal
+          id={data?.data.houseId || 0}
+          setModal={setModal}
+          title={data?.data.title || ''}
+          nickName={data?.data.nickName || ''}
+        />
       )}
       <div className={styles.title}>
         <div className={styles.innerTitle}>
@@ -83,24 +87,11 @@ export default function TradeBoardPage() {
               />
               <span>신고하기</span>
             </div>
-            <div>
-              <BsBookmark
-                style={{
-                  cursor: 'pointer',
-                  color: data?.data.isScraped ? '#ec6130' : '',
-                }}
-                onClick={async () => {
-                  if (data?.data.isScraped === true) {
-                    await DeleteScrapAPI(data?.data.houseId);
-                    await refetch();
-                  } else if (data?.data.isScraped === false) {
-                    await PutScrapAPI(data?.data.houseId);
-                    await refetch();
-                  }
-                }}
-              />
-              <span>스크랩</span>
-            </div>
+
+            <Scrap
+              boardId={id || ''}
+              isScraped={data?.data.isScraped || false}
+            />
           </article>
         ) : null}
       </div>

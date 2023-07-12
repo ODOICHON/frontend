@@ -2,16 +2,24 @@ import { PutReportAPI } from '@/apis/boards';
 import useInput from '@/hooks/useInput';
 import styles from './styles.module.scss';
 
+const reportType = [
+  { id: 1, name: '허위매물' },
+  { id: 2, name: '스팸홍보/도배글' },
+  { id: 3, name: '기타' },
+];
+
 type ReportModalProps = {
   id: number;
+  nickName: string;
+  title: string;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ReoportModal({ id, setModal }: ReportModalProps) {
+function ReportModal({ id, nickName, title, setModal }: ReportModalProps) {
   // TODO: 신고 내용 필수, 유효성 검사 하기
   const [report, handler, setReport] = useInput('');
 
-  const cancleHandler = () => {
+  const cancelHandler = () => {
     setReport('');
     setModal(false);
   };
@@ -27,15 +35,37 @@ function ReoportModal({ id, setModal }: ReportModalProps) {
 
   return (
     <section className={styles.container}>
-      <button type="button" onClick={cancleHandler}>
-        X
-      </button>
-      <textarea value={report} onChange={handler} />
-      <button type="button" onClick={submitReportHandler}>
-        신고하기
-      </button>
+      <h1 className={styles.title}>신고하기</h1>
+      <article className={styles.body}>
+        <p>작성자 : {nickName}</p>
+        <p>게시물 제목 : {title}</p>
+        <select>
+          {reportType.map((type) => (
+            <option key={type.id} value={type.id}>
+              {type.name}
+            </option>
+          ))}
+        </select>
+        <textarea
+          value={report}
+          onChange={handler}
+          placeholder="사유 기술이 필요한 경우 작성 (100자 이내)"
+        />
+        <span>
+          * 허위 신고로 인한 불이익은 신고자 본인에게 있습니다. 신중하게 신고
+          바랍니다.
+        </span>
+        <div>
+          <button type="button" onClick={cancelHandler}>
+            취소
+          </button>
+          <button type="button" onClick={submitReportHandler}>
+            신고
+          </button>
+        </div>
+      </article>
     </section>
   );
 }
 
-export default ReoportModal;
+export default ReportModal;

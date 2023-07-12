@@ -3,6 +3,84 @@
   // 내가 보고 있는 화면 기준으로 50% 위치
   top: 50%;
   left: 50%;
+  width: 100%;
+  max-width: 55.25rem;
   transform: translate(-50%, -50%);
-  background-color: aquamarine;
+  z-index: 100;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  border-radius: 20px 20px 0px 0px;
+  background: var(--main-color);
+  color: white;
+
+  height: 9.125rem;
+  font-family: 'Pretendard';
+  font-weight: 700;
+  font-size: 2.5rem;
+  padding: 2rem;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: white;
+  height: 40.25rem;
+  border-radius: 0px 0px 20px 20px;
+  font-family: 'Pretendard';
+  font-weight: 400;
+  font-size: 1.5rem;
+  padding: 2rem;
+  border: 1px solid var(--darkgray-color);
+
+  & > select {
+    width: 65%;
+    height: 3.5rem;
+    border: 1px solid var(--darkgray-color);
+    color: var(--darkgray-color);
+    border-radius: 0.5rem;
+    padding: 0 1rem;
+    outline: none;
+  }
+
+  & > textarea {
+    width: 100%;
+    height: 13.5rem;
+    border: 1px solid var(--darkgray-color);
+    padding: 1.5rem 1rem;
+    resize: none;
+    outline: none;
+  }
+
+  & > span {
+    font-size: 1rem;
+  }
+
+  & > div {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: auto;
+    & > button {
+      cursor: pointer;
+      width: 7.5rem;
+      height: 3.5rem;
+      border: 1px solid var(--darkgray-color);
+      border-radius: 0.5rem;
+
+      &:first-child {
+        background-color: white;
+        color: var(--darkgray-color);
+        border-color: var(--darkgray-color);
+      }
+      &:last-child {
+        background-color: var(--main-color);
+        color: white;
+        border-color: var(--main-color);
+      }
+    }
+  }
 }
