@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { PutReportAPI } from '@/apis/boards';
 import useInput from '@/hooks/useInput';
-import { reportType } from '@/constants/report';
+import { REPORT_TYPE } from '@/constants/report';
 import styles from './styles.module.scss';
 
 type ReportModalProps = {
@@ -11,21 +12,31 @@ type ReportModalProps = {
 };
 
 function ReportModal({ id, nickName, title, setModal }: ReportModalProps) {
-  // TODO: 신고 내용 필수, 유효성 검사 하기
   const [report, handler, setReport] = useInput('');
+  const [reportType, setReportType] = useState<string>('');
+
+  const onChangeReportType = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setReportType(e.target.value);
+  };
 
   const cancelHandler = () => {
     setReport('');
+    setReportType('');
     setModal(false);
+    // TODO: 스크롤 고정 해제 할것인가?
     // document.body.style.overflow = 'auto';
   };
 
   const submitReportHandler = async () => {
     try {
-      await PutReportAPI(id, report);
+      if (reportType === '') return alert('신고사유를 선택해주세요.');
+
+      await PutReportAPI(id, { reportReason: report, reportType });
       setModal(false);
+      // TODO: 성공적으로 마무리 했다면 토스트 메세지 보여주기 ( 디자이너에게 물어보기 )
     } catch (err) {
-      console.log(err);
+      // TODO: 신고가 안됐을 때, 토스트 메세지 보여주기?
+      alert(err);
     }
   };
 
@@ -36,14 +47,18 @@ function ReportModal({ id, nickName, title, setModal }: ReportModalProps) {
         <article className={styles.body}>
           <p>작성자 : {nickName}</p>
           <p>게시물 제목 : {title}</p>
-          <select>
-            {reportType.map((type) => (
-              <option key={type.id} value={type.id}>
+          <select onChange={onChangeReportType}>
+            <option disabled hidden selected>
+              신고사유
+            </option>
+            {REPORT_TYPE.map((type) => (
+              <option key={type.type} value={type.type}>
                 {type.name}
               </option>
             ))}
           </select>
           <textarea
+            maxLength={100}
             value={report}
             onChange={handler}
             placeholder="사유 기술이 필요한 경우 작성 (100자 이내)"

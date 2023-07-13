@@ -8,17 +8,17 @@ import { A11y, Navigation, Pagination, Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import TradeBoardInfo from '@/components/Trade/Info';
 import KakaoMapImage from '@/components/Trade/KakaoMapImage';
-import ReportModal from '@/components/Trade/ReportModal';
+import ReportIcon from '@/components/Trade/Report/ReportIcon';
+import ReportModal from '@/components/Trade/Report/ReportModal';
+import ScrapIcon from '@/components/Trade/ScrapIcon';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import userStore from '@/store/userStore';
-import Report from '@/components/Trade/Report';
-import Scrap from '@/components/Trade/Scrap';
-import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { TradeBoardDetailType } from '@/types/Board/tradeType';
+import userStore from '@/store/userStore';
 import { getMoveInType, getRentalName, getUserType } from '@/utils/utils';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -87,8 +87,8 @@ export default function TradeBoardPage() {
 
         {user ? (
           <article>
-            <Report setModal={setModal} />
-            <Scrap
+            <ReportIcon setModal={setModal} />
+            <ScrapIcon
               boardId={id || ''}
               isScraped={data?.data.isScraped || false}
             />

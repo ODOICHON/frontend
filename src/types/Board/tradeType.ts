@@ -56,5 +56,6 @@ export type TradeBoardDetailType = {
 export type TradeBoardPageType = BoardPageType<TradeBoardType>;
 
 export type ReportFormType = {
+  reportType: string;
   reportReason: string;
 };

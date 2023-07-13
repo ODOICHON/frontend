@@ -14,6 +14,7 @@ function Report({ setModal }: ReportProps) {
         }}
         onClick={() => {
           setModal(true);
+          // TODO: 스크롤 고정 할 것인가?
           // document.body.style.overflow = 'hidden';
         }}
       />

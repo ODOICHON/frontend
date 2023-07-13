@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { BoardFormType } from '@/types/Board/boardType';
+import { ReportFormType } from '@/types/Board/tradeType';
 import {
   ApiResponseType,
   ApiResponseWithDataType,
@@ -48,11 +49,12 @@ export const DeleteScrapAPI = async (id: number) => {
 };
 
 // 신고하기 함수
-export const PutReportAPI = async (id: number, reportReason: string) => {
+export const PutReportAPI = async (id: number, reportData: ReportFormType) => {
   try {
-    const { data } = await axios.put<ApiResponseType>(`houses/report/${id}`, {
-      reportReason,
-    });
+    const { data } = await axios.put<ApiResponseType>(
+      `houses/report/${id}`,
+      reportData,
+    );
     return data;
   } catch (err) {
     alert((err as AxiosError<ApiResponseType>).response?.data.message);

@@ -1,5 +1,5 @@
-export const reportType = [
-  { id: 1, name: '허위매물' },
-  { id: 2, name: '스팸홍보/도배글' },
-  { id: 3, name: '기타' },
+export const REPORT_TYPE = [
+  { type: 'FAKE_SALE', name: '허위매물' },
+  { type: 'ADVERTISING_BOARD', name: '스팸홍보/도배글' },
+  { type: 'ETC', name: '기타' },
 ];
