@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
-import { TradeBoardDetailData } from '@/types/Board/Trade/boardDetailType';
+import { TradeBoardDetailType } from '@/types/Board/tradeType';
 import { getRentalName } from '@/utils/utils';
 import styles from './styles.module.scss';
 
 // TODO: undefined 처리하기
 type TradeBoardInfoProps = {
-  info: TradeBoardDetailData | undefined;
+  info: TradeBoardDetailType | undefined;
 };
 
 function TradeBoardInfo({ info }: TradeBoardInfoProps) {
@@ -29,10 +29,7 @@ function TradeBoardInfo({ info }: TradeBoardInfoProps) {
           준공연도 <p>{dayjs(info?.createdDate).format('YYYY.MM.DD')}</p>
         </div>
         <div>
-          층수{' '}
-          <p>
-            {info?.floorNum}층/{info?.sumFloor}층
-          </p>
+          층수 <p>{info?.floorNum}</p>
         </div>
       </article>
       <article>
