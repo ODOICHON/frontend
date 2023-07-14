@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import love from '@/assets/common/love.svg';
 import notLove from '@/assets/common/notLove.svg';
 import { QueryKeys, restFetcher } from '@/queryClient';
+import { CommunityBoardDetailType } from '@/types/Board/communityType';
+import { IntroBoardDetailType } from '@/types/Board/introType';
 import userStore from '@/store/userStore';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import styles from './styles.module.scss';
@@ -36,31 +38,54 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
           ApiResponseWithDataType<boolean>
         >([QueryKeys.LIKE, boardId])[0][1];
 
+        const previousBoardData = queryClient.getQueriesData<
+          ApiResponseWithDataType<
+            IntroBoardDetailType | CommunityBoardDetailType
+          >
+        >([
+          intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
+          `${boardId}`,
+        ])[0][1];
+
         //  낙관적업데이트는 새로운 사용자 값으로 캐시를 업데이트.
         queryClient.setQueryData([QueryKeys.LIKE, boardId], {
           ...previousLikeData,
           data: !previousLikeData?.data,
         });
 
+        queryClient.setQueryData(
+          [
+            intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
+            `${boardId}`,
+          ],
+          {
+            ...previousBoardData,
+            data: {
+              ...previousBoardData?.data,
+              loveCount: previousLikeData?.data
+                ? previousBoardData!.data.loveCount - 1
+                : previousBoardData!.data.loveCount + 1,
+            },
+          },
+        );
         //  snapshot 값이 있는 컨텍스트 객체 반환
-        return { previousLikeData };
+        return { previousLikeData, previousBoardData };
       },
       onError: (error, newData, context) => {
         // 캐시를 저장된 값으로 롤백
         queryClient.setQueryData([QueryKeys.LIKE, boardId], {
           ...context?.previousLikeData,
         });
-      },
-      onSettled: () => {
-        // 쿼리 함수의 성공, 실패 두 경우 모두 실행.
-        // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
-        return queryClient.refetchQueries([
-          intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
-        ]);
+
+        queryClient.setQueryData(
+          [intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD, boardId],
+          {
+            ...context?.previousBoardData,
+          },
+        );
       },
     },
   );
-
   const onClickButton = () => {
     if (!user) {
       alert('로그인 후 이용 가능합니다.');
