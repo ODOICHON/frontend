@@ -21,20 +21,25 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
     { enabled: !!user },
   );
   const { mutate: clickLove } = useMutation(
-    () => restFetcher({ method: 'PUT', path: `/loves/${boardId}` }),
+    () =>
+      restFetcher({
+        method: isLove?.data ? 'DELETE' : 'PUT',
+        path: `/loves/${boardId}`,
+      }),
     {
       onMutate: async () => {
         // 데이터에 대한 모든 퀴리요청을 취소하여 이전 서버 데이터가 낙관적 업데이트를 덮어쓰지 않도록.
         queryClient.cancelQueries([QueryKeys.LIKE]);
 
         // 이전 값의 snapshot
-        const previousLikeData = queryClient.getQueriesData([QueryKeys.LIKE]);
+        const previousLikeData = queryClient.getQueriesData<
+          ApiResponseWithDataType<boolean>
+        >([QueryKeys.LIKE, boardId])[0][1];
 
         //  낙관적업데이트는 새로운 사용자 값으로 캐시를 업데이트.
-        queryClient.setQueryData([QueryKeys.LIKE], {
-          code: 'SUCCESS',
-          message: '성공',
-          data: true,
+        queryClient.setQueryData([QueryKeys.LIKE, boardId], {
+          ...previousLikeData,
+          data: !previousLikeData?.data,
         });
 
         //  snapshot 값이 있는 컨텍스트 객체 반환
@@ -42,57 +47,12 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
       },
       onError: (error, newData, context) => {
         // 캐시를 저장된 값으로 롤백
-        if (context?.previousLikeData) {
-          queryClient.setQueryData([QueryKeys.LIKE], {
-            code: 'SUCCESS',
-            message: '성공',
-            data: false,
-          });
-        }
-      },
-      onSettled: () => {
-        // 쿼리 함수의 성공, 실패 두 경우 모두 실행.
-        queryClient.refetchQueries([QueryKeys.LIKE]);
-        // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
-        return queryClient.refetchQueries([
-          intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
-        ]);
-      },
-    },
-  );
-  const { mutate: cancelLove } = useMutation(
-    () => restFetcher({ method: 'DELETE', path: `/loves/${boardId}` }),
-    {
-      onMutate: async () => {
-        // 데이터에 대한 모든 퀴리요청을 취소하여 이전 서버 데이터가 낙관적 업데이트를 덮어쓰지 않도록.
-        queryClient.cancelQueries([QueryKeys.LIKE]);
-
-        // 이전 값의 snapshot
-        const previousLikeData = queryClient.getQueriesData([QueryKeys.LIKE]);
-
-        //  낙관적업데이트는 새로운 사용자 값으로 캐시를 업데이트.
-        queryClient.setQueryData([QueryKeys.LIKE], {
-          code: 'SUCCESS',
-          message: '성공',
-          data: false,
+        queryClient.setQueryData([QueryKeys.LIKE, boardId], {
+          ...context?.previousLikeData,
         });
-
-        //  snapshot 값이 있는 컨텍스트 객체 반환
-        return { previousLikeData };
-      },
-      onError: (error, newData, context) => {
-        // 캐시를 저장된 값으로 롤백
-        if (context?.previousLikeData) {
-          queryClient.setQueryData([QueryKeys.LIKE], {
-            code: 'SUCCESS',
-            message: '성공',
-            data: true,
-          });
-        }
       },
       onSettled: () => {
         // 쿼리 함수의 성공, 실패 두 경우 모두 실행.
-        queryClient.refetchQueries([QueryKeys.LIKE]);
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
         return queryClient.refetchQueries([
           intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
@@ -100,12 +60,13 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
       },
     },
   );
+
   const onClickButton = () => {
     if (!user) {
       alert('로그인 후 이용 가능합니다.');
       return;
     }
-    isLove?.data ? cancelLove() : clickLove();
+    clickLove();
   };
   return (
     <div className={styles.wrapper}>
