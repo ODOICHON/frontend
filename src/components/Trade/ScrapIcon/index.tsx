@@ -43,7 +43,6 @@ function Scrap({ isScraped, boardId }: ScrapProps) {
     <div>
       <BsBookmark
         style={{
-          cursor: 'pointer',
           color: isScraped ? '#ec6130' : '',
         }}
         onClick={() => mutate(+boardId)}

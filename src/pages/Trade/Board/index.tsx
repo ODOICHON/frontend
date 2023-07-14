@@ -84,7 +84,6 @@ export default function TradeBoardPage() {
             ) : null}
           </div>
         </div>
-
         {user ? (
           <article>
             <ReportIcon setModal={setModal} />

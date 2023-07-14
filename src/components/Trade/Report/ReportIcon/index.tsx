@@ -9,13 +9,10 @@ function Report({ setModal }: ReportProps) {
   return (
     <div>
       <AiOutlineAlert
-        style={{
-          cursor: 'pointer',
-        }}
         onClick={() => {
           setModal(true);
-          // TODO: 스크롤 고정 할 것인가?
-          // document.body.style.overflow = 'hidden';
+          const bodyEl = document.querySelector('body');
+          bodyEl?.classList.add('over_hidden');
         }}
       />
       <span>신고하기</span>

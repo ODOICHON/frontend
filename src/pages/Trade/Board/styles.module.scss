@@ -19,7 +19,7 @@
 
   & > article {
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
     align-items: end;
     margin-right: 2rem;
 
@@ -29,11 +29,22 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      cursor: pointer;
+
       &:hover {
         opacity: 0.8;
       }
       & > svg {
         font-size: 3rem;
+      }
+
+      @include mobile {
+        & > svg {
+          font-size: 2rem;
+        }
+        & > span {
+          display: none;
+        }
       }
     }
   }

@@ -23,8 +23,8 @@ function ReportModal({ id, nickName, title, setModal }: ReportModalProps) {
     setReport('');
     setReportType('');
     setModal(false);
-    // TODO: 스크롤 고정 해제 할것인가?
-    // document.body.style.overflow = 'auto';
+    const bodyEl = document.querySelector('body');
+    bodyEl?.classList.remove('over_hidden');
   };
 
   const submitReportHandler = async () => {
