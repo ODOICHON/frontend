@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { BoardFormType } from '@/types/Board/boardType';
+import { ReportFormType } from '@/types/Board/tradeType';
 import {
   ApiResponseType,
   ApiResponseWithDataType,
@@ -20,6 +21,40 @@ export const PostBoardAPI = async (form: BoardFormType) => {
 export const DeleteBoardAPI = async (id: string) => {
   try {
     const { data } = await axios.delete<ApiResponseType>(`/boards/${id}`);
+    return data;
+  } catch (err) {
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
+  }
+};
+
+// trade board 관련
+export const PutScrapAPI = async (id: number) => {
+  try {
+    const { data } = await axios.put<ApiResponseWithDataType<number>>(
+      `/scraps/${id}`,
+    );
+    return data;
+  } catch (err) {
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
+  }
+};
+
+export const DeleteScrapAPI = async (id: number) => {
+  try {
+    const { data } = await axios.delete<ApiResponseType>(`/scraps/${id}`);
+    return data;
+  } catch (err) {
+    alert((err as AxiosError<ApiResponseType>).response?.data.message);
+  }
+};
+
+// 신고하기 함수
+export const PutReportAPI = async (id: number, reportData: ReportFormType) => {
+  try {
+    const { data } = await axios.put<ApiResponseType>(
+      `houses/report/${id}`,
+      reportData,
+    );
     return data;
   } catch (err) {
     alert((err as AxiosError<ApiResponseType>).response?.data.message);

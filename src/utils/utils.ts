@@ -39,6 +39,37 @@ export const getPrefixCategoryName = (category: string) => {
   }
 };
 
+// 매매 타입 이름 가져오기
+export const getRentalName = (rental: string) => {
+  switch (rental) {
+    case 'MONTHLYRENT':
+      return '월세';
+    case 'JEONSE':
+      return '전세';
+    case 'SALE':
+      return '매매';
+    default:
+      return '';
+  }
+};
+
+// 일반회원, 중개사 회원 구분 함수
+export const getUserType = (userType: string) => {
+  switch (userType) {
+    case 'NONE':
+      return '일반회원';
+    case 'AGENT':
+      return '중개사';
+    default:
+      return '';
+  }
+};
+
+// 입주가능, 입주불가 구분 함수
+export const getMoveInType = (isCompleted: boolean) => {
+  return isCompleted ? '입주가능' : '입주불가';
+};
+
 export const checkBeforePost = (
   title: string,
   contents: string,
@@ -62,4 +93,20 @@ export const checkBeforePost = (
     return false;
   }
   return true;
+};
+
+// 카카오 map api를 이용하여 주소 파라미터로 받고 좌표로 변환하는 함수
+export const getLatLng = async (address: string) => {
+  if (address === '') return { lat: 0, lng: 0 };
+
+  const data = await axios.get(
+    `https://dapi.kakao.com/v2/local/search/address.json?query=${address}`,
+    {
+      headers: {
+        Authorization: `KakaoAK ${import.meta.env.VITE_KAKAO_MAP_REST_API_KEY}`,
+      },
+    },
+  );
+  const { x, y } = data.data.documents[0].address;
+  return { lat: +y, lng: +x };
 };

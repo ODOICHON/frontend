@@ -6,6 +6,7 @@
   min-height: 100vh;
   padding: 0 3rem;
   margin: 0 auto;
+  position: relative;
 }
 
 .title {
@@ -16,10 +17,36 @@
   padding-top: 7.5rem;
   margin-bottom: 1.5rem;
 
-  & > svg {
-    align-self: flex-end;
+  & > article {
+    display: flex;
+    gap: 1rem;
+    align-items: end;
     margin-right: 2rem;
-    font-size: 3rem;
+
+    & > div {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.8;
+      }
+      & > svg {
+        font-size: 3rem;
+      }
+
+      @include mobile {
+        & > svg {
+          font-size: 2rem;
+        }
+        & > span {
+          display: none;
+        }
+      }
+    }
   }
 }
 
@@ -36,12 +63,17 @@
   & > div {
     display: flex;
     gap: 1rem;
-    // justify-content: space-between;
-    & > p {
-      font-size: 1.25rem;
-      font-weight: 400;
-      & > span {
-        font-weight: 200;
+    font-size: 1.25rem;
+    font-weight: 400;
+
+    span {
+      font-weight: 200;
+    }
+
+    & > div > span {
+      cursor: pointer;
+      &:hover {
+        color: var(--main-color);
       }
     }
   }
@@ -98,10 +130,15 @@
     font-family: 'NanumSquareAcB';
     font-size: 1.375rem;
     padding: 0.5rem 1rem;
+    line-height: normal;
     border: 1px solid var(--main-color);
     background-color: var(--main-color);
     color: white;
     border-radius: 24px;
+  }
+  & > .userType {
+    background-color: var(--sub-color);
+    border-color: var(--sub-color);
   }
 }
 

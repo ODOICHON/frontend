@@ -1,25 +1,31 @@
+import React, { useEffect, useState } from 'react';
 import { StaticMap } from 'react-kakao-maps-sdk';
+import { getLatLng } from '@/utils/utils';
 import styles from './styles.module.scss';
 
-function KakaoMapImage() {
+type KakaoMapImageProps = {
+  address: string;
+};
+
+function KakaoMapImage({ address }: KakaoMapImageProps) {
+  const [position, setPosition] = useState({ lat: 0, lng: 0 });
+
+  useEffect(() => {
+    getLatLng(address).then((res) => {
+      setPosition(res);
+    });
+  }, [address]);
+
   return (
-    <StaticMap // 지도를 표시할 Container
-      className={styles.kakaoMapImage}
-      center={{
-        // 지도의 중심좌표
-        lat: 33.450701,
-        lng: 126.570667,
-      }}
-      marker={{
-        position: {
-          // 마커의 위치
-          lat: 33.450701,
-          lng: 126.570667,
-        },
-      }}
-      level={3} // 지도의 확대 레벨
-    />
+    <section className={styles.kakaoMapImage}>
+      <StaticMap // 지도를 표시할 Container
+        style={{ width: '100%', height: '100%' }}
+        center={position}
+        marker={{ position }} // 마커가 표시될 위치
+        level={3} // 지도의 확대 레벨
+      />
+    </section>
   );
 }
 
-export default KakaoMapImage;
+export default React.memo(KakaoMapImage);

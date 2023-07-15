@@ -10,6 +10,7 @@
   --darkgray-color: #878d91;
   --gray-background: #eaeeef;
   --background-color: #f8fafb;
+  --sub-color: #5772ff;
 }
 
 html,
@@ -197,4 +198,10 @@ html {
 }
 .ql-align-justify {
   text-align: justify;
+}
+
+#react-kakao-maps-sdk-staticmap-container {
+  & > a:first-child {
+    display: none;
+  }
 }
