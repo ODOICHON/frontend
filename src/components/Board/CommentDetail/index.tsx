@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import dayjs from 'dayjs';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { CommentType } from '@/types/Board/boardType';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import userStore from '@/store/userStore';
 
 import styles from './styles.module.scss';
