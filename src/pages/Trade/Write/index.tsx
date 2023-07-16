@@ -1,7 +1,7 @@
 import { FiSearch } from 'react-icons/fi';
 import { MdUploadFile } from 'react-icons/md';
-import TradeQuill from '@/components/Trade/Quill';
 import { motion } from 'framer-motion';
+import TradeQuill from '@/components/Trade/Quill';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
