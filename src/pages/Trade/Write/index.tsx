@@ -1,7 +1,8 @@
 import { FiSearch } from 'react-icons/fi';
 import { MdUploadFile } from 'react-icons/md';
-import { motion } from 'framer-motion';
 import TradeQuill from '@/components/Trade/Quill';
+import { motion } from 'framer-motion';
+import { sepicalCategory } from '@/constants/trade';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -121,6 +122,17 @@ export default function TradeWritePage() {
             />
           </div>
         </div>
+      </article>
+      <article className={styles.specialInfoContainer}>
+        <span>매물 특징</span>
+        <p>
+          해당 매물을 추천하는 사람의 특징에 해당하는 것에 모두 선택해주세요.
+        </p>
+        <ul>
+          {sepicalCategory.map((category) => (
+            <li key={category.content}>{category.content}</li>
+          ))}
+        </ul>
       </article>
       <div className={styles.line} />
       <article className={styles.detailInfoContainer}>
