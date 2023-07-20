@@ -59,3 +59,5 @@ export type ReportFormType = {
   reportType: string;
   reportReason: string;
 };
+
+export type MenuType = 'none' | 'type' | 'location' | 'category' | 'search';
