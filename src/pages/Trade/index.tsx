@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import CategorySelect from '@/components/Trade/CategorySelect';
+import FilterOption from '@/components/Trade/FilterOption';
 import SearchBar from '@/components/Trade/SearchBar';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
@@ -41,27 +42,10 @@ export default function TradePage() {
           selectedCategories={selectedCategories}
           setSelectedCategories={setSelectedCategories}
         />
-        <ul className={styles.optionWrapper}>
-          <li
-            role="presentation"
-            className={
-              focusedFilter === 'ALL' ? styles.focused : styles.notFocused
-            }
-            onClick={() => setFocusedFilter('ALL')}
-          >
-            전체
-          </li>
-          <div className={styles.divider} />
-          <li
-            role="presentation"
-            className={
-              focusedFilter === 'TRADING' ? styles.focused : styles.notFocused
-            }
-            onClick={() => setFocusedFilter('TRADING')}
-          >
-            거래중인 매물
-          </li>
-        </ul>
+        <FilterOption
+          focusedFilter={focusedFilter}
+          setFocusedFilter={setFocusedFilter}
+        />
         <div className={styles.line} />
       </section>
     </motion.div>
