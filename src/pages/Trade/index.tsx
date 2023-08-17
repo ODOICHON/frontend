@@ -1,12 +1,19 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import TradeBoard from '@/components/Trade/Board';
 import CategorySelect from '@/components/Trade/CategorySelect';
 import FilterOption from '@/components/Trade/FilterOption';
 import SearchBar from '@/components/Trade/SearchBar';
+import userStore from '@/store/userStore';
+import { TRADE_DUMMY } from '@/constants/trade_dummy';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 export default function TradePage() {
+  const navigate = useNavigate();
+  const { token } = userStore();
+
   const [type, setType] = useState('');
   const [location, setLocation] = useState('');
   const [search, setSearch] = useState('');
@@ -47,6 +54,35 @@ export default function TradePage() {
           setFocusedFilter={setFocusedFilter}
         />
         <div className={styles.line} />
+        <ul className={styles.boardWrapper}>
+          {TRADE_DUMMY.map((content) => (
+            <TradeBoard
+              key={content.houseId}
+              rentalType={content.rentalType}
+              city={content.city}
+              price={content.price}
+              monthlyPrice={content.monthlyPrice}
+              isCompleted={content.isCompleted}
+              nickName={content.nickName}
+              createdAt={content.createdAt}
+              imageUrl={content.imageUrl}
+              title={content.title}
+              recommendedTagName={content.recommendedTagName}
+            />
+          ))}
+        </ul>
+        <button
+          className={styles.writeButton}
+          type="button"
+          onClick={() => {
+            token ? navigate(`/trade/write`) : navigate('/login');
+          }}
+        >
+          글쓰기
+        </button>
+        <button type="button" className={styles.moreButton}>
+          더 많은 매물 보기
+        </button>
       </section>
     </motion.div>
   );

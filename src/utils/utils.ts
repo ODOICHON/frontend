@@ -110,3 +110,26 @@ export const getLatLng = async (address: string) => {
   const { x, y } = data.data.documents[0].address;
   return { lat: +y, lng: +x };
 };
+
+export const priceCount = (price: number) => {
+  const unitWords = ['만', '억', '조', '경'];
+  const splitUnit = 10000;
+  const splitCount = unitWords.length;
+  const resultArray = [];
+  let resultString = '';
+
+  for (let i = 0; i < splitCount; i += 1) {
+    let unitResult = (price % splitUnit ** (i + 1)) / splitUnit ** i;
+    unitResult = Math.floor(unitResult);
+    if (unitResult > 0) {
+      resultArray[i] = unitResult;
+    }
+  }
+
+  for (let i = 0; i < resultArray.length; i += 1) {
+    if (resultArray[i])
+      resultString = `${String(resultArray[i])}${unitWords[i]} ${resultString}`;
+  }
+
+  return `${resultString.trim()}원`;
+};

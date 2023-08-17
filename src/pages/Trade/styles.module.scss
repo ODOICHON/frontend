@@ -48,3 +48,50 @@
   border-radius: 3px;
   margin: 1.5rem 0;
 }
+
+.boardWrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 3rem;
+  column-gap: 5rem;
+  margin-top: 2rem;
+  margin-bottom: 4.5rem;
+  @media (max-width: 778px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.writeButton {
+  width: 7.5rem;
+  height: 3.5rem;
+  align-self: flex-end;
+  margin: 2.5rem 0;
+  background-color: var(--main-color);
+  color: white;
+  font-size: 1.25rem;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.moreButton {
+  align-self: center;
+  width: 16rem;
+  height: 4.25rem;
+  border: 2px solid var(--main-color);
+  margin-bottom: 4.5rem;
+  border-radius: 100px;
+  background-color: transparent;
+  font-family: 'Pretendard';
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--main-color);
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+}
