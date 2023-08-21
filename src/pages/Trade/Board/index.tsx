@@ -64,7 +64,13 @@ export default function TradeBoardPage() {
           <ul className={styles.categoryList}>
             <li>{getRentalName(data?.data.rentalType || '')}</li>
             <li>{getMoveInType(data?.data.isCompleted || false)}</li>
-            <li className={styles.userType}>
+            <li
+              className={
+                data?.data.userType === 'AGENT'
+                  ? styles.userTypeAgent
+                  : styles.userTypeNormal
+              }
+            >
               {getUserType(data?.data.userType || '')}
             </li>
           </ul>
@@ -120,6 +126,16 @@ export default function TradeBoardPage() {
           style={user ? undefined : { visibility: 'hidden' }}
         >
           <TradeBoardInfo info={data?.data} />
+        </section>
+        <section className={styles.recommendedTag}>
+          <article>
+            <span>매물 특징</span>
+            <ul>
+              {data?.data.recommendedTagName.map((tag) => (
+                <div>{tag}</div>
+              ))}
+            </ul>
+          </article>
         </section>
         <div className={styles.contentWrapper}>
           <div

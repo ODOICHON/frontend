@@ -71,12 +71,10 @@ export const getRentalPriceType = (rental: string) => {
 // 일반회원, 중개사 회원 구분 함수
 export const getUserType = (userType: string) => {
   switch (userType) {
-    case 'NONE':
-      return '일반회원';
     case 'AGENT':
-      return '중개사';
+      return '공인중개사 매물';
     default:
-      return '';
+      return '일반회원 매물';
   }
 };
 

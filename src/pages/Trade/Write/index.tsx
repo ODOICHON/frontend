@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { FiSearch } from 'react-icons/fi';
 import { MdUploadFile } from 'react-icons/md';
 import { AxiosError } from 'axios';
@@ -67,6 +68,9 @@ export default function TradeWritePage() {
       }
     }
   };
+
+  if (!user) return <Navigate to="/login" />;
+
   return (
     <motion.div
       className={styles.container}
