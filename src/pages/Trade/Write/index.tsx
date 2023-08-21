@@ -112,7 +112,7 @@ export default function TradeWritePage() {
                   className={
                     form.rentalType === item.type
                       ? styles.selectRentalType
-                      : undefined
+                      : styles.rentalType
                   }
                   onClick={() => {
                     setForm((prev: TradeBoardForm) => ({
@@ -303,7 +303,7 @@ export default function TradeWritePage() {
               className={
                 form.recommendedTag.includes(category.type)
                   ? styles.selectSpecial
-                  : undefined
+                  : styles.special
               }
               onClick={() => {
                 if (form.recommendedTag.includes(category.type)) {
