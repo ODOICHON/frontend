@@ -43,7 +43,6 @@ export default function TradeBoardPage() {
     updateState(true);
   }, []);
 
-  console.log(data?.data, 'data');
   return (
     <motion.div
       className={styles.container}
@@ -127,6 +126,16 @@ export default function TradeBoardPage() {
           style={user ? undefined : { visibility: 'hidden' }}
         >
           <TradeBoardInfo info={data?.data} />
+        </section>
+        <section className={styles.recommendedTag}>
+          <article>
+            <span>매물 특징</span>
+            <ul>
+              {data?.data.recommendedTagName.map((tag) => (
+                <div>{tag}</div>
+              ))}
+            </ul>
+          </article>
         </section>
         <div className={styles.contentWrapper}>
           <div
