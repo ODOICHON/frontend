@@ -142,9 +142,14 @@
     color: white;
     border-radius: 24px;
   }
-  & > .userType {
+  & > .userTypeAgent {
     background-color: var(--sub-color);
     border-color: var(--sub-color);
+  }
+
+  & > .userTypeNormal {
+    background-color: #045345;
+    border-color: #045345;
   }
 }
 
