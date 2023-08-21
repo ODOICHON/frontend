@@ -130,7 +130,6 @@ export const checkBeforeTradePost = (
     code,
   } = tradeBoardForm;
 
-  console.log(imageUrls);
   if (imageUrls[0] === '') {
     alert('썸네일을 등록해주세요.');
     return false;

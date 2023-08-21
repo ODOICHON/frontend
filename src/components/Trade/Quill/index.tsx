@@ -45,7 +45,7 @@ export default function TradeQuill({
       await PostHouseAPI(newForm);
       navigate(`/trade`);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
