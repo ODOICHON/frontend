@@ -83,6 +83,12 @@
   }
 }
 
+.mainContainer {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.1;
+}
+
 .swiperContainer {
   & > div:nth-child(2) {
     color: whitesmoke;

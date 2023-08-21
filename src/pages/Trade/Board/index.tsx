@@ -6,6 +6,7 @@ import Dompurify from 'dompurify';
 import { motion } from 'framer-motion';
 import { A11y, Navigation, Pagination, Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import AccessModal from '@/components/Common/AccessModal';
 import TradeBoardInfo from '@/components/Trade/Info';
 import KakaoMapImage from '@/components/Trade/KakaoMapImage';
 import ReportIcon from '@/components/Trade/Report/ReportIcon';
@@ -93,50 +94,57 @@ export default function TradeBoardPage() {
             />
           </article>
         ) : null}
+        {user ? null : <AccessModal />}
       </div>
       <div className={styles.line} />
-      <Swiper
-        className={styles.swiperContainer}
-        modules={[Navigation, Pagination, Scrollbar, A11y]}
-        spaceBetween={50}
-        slidesPerView={1}
-        navigation
-        pagination={{ el: ref.current }}
-        scrollbar={{ draggable: true }}
-      >
-        {data?.data.imageUrls.map((url, index) => (
-          <SwiperSlide key={index}>
-            <img src={url} alt="trade_board_img" />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-      <div className={styles.pagination} ref={ref} />
-      <section className={styles.infoContainer}>
-        <TradeBoardInfo info={data?.data} />
-      </section>
-      <div className={styles.contentWrapper}>
-        <div
-          className={styles.content}
-          dangerouslySetInnerHTML={{
-            __html: Dompurify.sanitize(data?.data.code || ''),
-          }}
-        />
-      </div>
 
-      <section className={styles.kakao}>
-        <span>지도 API</span>
-        <KakaoMapImage address={data?.data.city || ''} />
-      </section>
-      <section className={styles.process}>
-        <span>빈집거래 프로세스가 궁금하신가요?</span>
-        <button
-          type="button"
-          onClick={() => {
-            navigate('/trade/process');
-          }}
+      <section className={user ? undefined : styles.mainContainer}>
+        <Swiper
+          className={styles.swiperContainer}
+          modules={[Navigation, Pagination, Scrollbar, A11y]}
+          spaceBetween={50}
+          slidesPerView={1}
+          navigation
+          pagination={{ el: ref.current }}
+          scrollbar={{ draggable: true }}
         >
-          중계 프로세스 확인하기
-        </button>
+          {data?.data.imageUrls.map((url, index) => (
+            <SwiperSlide key={index}>
+              <img src={url} alt="trade_board_img" />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        <div className={styles.pagination} ref={ref} />
+        <section
+          className={styles.infoContainer}
+          style={user ? undefined : { visibility: 'hidden' }}
+        >
+          <TradeBoardInfo info={data?.data} />
+        </section>
+        <div className={styles.contentWrapper}>
+          <div
+            className={styles.content}
+            dangerouslySetInnerHTML={{
+              __html: Dompurify.sanitize(data?.data.code || ''),
+            }}
+          />
+        </div>
+
+        <section className={styles.kakao}>
+          <span>지도 API</span>
+          <KakaoMapImage address={data?.data.city || ''} />
+        </section>
+        <section className={styles.process}>
+          <span>빈집거래 프로세스가 궁금하신가요?</span>
+          <button
+            type="button"
+            onClick={() => {
+              navigate('/trade/process');
+            }}
+          >
+            중계 프로세스 확인하기
+          </button>
+        </section>
       </section>
     </motion.div>
   );
