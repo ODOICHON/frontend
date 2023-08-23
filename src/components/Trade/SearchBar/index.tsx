@@ -2,25 +2,25 @@ import { useEffect, useRef, useState } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
 import { AnimatePresence } from 'framer-motion';
 import { MenuType } from '@/types/Board/tradeType';
-import { LOCATION_MENU, TYPE_MENU } from '@/constants/trade';
+import { RENTAL_TYPE_MENU, CITY_MENU } from '@/constants/trade';
 import styles from './styles.module.scss';
 import Dropdown from '../Dropdown';
 
 type SearchBarProps = {
-  type: string;
-  location: string;
+  rentalType: string;
+  city: string;
   search: string;
-  setType: React.Dispatch<React.SetStateAction<string>>;
-  setLocation: React.Dispatch<React.SetStateAction<string>>;
+  setRentalType: React.Dispatch<React.SetStateAction<string>>;
+  setCity: React.Dispatch<React.SetStateAction<string>>;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function SearchBar({
-  type,
-  location,
+  rentalType,
+  city,
   search,
-  setType,
-  setLocation,
+  setRentalType,
+  setCity,
   setSearch,
 }: SearchBarProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -51,24 +51,24 @@ export default function SearchBar({
         <span
           role="presentation"
           className={
-            selectedMenu === 'type'
+            selectedMenu === 'rentalType'
               ? styles.selectedSearchItem
               : styles.searchItem
           }
           style={{ flexGrow: '1' }}
-          onClick={() => setSelectedMenu('type')}
+          onClick={() => setSelectedMenu('rentalType')}
         >
           <div>
-            <p style={{ color: type !== '' ? 'black' : '' }}>
-              {type === '' ? '유형' : type}
+            <p style={{ color: rentalType !== '' ? 'black' : '' }}>
+              {rentalType === '' ? '유형' : rentalType}
             </p>
             <GoTriangleDown color="#d9d9d9" size="1.25rem" />
           </div>
           <AnimatePresence>
-            {selectedMenu === 'type' && (
+            {selectedMenu === 'rentalType' && (
               <Dropdown
-                menu={TYPE_MENU}
-                setMenu={setType}
+                menu={RENTAL_TYPE_MENU}
+                setMenu={setRentalType}
                 setSelectedMenu={setSelectedMenu}
               />
             )}
@@ -80,24 +80,24 @@ export default function SearchBar({
         <span
           role="presentation"
           className={
-            selectedMenu === 'location'
+            selectedMenu === 'city'
               ? styles.selectedSearchItem
               : styles.searchItem
           }
           style={{ flexGrow: '1' }}
-          onClick={() => setSelectedMenu('location')}
+          onClick={() => setSelectedMenu('city')}
         >
           <div>
-            <p style={{ color: location !== '' ? 'black' : '' }}>
-              {location === '' ? '위치' : location}
+            <p style={{ color: city !== '' ? 'black' : '' }}>
+              {city === '' ? '위치' : city}
             </p>
             <GoTriangleDown color="#d9d9d9" size="1.25rem" />
           </div>
           <AnimatePresence>
-            {selectedMenu === 'location' && (
+            {selectedMenu === 'city' && (
               <Dropdown
-                menu={LOCATION_MENU}
-                setMenu={setLocation}
+                menu={CITY_MENU}
+                setMenu={setCity}
                 setSelectedMenu={setSelectedMenu}
               />
             )}

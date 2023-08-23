@@ -1,11 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import Loading from '@/components/Common/Loading';
 import TradeBoard from '@/components/Trade/Board';
 import CategorySelect from '@/components/Trade/CategorySelect';
 import FilterOption from '@/components/Trade/FilterOption';
 import SearchBar from '@/components/Trade/SearchBar';
+import { restFetcher, QueryKeys } from '@/queryClient';
+import {
+  RecommendedTagType,
+  TradeBoardPageType,
+  TradeBoardType,
+} from '@/types/Board/tradeType';
 import userStore from '@/store/userStore';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { TRADE_DUMMY } from '@/constants/trade_dummy';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
@@ -14,11 +23,61 @@ export default function TradePage() {
   const navigate = useNavigate();
   const { token } = userStore();
 
-  const [type, setType] = useState('');
-  const [location, setLocation] = useState('');
+  const [boardListData, setBoardListData] = useState<TradeBoardType[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
+
+  const [rentalType, setRentalType] = useState('');
+  const [city, setCity] = useState('');
   const [search, setSearch] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [recommendedTags, setRecommendedTags] = useState<RecommendedTagType[]>(
+    [],
+  );
   const [focusedFilter, setFocusedFilter] = useState('ALL');
+
+  const handleMoreBoards = () => {
+    if (currentPage < totalPage) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const fetchBoardList = (page: number) => {
+    const params = {
+      ...(search && { search }),
+      ...(rentalType !== '' && { rentalType }),
+      ...(city !== '' && { city }),
+      ...(recommendedTags.length > 0 && {
+        recommendedTag: recommendedTags.join(','),
+      }),
+      order: focusedFilter,
+      page: page - 1,
+    };
+    return restFetcher({ method: 'GET', path: 'houses', params });
+  };
+
+  const { refetch, isLoading } = useQuery<
+    ApiResponseWithDataType<TradeBoardPageType>
+  >(
+    [
+      QueryKeys.TRADE_BOARD,
+      rentalType,
+      city,
+      recommendedTags,
+      focusedFilter,
+      currentPage,
+    ],
+    () => fetchBoardList(currentPage),
+    {
+      onSuccess: (response) => {
+        setBoardListData((prev) => [...prev, ...response.data.content]);
+        setTotalPage(response.data.totalPages);
+      },
+    },
+  );
+
+  useEffect(() => {
+    refetch();
+  }, [currentPage]);
 
   return (
     <motion.div
@@ -38,16 +97,16 @@ export default function TradePage() {
       </section>
       <section className={styles.contentWrapper}>
         <SearchBar
-          type={type}
-          location={location}
+          rentalType={rentalType}
+          city={city}
           search={search}
-          setType={setType}
-          setLocation={setLocation}
+          setRentalType={setRentalType}
+          setCity={setCity}
           setSearch={setSearch}
         />
         <CategorySelect
-          selectedCategories={selectedCategories}
-          setSelectedCategories={setSelectedCategories}
+          recommendedTags={recommendedTags}
+          setRecommendedTags={setRecommendedTags}
         />
         <FilterOption
           focusedFilter={focusedFilter}
@@ -80,9 +139,17 @@ export default function TradePage() {
         >
           글쓰기
         </button>
-        <button type="button" className={styles.moreButton}>
-          더 많은 매물 보기
-        </button>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <button
+            type="button"
+            className={styles.moreButton}
+            onClick={handleMoreBoards}
+          >
+            더 많은 매물 보기
+          </button>
+        )}
       </section>
     </motion.div>
   );

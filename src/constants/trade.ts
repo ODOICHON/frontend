@@ -1,6 +1,6 @@
-export const TYPE_MENU = ['매매', '전세', '월세'];
-export const LOCATION_MENU = ['OPTION1-1', 'OPTION2-1', 'OPTION3-1'];
-export const CATEGORY_MENU = [
+export const RENTAL_TYPE_MENU = ['매매', '전세', '월세'];
+export const CITY_MENU = ['OPTION1-1', 'OPTION2-1', 'OPTION3-1'];
+export const RECOMMENDED_TAG_MENU = [
   '처음부터 인테리어를 하고 싶어요.',
   '어느 정도 준비된 집이 좋아요.',
   '아이가 함께 살아요.',
