@@ -1,5 +1,5 @@
 import { RecommendedTagType } from '@/types/Board/tradeType';
-import { RECOMMENDED_TAG_MENU } from '@/constants/trade';
+import { specialCategory } from '@/constants/trade';
 import styles from './styles.module.scss';
 
 type CategorySelectProps = {
@@ -46,17 +46,19 @@ export default function CategorySelect({
 
   return (
     <section className={styles.container}>
-      {RECOMMENDED_TAG_MENU.map((menu) => (
+      {specialCategory.map((menu) => (
         <button
-          key={menu}
-          id={menu}
+          key={menu.content}
+          id={menu.content}
           onClick={onSelectCategory}
           className={
-            isSelectedCategory(menu) ? styles.selectedMenuItem : styles.menuItem
+            isSelectedCategory(menu.content)
+              ? styles.selectedMenuItem
+              : styles.menuItem
           }
           type="button"
         >
-          {menu}
+          {menu.content}
         </button>
       ))}
     </section>

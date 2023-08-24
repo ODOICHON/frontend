@@ -4,7 +4,7 @@ $desktop: 1024px;
 
 // Mixins
 @mixin mobile {
-  @media (max-width: #{$tablet}) {
+  @media (max-width: #{$tablet - 1}) {
     @content;
   }
 }

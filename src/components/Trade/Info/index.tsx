@@ -44,7 +44,7 @@ function TradeBoardInfo({ info }: TradeBoardInfoProps) {
           전화번호 <p>{info?.contact}</p>
         </div>
         <div>
-          공인중개사명 <p>{info?.agentName}</p>
+          공인중개사명 <p>{info?.agentName !== '' ? info?.agentName : 'X'}</p>
         </div>
       </article>
     </section>

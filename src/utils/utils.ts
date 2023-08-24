@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { TradeBoardForm } from '@/types/Board/tradeType';
 
 export const setInterceptor = (token: string) => {
   if (!token) return false;
@@ -53,15 +54,27 @@ export const getRentalName = (rental: string) => {
   }
 };
 
+// 매매 타입에 따른 가격 이름
+export const getRentalPriceType = (rental: string) => {
+  switch (rental) {
+    case 'MONTHLYRENT':
+      return '보증금';
+    case 'JEONSE':
+      return '임대 가격';
+    case 'SALE':
+      return '매매 가격';
+    default:
+      return '임대 가격';
+  }
+};
+
 // 일반회원, 중개사 회원 구분 함수
 export const getUserType = (userType: string) => {
   switch (userType) {
-    case 'NONE':
-      return '일반회원';
     case 'AGENT':
-      return '중개사';
+      return '공인중개사 매물';
     default:
-      return '';
+      return '일반회원 매물';
   }
 };
 
@@ -92,6 +105,86 @@ export const checkBeforePost = (
     alert('썸네일을 등록해주세요.');
     return false;
   }
+  return true;
+};
+
+// 빈집거래 글쓰기 필수 입력사항 체크
+export const checkBeforeTradePost = (
+  user: User,
+  tradeBoardForm: TradeBoardForm,
+) => {
+  const {
+    imageUrls,
+    city,
+    zipCode,
+    price,
+    monthlyPrice,
+    contact,
+    agentName,
+    size,
+    createdDate,
+    purpose,
+    title,
+    code,
+  } = tradeBoardForm;
+
+  if (imageUrls[0] === '') {
+    alert('썸네일을 등록해주세요.');
+    return false;
+  }
+  if (city === '') {
+    alert('시/도를 선택해주세요.');
+    return false;
+  }
+  if (zipCode === '') {
+    alert('우편번호를 입력해주세요.');
+    return false;
+  }
+  if (price === 0) {
+    alert('매매가를 입력해주세요.');
+    return false;
+  }
+  if (tradeBoardForm.rentalType === 'MONTHLYRENT' && monthlyPrice === 0) {
+    alert('월세를 입력해주세요.');
+    return false;
+  }
+  if (contact === '') {
+    alert('연락처를 입력해주세요.');
+    return false;
+  }
+  if (contact.includes('-')) {
+    alert('연락처를 - 없이 입력해주세요.');
+    return false;
+  }
+  if (user.userType === 'AGENT' && agentName === '') {
+    alert('중개사 이름을 입력해주세요.');
+    return false;
+  }
+  if (size === '') {
+    alert('평수를 입력해주세요.');
+    return false;
+  }
+  if (createdDate === '') {
+    alert('준공일을 입력해주세요.');
+    return false;
+  }
+  if (purpose === '') {
+    alert('용도를 입력해주세요.');
+    return false;
+  }
+  if (title === '') {
+    alert('제목을 입력해주세요.');
+    return false;
+  }
+  if (code === '') {
+    alert('내용을 입력해주세요.');
+    return false;
+  }
+  if (imageUrls.length <= 5) {
+    alert('이미지는 5개 이상 등록해주세요.');
+    return false;
+  }
+
   return true;
 };
 

@@ -64,6 +64,8 @@ export type TradeBoardDetailType = {
   createdAt: Date;
   isCompleted: boolean;
   isScraped: boolean;
+  recommendedTag: RecommendedTagType[];
+  recommendedTagName: string[];
 };
 
 export type TradeBoardPageType = BoardPageType<TradeBoardType>;

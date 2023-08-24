@@ -15,7 +15,6 @@ import {
 } from '@/types/Board/tradeType';
 import userStore from '@/store/userStore';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
-import { TRADE_DUMMY } from '@/constants/trade_dummy';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -114,7 +113,7 @@ export default function TradePage() {
         />
         <div className={styles.line} />
         <ul className={styles.boardWrapper}>
-          {TRADE_DUMMY.map((content) => (
+          {boardListData.map((content) => (
             <TradeBoard
               key={content.houseId}
               rentalType={content.rentalType}
