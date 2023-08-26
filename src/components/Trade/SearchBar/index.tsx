@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
 import { AnimatePresence } from 'framer-motion';
-import { MenuType } from '@/types/Board/tradeType';
-import { RENTAL_TYPE_MENU, CITY_MENU } from '@/constants/trade';
+import { MenuType, RentalType } from '@/types/Board/tradeType';
+import { convertRentalTypeName } from '@/utils/utils';
+import { tradeCategory, tradeCity } from '@/constants/trade';
 import styles from './styles.module.scss';
 import Dropdown from '../Dropdown';
 
@@ -13,6 +14,8 @@ type SearchBarProps = {
   setRentalType: React.Dispatch<React.SetStateAction<string>>;
   setCity: React.Dispatch<React.SetStateAction<string>>;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  fetchBoard: () => void;
 };
 
 export default function SearchBar({
@@ -22,10 +25,21 @@ export default function SearchBar({
   setRentalType,
   setCity,
   setSearch,
+  setCurrentPage,
+  fetchBoard,
 }: SearchBarProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [selectedMenu, setSelectedMenu] = useState<MenuType>('none');
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    (document.activeElement as HTMLElement).blur();
+    setSelectedMenu('none');
+    setCurrentPage(0);
+    fetchBoard();
+  };
+
   useEffect(() => {
     const handleCloseModal = (e: Event | React.MouseEvent) => {
       if (
@@ -60,14 +74,16 @@ export default function SearchBar({
         >
           <div>
             <p style={{ color: rentalType !== '' ? 'black' : '' }}>
-              {rentalType === '' ? '유형' : rentalType}
+              {rentalType === ''
+                ? '유형'
+                : convertRentalTypeName(rentalType as RentalType)}
             </p>
             <GoTriangleDown color="#d9d9d9" size="1.25rem" />
           </div>
           <AnimatePresence>
             {selectedMenu === 'rentalType' && (
               <Dropdown
-                menu={RENTAL_TYPE_MENU}
+                menu={tradeCategory}
                 setMenu={setRentalType}
                 setSelectedMenu={setSelectedMenu}
               />
@@ -96,7 +112,7 @@ export default function SearchBar({
           <AnimatePresence>
             {selectedMenu === 'city' && (
               <Dropdown
-                menu={CITY_MENU}
+                menu={tradeCity}
                 setMenu={setCity}
                 setSelectedMenu={setSelectedMenu}
               />
@@ -115,7 +131,7 @@ export default function SearchBar({
         style={{ flexGrow: '3' }}
         onClick={() => setSelectedMenu('search')}
       >
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="직접 검색"

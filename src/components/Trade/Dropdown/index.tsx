@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
 import { MenuType } from '@/types/Board/tradeType';
+import { TradeCategoryType, TradeCityType } from '@/constants/trade';
 import { tradeDropdownVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 type DropdownProps = {
-  menu: string[];
+  menu: TradeCategoryType[] | TradeCityType[];
   setMenu: React.Dispatch<React.SetStateAction<string>>;
   setSelectedMenu: React.Dispatch<React.SetStateAction<MenuType>>;
 };
@@ -33,12 +34,12 @@ export default function Dropdown({
     >
       {menu.map((item) => (
         <li
-          key={item}
+          key={item.type}
           role="presentation"
           className={styles.dropdownMenu}
-          onClick={(event) => onClickMenu(event, item)}
+          onClick={(event) => onClickMenu(event, item.type)}
         >
-          <p>{item}</p>
+          <p>{item.content}</p>
         </li>
       ))}
     </motion.ul>

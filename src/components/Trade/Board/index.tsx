@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { RentalType, TradeBoardType } from '@/types/Board/tradeType';
 import { priceCount } from '@/utils/utils';
 import styles from './styles.module.scss';
 
-type TradeBoardProps = Omit<TradeBoardType, 'houseId' | 'recommendedTag'>;
+type TradeBoardProps = Omit<TradeBoardType, 'recommendedTag'>;
 
 export default function TradeBoard({
+  houseId,
   rentalType,
   city,
   price,
@@ -18,6 +20,8 @@ export default function TradeBoard({
   title,
   recommendedTagName,
 }: TradeBoardProps) {
+  const navigate = useNavigate();
+
   const [visibleTags, setVisibleTags] = useState<string[]>(recommendedTagName);
   const [hiddenTags, setHiddenTags] = useState<string[]>([]);
   const ulRef = useRef<HTMLUListElement>(null);
@@ -71,7 +75,11 @@ export default function TradeBoard({
   }, [ulRef.current]);
 
   return (
-    <article className={styles.wrapper}>
+    <article
+      role="presentation"
+      className={styles.wrapper}
+      onClick={() => navigate(`/trade/trade_board/${houseId}`)}
+    >
       <div
         className={isCompleted ? styles.completedThumbnail : styles.thumbnail}
         style={{

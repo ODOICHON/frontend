@@ -1,30 +1,28 @@
 import styles from './styles.module.scss';
 
 type FilterOptionProps = {
-  focusedFilter: string;
-  setFocusedFilter: React.Dispatch<React.SetStateAction<string>>;
+  dealState: 'ALL' | 'ONGOING';
+  setDealState: React.Dispatch<React.SetStateAction<'ALL' | 'ONGOING'>>;
 };
 
 export default function FilterOption({
-  focusedFilter,
-  setFocusedFilter,
+  dealState,
+  setDealState,
 }: FilterOptionProps) {
   return (
     <ul className={styles.optionWrapper}>
       <li
         role="presentation"
-        className={focusedFilter === 'ALL' ? styles.focused : styles.notFocused}
-        onClick={() => setFocusedFilter('ALL')}
+        className={dealState === 'ALL' ? styles.focused : styles.notFocused}
+        onClick={() => setDealState('ALL')}
       >
         전체
       </li>
       <div className={styles.divider} />
       <li
         role="presentation"
-        className={
-          focusedFilter === 'TRADING' ? styles.focused : styles.notFocused
-        }
-        onClick={() => setFocusedFilter('TRADING')}
+        className={dealState === 'ONGOING' ? styles.focused : styles.notFocused}
+        onClick={() => setDealState('ONGOING')}
       >
         거래중인 매물
       </li>

@@ -6,7 +6,7 @@ import { AxiosError } from 'axios';
 import { motion } from 'framer-motion';
 import AddressModal from '@/components/Trade/AddressModal';
 import TradeQuill from '@/components/Trade/Quill';
-import { TradeBoardForm } from '@/types/Board/tradeType';
+import { RentalType, TradeBoardForm } from '@/types/Board/tradeType';
 import { uploadFile } from '@/apis/uploadS3';
 import userStore from '@/store/userStore';
 import { getRentalPriceType } from '@/utils/utils';
@@ -109,7 +109,7 @@ export default function TradeWritePage() {
           <div>
             <label>매물 유형</label>
             <ul>
-              {tradeCategory.map((item) => (
+              {tradeCategory.slice(1).map((item) => (
                 <button
                   key={item.type}
                   type="button"
@@ -121,7 +121,7 @@ export default function TradeWritePage() {
                   onClick={() => {
                     setForm((prev: TradeBoardForm) => ({
                       ...prev,
-                      rentalType: item.type,
+                      rentalType: item.type as RentalType,
                     }));
                   }}
                 >

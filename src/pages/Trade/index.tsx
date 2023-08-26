@@ -23,8 +23,8 @@ export default function TradePage() {
   const { token } = userStore();
 
   const [boardListData, setBoardListData] = useState<TradeBoardType[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [isLastPage, setIsLastPage] = useState(false);
 
   const [rentalType, setRentalType] = useState('');
   const [city, setCity] = useState('');
@@ -32,15 +32,9 @@ export default function TradePage() {
   const [recommendedTags, setRecommendedTags] = useState<RecommendedTagType[]>(
     [],
   );
-  const [focusedFilter, setFocusedFilter] = useState('ALL');
+  const [dealState, setDealState] = useState<'ALL' | 'ONGOING'>('ALL');
 
-  const handleMoreBoards = () => {
-    if (currentPage < totalPage) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
-  const fetchBoardList = (page: number) => {
+  const fetchBoardList = (page = 0) => {
     const params = {
       ...(search && { search }),
       ...(rentalType !== '' && { rentalType }),
@@ -48,35 +42,42 @@ export default function TradePage() {
       ...(recommendedTags.length > 0 && {
         recommendedTag: recommendedTags.join(','),
       }),
-      order: focusedFilter,
-      page: page - 1,
+      ...(dealState !== 'ALL' && { dealState }),
+      page,
     };
     return restFetcher({ method: 'GET', path: 'houses', params });
   };
 
-  const { refetch, isLoading } = useQuery<
+  const { refetch: fetchBoard } = useQuery<
     ApiResponseWithDataType<TradeBoardPageType>
-  >(
-    [
-      QueryKeys.TRADE_BOARD,
-      rentalType,
-      city,
-      recommendedTags,
-      focusedFilter,
-      currentPage,
-    ],
-    () => fetchBoardList(currentPage),
-    {
-      onSuccess: (response) => {
-        setBoardListData((prev) => [...prev, ...response.data.content]);
-        setTotalPage(response.data.totalPages);
-      },
+  >([QueryKeys.TRADE_BOARD], () => fetchBoardList(), {
+    onSuccess: (response) => {
+      setBoardListData(response.data.content);
+      setIsLastPage(response.data.last);
     },
-  );
+  });
+
+  const { isInitialLoading: isMoreBoardLoading } = useQuery<
+    ApiResponseWithDataType<TradeBoardPageType>
+  >([QueryKeys.TRADE_BOARD, currentPage], () => fetchBoardList(currentPage), {
+    enabled: currentPage !== 0,
+    onSuccess: (response) => {
+      setBoardListData((prev) => [...prev, ...response.data.content]);
+      setIsLastPage(response.data.last);
+    },
+    staleTime: 0,
+  });
+
+  const handleMoreBoards = () => {
+    if (!isLastPage) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
 
   useEffect(() => {
-    refetch();
-  }, [currentPage]);
+    fetchBoard();
+    setCurrentPage(0);
+  }, [recommendedTags, dealState]);
 
   return (
     <motion.div
@@ -102,20 +103,20 @@ export default function TradePage() {
           setRentalType={setRentalType}
           setCity={setCity}
           setSearch={setSearch}
+          setCurrentPage={setCurrentPage}
+          fetchBoard={fetchBoard}
         />
         <CategorySelect
           recommendedTags={recommendedTags}
           setRecommendedTags={setRecommendedTags}
         />
-        <FilterOption
-          focusedFilter={focusedFilter}
-          setFocusedFilter={setFocusedFilter}
-        />
+        <FilterOption dealState={dealState} setDealState={setDealState} />
         <div className={styles.line} />
         <ul className={styles.boardWrapper}>
           {boardListData.map((content) => (
             <TradeBoard
               key={content.houseId}
+              houseId={content.houseId}
               rentalType={content.rentalType}
               city={content.city}
               price={content.price}
@@ -138,16 +139,18 @@ export default function TradePage() {
         >
           글쓰기
         </button>
-        {isLoading ? (
+        {isMoreBoardLoading ? (
           <Loading />
         ) : (
-          <button
-            type="button"
-            className={styles.moreButton}
-            onClick={handleMoreBoards}
-          >
-            더 많은 매물 보기
-          </button>
+          !isLastPage && (
+            <button
+              type="button"
+              className={styles.moreButton}
+              onClick={handleMoreBoards}
+            >
+              더 많은 매물 보기
+            </button>
+          )
         )}
       </section>
     </motion.div>
