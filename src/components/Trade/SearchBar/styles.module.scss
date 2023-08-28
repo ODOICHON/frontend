@@ -43,6 +43,10 @@
   font-weight: 500;
   cursor: pointer;
 
+  @include mobile {
+    padding-left: 1rem;
+  }
+
   & > div {
     display: flex;
     justify-content: space-between;
@@ -51,6 +55,9 @@
     & > p {
       flex-grow: 1;
       font-size: 1.375rem;
+      @include mobile {
+        font-size: 1rem;
+      }
     }
   }
   & > form {
@@ -66,6 +73,9 @@
       background-color: transparent;
       font-size: 1.375rem;
       height: 100%;
+      @include mobile {
+        font-size: 1rem;
+      }
     }
     & > button {
       width: 9.375rem;
@@ -77,6 +87,10 @@
       outline: none;
       font-size: 1.375rem;
       cursor: pointer;
+      @include mobile {
+        width: 5rem;
+        font-size: 1rem;
+      }
     }
   }
 }
