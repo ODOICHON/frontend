@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { RentalType, TradeBoardType } from '@/types/Board/tradeType';
-import { priceCount } from '@/utils/utils';
+import { convertRentalTypeName, priceCount } from '@/utils/utils';
 import styles from './styles.module.scss';
 
 type TradeBoardProps = Omit<TradeBoardType, 'recommendedTag'>;
@@ -49,12 +49,6 @@ export default function TradeBoard({
     }
   };
 
-  const convertRentalType = (type: RentalType) => {
-    if (type === 'SALE') return '매매';
-    if (type === 'JEONSE') return '전세';
-    if (type === 'MONTHLYRENT') return '월세';
-    return type;
-  };
   const rentalStyle = (type: RentalType) => {
     if (type === 'SALE') return styles.saleType;
     if (type === 'JEONSE') return styles.jeonseType;
@@ -98,7 +92,7 @@ export default function TradeBoard({
         )}
         {!isCompleted && (
           <div className={rentalStyle(rentalType)}>
-            {convertRentalType(rentalType)}
+            {convertRentalTypeName(rentalType)}
           </div>
         )}
       </div>
@@ -109,9 +103,9 @@ export default function TradeBoard({
         </p>
         <p>
           <strong>가격</strong> :{' '}
-          {convertRentalType(rentalType) === '월세'
+          {convertRentalTypeName(rentalType) === '월세'
             ? `보증금 ${priceCount(price)} / 월세 ${priceCount(monthlyPrice)}`
-            : `${convertRentalType(rentalType)} ${priceCount(price)}`}
+            : `${convertRentalTypeName(rentalType)} ${priceCount(price)}`}
         </p>
         <ul ref={ulRef} className={styles.tagWrapper}>
           {visibleTags.map((tag, index) => (
