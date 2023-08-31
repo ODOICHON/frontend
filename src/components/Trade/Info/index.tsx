@@ -9,7 +9,6 @@ type TradeBoardInfoProps = {
 };
 
 function TradeBoardInfo({ info }: TradeBoardInfoProps) {
-  console.log(info);
   return (
     <section className={styles.infoContainer}>
       <article>

@@ -1,0 +1,25 @@
+.optionWrapper {
+  font-family: 'NanumSquareAcB';
+  display: flex;
+  gap: 1rem;
+  font-size: 1.25rem;
+  & > li {
+    cursor: pointer;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+.divider {
+  width: 2px;
+  height: 1.25rem;
+  background-color: #9a9a9a;
+}
+
+.notFocused {
+  color: var(--darkgray-color);
+}
+.focused {
+  color: var(--main-color);
+}

@@ -34,6 +34,21 @@ export const dropdownVariants = {
   },
 };
 
+export const tradeDropdownVariants = {
+  initial: {
+    top: 35,
+    opacity: 0,
+  },
+  visiable: {
+    top: 65,
+    opacity: 1,
+  },
+  exit: {
+    top: 35,
+    opacity: 0,
+  },
+};
+
 export const updownVariants = {
   initial: {
     top: 20,
