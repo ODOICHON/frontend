@@ -69,7 +69,6 @@ export default function SearchBar({
               ? styles.selectedSearchItem
               : styles.searchItem
           }
-          // style={{ flexGrow: '1' }}
           onClick={() => setSelectedMenu('rentalType')}
         >
           <div>
@@ -100,7 +99,6 @@ export default function SearchBar({
               ? styles.selectedSearchItem
               : styles.searchItem
           }
-          // style={{ flexGrow: '1' }}
           onClick={() => setSelectedMenu('city')}
         >
           <div>

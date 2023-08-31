@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Loading from '@/components/Common/Loading';
+import NoPosts from '@/components/Community/NoPosts';
 import TradeBoard from '@/components/Trade/Board';
 import CategorySelect from '@/components/Trade/CategorySelect';
 import FilterOption from '@/components/Trade/FilterOption';
@@ -48,7 +49,7 @@ export default function TradePage() {
     return restFetcher({ method: 'GET', path: 'houses', params });
   };
 
-  const { refetch: fetchBoard } = useQuery<
+  const { refetch: fetchBoard, isLoading: isBoardLoading } = useQuery<
     ApiResponseWithDataType<TradeBoardPageType>
   >([QueryKeys.TRADE_BOARD], () => fetchBoardList(), {
     onSuccess: (response) => {
@@ -112,24 +113,30 @@ export default function TradePage() {
         />
         <FilterOption dealState={dealState} setDealState={setDealState} />
         <div className={styles.line} />
-        <ul className={styles.boardWrapper}>
-          {boardListData.map((content) => (
-            <TradeBoard
-              key={content.houseId}
-              houseId={content.houseId}
-              rentalType={content.rentalType}
-              city={content.city}
-              price={content.price}
-              monthlyPrice={content.monthlyPrice}
-              isCompleted={content.isCompleted}
-              nickName={content.nickName}
-              createdAt={content.createdAt}
-              imageUrl={content.imageUrl}
-              title={content.title}
-              recommendedTagName={content.recommendedTagName}
-            />
-          ))}
-        </ul>
+
+        {isBoardLoading && <Loading />}
+        {boardListData && boardListData.length > 0 ? (
+          <ul className={styles.boardWrapper}>
+            {boardListData.map((content) => (
+              <TradeBoard
+                key={content.houseId}
+                houseId={content.houseId}
+                rentalType={content.rentalType}
+                city={content.city}
+                price={content.price}
+                monthlyPrice={content.monthlyPrice}
+                isCompleted={content.isCompleted}
+                nickName={content.nickName}
+                createdAt={content.createdAt}
+                imageUrl={content.imageUrl}
+                title={content.title}
+                recommendedTagName={content.recommendedTagName}
+              />
+            ))}
+          </ul>
+        ) : (
+          <NoPosts />
+        )}
         <button
           className={styles.writeButton}
           type="button"
