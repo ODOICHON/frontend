@@ -1,9 +1,9 @@
+import axios from 'axios';
 import {
   RecommendedTagType,
   RentalType,
   TradeBoardForm,
 } from '@/types/Board/tradeType';
-import axios from 'axios';
 
 export const setInterceptor = (token: string) => {
   if (!token) return false;
