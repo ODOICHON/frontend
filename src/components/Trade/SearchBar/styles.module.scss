@@ -1,1 +1,107 @@
 @import '@/styles/media.scss';
+
+.container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+  height: 5.125rem;
+  margin-top: 4.375rem;
+  border-radius: 6.25rem;
+  border: 1px solid #ced3d6;
+  background-color: #f1f4f5;
+}
+
+.selectInput {
+  min-width: 8.5rem;
+  width: 100%;
+  height: 100%;
+  & > option[value=''][disabled] {
+    display: none;
+  }
+}
+
+.selectItem {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 0.5rem;
+}
+
+.searchItem {
+  flex: 1 1 0;
+  position: relative;
+  height: 100%;
+  background-color: transparent;
+  border-radius: 6.25rem;
+  padding: 0.5rem;
+  padding-left: 2rem;
+  color: var(--darkgray-color);
+  font-family: 'Pretendard';
+  font-weight: 500;
+  cursor: pointer;
+
+  @include mobile {
+    padding-left: 1rem;
+  }
+
+  & > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    & > p {
+      flex-grow: 1;
+      font-size: 1.375rem;
+      @include mobile {
+        font-size: 1rem;
+      }
+    }
+  }
+  & > form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Pretendard';
+    height: 100%;
+    & > input {
+      flex-grow: 1;
+      outline: none;
+      border: none;
+      background-color: transparent;
+      font-size: 1.375rem;
+      height: 100%;
+      @include mobile {
+        font-size: 1rem;
+      }
+    }
+    & > button {
+      width: 9.375rem;
+      background-color: var(--main-color);
+      color: white;
+      height: 100%;
+      border: none;
+      border-radius: 6.25rem;
+      outline: none;
+      font-size: 1.375rem;
+      cursor: pointer;
+      @include mobile {
+        width: 5rem;
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+.selectedSearchItem {
+  @extend .searchItem;
+  background-color: white;
+}
+
+.divider {
+  width: 2px;
+  height: 3.75rem;
+  background-color: #ced3d6;
+}

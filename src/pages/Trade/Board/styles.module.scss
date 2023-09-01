@@ -6,6 +6,7 @@
   min-height: 100vh;
   padding: 0 3rem;
   margin: 0 auto;
+  position: relative;
 }
 
 .title {
@@ -16,10 +17,36 @@
   padding-top: 7.5rem;
   margin-bottom: 1.5rem;
 
-  & > svg {
-    align-self: flex-end;
+  & > article {
+    display: flex;
+    gap: 1rem;
+    align-items: end;
     margin-right: 2rem;
-    font-size: 3rem;
+
+    & > div {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.8;
+      }
+      & > svg {
+        font-size: 3rem;
+      }
+
+      @include mobile {
+        & > svg {
+          font-size: 2rem;
+        }
+        & > span {
+          display: none;
+        }
+      }
+    }
   }
 }
 
@@ -36,12 +63,17 @@
   & > div {
     display: flex;
     gap: 1rem;
-    // justify-content: space-between;
-    & > p {
-      font-size: 1.25rem;
-      font-weight: 400;
-      & > span {
-        font-weight: 200;
+    font-size: 1.25rem;
+    font-weight: 400;
+
+    span {
+      font-weight: 200;
+    }
+
+    & > div > span {
+      cursor: pointer;
+      &:hover {
+        color: var(--main-color);
       }
     }
   }
@@ -49,6 +81,12 @@
     font-size: 2rem;
     line-height: 2.5rem;
   }
+}
+
+.mainContainer {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.1;
 }
 
 .swiperContainer {
@@ -98,10 +136,104 @@
     font-family: 'NanumSquareAcB';
     font-size: 1.375rem;
     padding: 0.5rem 1rem;
+    line-height: normal;
     border: 1px solid var(--main-color);
     background-color: var(--main-color);
     color: white;
     border-radius: 24px;
+  }
+  & > .userTypeAgent {
+    background-color: var(--sub-color);
+    border-color: var(--sub-color);
+  }
+
+  & > .userTypeNormal {
+    background-color: #045345;
+    border-color: #045345;
+  }
+}
+
+.recomen {
+  .infoContainer {
+    display: flex;
+    padding: 3.75rem 4.375rem;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+
+    @include mobile {
+      flex-direction: column;
+      gap: 5rem;
+    }
+
+    & > article {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      font-size: 1.375rem;
+      font-family: 'Pretendard';
+      font-weight: bold;
+      gap: 2rem;
+      & > span {
+        color: var(--main-color);
+        margin-bottom: 1rem;
+      }
+      & > div {
+        display: flex;
+        color: #4d5256;
+        gap: 1rem;
+        & > p {
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}
+
+.recommendedTag {
+  display: flex;
+  padding: 3.75rem 4.375rem;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  margin-bottom: 6rem;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  & > article {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-size: 1.375rem;
+    font-family: 'Pretendard';
+    font-weight: bold;
+    gap: 0.5rem;
+    & > span {
+      color: var(--main-color);
+      margin-bottom: 1rem;
+    }
+    & > ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+
+      background-color: #f6f7fb;
+      border-radius: 16px;
+      font-size: 1.125rem;
+      font-family: 'Pretandard';
+
+      & > div {
+        background-color: #f8e9e4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 100px;
+        color: var(--main-color);
+        border: 1px solid #f8e9e4;
+        padding: 0.825rem 1.25rem;
+      }
+    }
   }
 }
 
