@@ -1,9 +1,9 @@
-import axios from 'axios';
 import {
   RecommendedTagType,
   RentalType,
   TradeBoardForm,
 } from '@/types/Board/tradeType';
+import axios from 'axios';
 
 export const setInterceptor = (token: string) => {
   if (!token) return false;
@@ -84,7 +84,7 @@ export const getUserType = (userType: string) => {
 
 // 입주가능, 입주불가 구분 함수
 export const getMoveInType = (isCompleted: boolean) => {
-  return isCompleted ? '입주가능' : '입주불가';
+  return isCompleted ? '입주불가' : '입주가능';
 };
 
 export const checkBeforePost = (
