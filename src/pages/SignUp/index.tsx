@@ -10,6 +10,7 @@ import { restFetcher } from '@/queryClient';
 import Terms from '@/components/Terms';
 import userStore from '@/store/userStore';
 import useCheckAPI from '@/hooks/useCheckAPI';
+import { TermType } from '@/types/signUp';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -22,7 +23,7 @@ type IForm = {
   phone_check: string;
   age: string;
   join_paths: string[];
-  terms: boolean;
+  service_term: boolean;
 };
 type ISubmitForm = {
   email: string;
@@ -38,6 +39,7 @@ export default function SignUpPage() {
     register,
     watch,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<IForm>({
     mode: 'onSubmit',
@@ -93,6 +95,11 @@ export default function SignUpPage() {
   const [phoneSMSCheck, setPhoneSMSCheck] = useState(false); // 전화번호 인증 완료 상태
   const [phoneSMSMessage, setPhoneSMSMessage] = useState<string | undefined>(); // 전화번호 인증 완료 상태
   const [phoneErrMessage, setPhoneErrMessage] = useState<string | undefined>(); // 전화번호 에러 메세지
+  const [isServiceTerm, setIsServiceTerm] = useState(false);
+  const [isPrivacyTerm, setIsPrivacyTerm] = useState(false);
+  const [isMarketingTerm, setIsMarketingTerm] = useState(false);
+  const [selectedTerm, setSelectedTerm] = useState<TermType>('');
+
   const [
     idCheck,
     idCheckMessage,
@@ -121,10 +128,11 @@ export default function SignUpPage() {
     '이미 존재하는 닉네임 입니다.',
     '닉네임 형식에 맞지 않습니다.',
   );
-  const onToggleClick = () => {
+  const onToggleClick = (term: TermType) => {
     const bodyEl = document.querySelector('body');
     bodyEl?.classList.add('over_hidden');
     setToggle(true);
+    setSelectedTerm(term);
   };
   const onEyeClick = (e: React.MouseEvent<HTMLImageElement>) => {
     if (e.currentTarget.id === 'passwordEye') setEyeState((prev) => !prev);
@@ -199,6 +207,12 @@ export default function SignUpPage() {
       },
     );
   };
+
+  const handleAllSelect = (isSelected: boolean) => {
+    setIsServiceTerm(isSelected);
+    setIsPrivacyTerm(isSelected);
+    setIsMarketingTerm(isSelected);
+  };
   useEffect(() => {
     onChangeInput(setIdCheck, setIdCheckMessage, '아이디');
   }, [watch('email')]);
@@ -221,6 +235,18 @@ export default function SignUpPage() {
       className={styles.container}
     >
       <img className={styles.logo} src={logoImage} alt="로고" />
+      <span className={styles.agentSingUp}>
+        <h3>
+          <strong>공인중개사</strong> 회원이신가요?
+        </h3>
+        <button
+          className={styles.termsButton}
+          type="button"
+          onClick={() => navigate('/agentSignup')}
+        >
+          <p>공인중개사 회원가입</p> &gt;
+        </button>
+      </span>
       <form className={styles.formContent}>
         <div className={styles.inputContainer}>
           <label htmlFor="email">아이디</label>
@@ -555,28 +581,98 @@ export default function SignUpPage() {
         </div>
         <div className={styles.horizonLine} />
         <div className={styles.inputContainer}>
-          <label>약관</label>
+          <div className={styles.inputContainerTitle}>
+            <label>약관</label>
+            <span>
+              <input
+                id="allSelect"
+                type="checkbox"
+                onChange={() => {
+                  handleAllSelect(
+                    !(isServiceTerm && isPrivacyTerm && isMarketingTerm),
+                  );
+                  setValue('service_term', !isServiceTerm, {
+                    shouldValidate: true,
+                  });
+                }}
+                checked={isServiceTerm && isPrivacyTerm && isMarketingTerm}
+              />
+              <label htmlFor="allSelect">전체동의</label>
+            </span>
+          </div>
           <div className={styles.termsContainer}>
             <span>
               <input
-                id="terms"
+                id="service_term"
                 type="checkbox"
-                {...register('terms', { required: '필수 선택입니다.' })}
+                {...register('service_term', {
+                  required: '필수 선택입니다.',
+                  onChange: () => {
+                    setIsServiceTerm((prev) => !prev);
+                  },
+                })}
+                checked={isServiceTerm}
               />
-              <label htmlFor="terms">서비스 이용약관에 동의(필수)</label>
+              <label htmlFor="service_term">서비스 이용약관에 동의(필수)</label>
             </span>
             <button
               className={styles.termsButton}
               type="button"
-              onClick={onToggleClick}
+              onClick={() => onToggleClick('SERVICE')}
             >
               약관보기 &gt;
             </button>
           </div>
           <p className={styles.errorMessage}>
-            {errors.terms && errors.terms.message}
+            {errors.service_term && errors.service_term.message}
           </p>
+
+          <div
+            className={styles.termsContainer}
+            style={{ marginBottom: '1.7rem' }}
+          >
+            <span>
+              <input
+                id="privacy_term"
+                type="checkbox"
+                checked={isPrivacyTerm}
+                onChange={() => setIsPrivacyTerm((prev) => !prev)}
+              />
+              <label htmlFor="privacy_term">
+                개인정보 수집 및 이용 동의(선택)
+              </label>
+            </span>
+            <button
+              className={styles.termsButton}
+              type="button"
+              onClick={() => onToggleClick('PRIVACY')}
+            >
+              약관보기 &gt;
+            </button>
+          </div>
+
+          <div className={styles.termsContainer}>
+            <span>
+              <input
+                id="marketing_term"
+                type="checkbox"
+                checked={isMarketingTerm}
+                onChange={() => setIsMarketingTerm((prev) => !prev)}
+              />
+              <label htmlFor="marketing_term">
+                마켓팅 활용 및 광고성 정보 수신 동의(선택)
+              </label>
+            </span>
+            <button
+              className={styles.termsButton}
+              type="button"
+              onClick={() => onToggleClick('MARKETING')}
+            >
+              약관보기 &gt;
+            </button>
+          </div>
         </div>
+
         <button
           type="button"
           className={styles.signUpButton}
@@ -585,7 +681,9 @@ export default function SignUpPage() {
           회원가입
         </button>
       </form>
-      {toggle ? <Terms setToggle={setToggle} /> : null}
+      {toggle ? (
+        <Terms selectedTerm={selectedTerm} setToggle={setToggle} />
+      ) : null}
     </motion.div>
   );
 }
