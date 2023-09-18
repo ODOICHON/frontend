@@ -46,6 +46,14 @@ export default function TradeWritePage() {
   // const appendSpecialCategory = (category: string) => {};
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
 
+  const postCodeCallback = (fullAddress: string, zipCode?: string) => {
+    setForm((prev: TradeBoardForm) => ({
+      ...prev,
+      city: fullAddress,
+      zipCode: zipCode ?? '',
+    }));
+  };
+
   const onChangeForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -79,7 +87,10 @@ export default function TradeWritePage() {
       animate="mount"
     >
       {isPostcodeOpen && (
-        <AddressModal setForm={setForm} setIsPostcodeOpen={setIsPostcodeOpen} />
+        <AddressModal
+          callback={postCodeCallback}
+          setIsPostcodeOpen={setIsPostcodeOpen}
+        />
       )}
       <article className={styles.waringContainer}>
         <span>매물 등록</span>

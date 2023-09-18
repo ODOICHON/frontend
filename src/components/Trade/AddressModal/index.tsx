@@ -1,14 +1,14 @@
 import React from 'react';
-import DaumPostcodeEmbed from 'react-daum-postcode';
+import DaumPostcodeEmbed, { Address } from 'react-daum-postcode';
 import styles from './styles.module.scss';
 
 type AddressModalProps = {
-  setForm: React.Dispatch<React.SetStateAction<any>>;
+  callback: (fullAddress: string, zipCode?: string) => void;
   setIsPostcodeOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function AddressModal({ setForm, setIsPostcodeOpen }: AddressModalProps) {
-  const handleComplete = (data: any) => {
+function AddressModal({ callback, setIsPostcodeOpen }: AddressModalProps) {
+  const handleComplete = (data: Address) => {
     let fullAddress = data.address;
     let extraAddress = '';
 
@@ -22,11 +22,7 @@ function AddressModal({ setForm, setIsPostcodeOpen }: AddressModalProps) {
       }
       fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
     }
-    setForm((prev: any) => ({
-      ...prev,
-      city: fullAddress,
-      zipCode: data.zonecode,
-    }));
+    callback(fullAddress, data.zonecode);
     setIsPostcodeOpen((pre) => !pre);
   };
   return (
