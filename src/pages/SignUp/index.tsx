@@ -349,7 +349,7 @@ export default function SignUpPage() {
               className={styles.inputStyle}
               id="nick_name"
               type="text"
-              placeholder="20자 이하의 조합 "
+              placeholder="20자 이하의 조합"
               {...register('nick_name', {
                 required: '닉네임은 필수 입력입니다.',
                 pattern: {
