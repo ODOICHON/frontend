@@ -747,7 +747,7 @@ export default function AgentSignUpPage() {
             </span>
           </div>
           <p className={signUpStyles.errorMessage}>
-            {errors.age && errors.age.message}
+            {errors.estate && errors.estate.message}
           </p>
         </div>
         {/* 연령대 */}
