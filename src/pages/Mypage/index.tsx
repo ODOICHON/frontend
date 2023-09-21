@@ -1,16 +1,26 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Preparation from '@/components/Common/Preparation';
+import MyPageNavbar from '@/components/MyPage/MyPageNavbar';
 import userStore from '@/store/userStore';
 import { opacityVariants } from '@/constants/variants';
+import styles from './styles.module.scss';
 
 export default function MyPage() {
   const { token } = userStore();
 
   if (!token) return <Navigate to="/login" />;
   return (
-    <motion.div variants={opacityVariants} initial="initial" animate="mount">
-      <Preparation />
+    <motion.div
+      variants={opacityVariants}
+      initial="initial"
+      animate="mount"
+      className={styles.container}
+    >
+      <MyPageNavbar />
+      <div className={styles.contentContainer}>
+        <div className={styles.boundaryLine} />
+        <Outlet />
+      </div>
     </motion.div>
   );
 }
