@@ -16,8 +16,14 @@ import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 import signUpStyles from '../styles.module.scss';
 
+type AgentSignUpTerm =
+  | 'SERVICE_USED_AGREE'
+  | 'PERSONAL_INFO_NOTI'
+  | 'PERSONAL_INFO_USED_AGREE'
+  | 'MARKETING_ADVERTISEMENT_AGREE';
+
 type IForm = {
-  email: string;
+  userName: string;
   password: string;
   password_check: string;
   nick_name: string;
@@ -34,11 +40,13 @@ type IForm = {
   company_address: string;
   company_address_detail: string;
   company_email: string;
+  email_code: string;
   estate: string;
   service_term: boolean;
+  agent_term: boolean;
 };
 type ISubmitForm = {
-  email: string;
+  userName: string;
   password: string;
   nick_name: string;
   phone_num: string;
@@ -54,6 +62,7 @@ type ISubmitForm = {
   company_address_detail: string;
   company_email: string;
   estate: string;
+  terms: AgentSignUpTerm[];
 };
 
 export default function AgentSignUpPage() {
@@ -68,7 +77,12 @@ export default function AgentSignUpPage() {
   const [phoneSMSCheck, setPhoneSMSCheck] = useState(false); // 전화번호 인증 완료 상태
   const [phoneSMSMessage, setPhoneSMSMessage] = useState<string | undefined>(); // 전화번호 인증 완료 상태
   const [phoneErrMessage, setPhoneErrMessage] = useState<string | undefined>(); // 전화번호 에러 메세지
+  const [isCheckEmail, setIsCheckEmail] = useState(false); // 이메일 인증 중 상태
+  const [emailCheck, setEmailCheck] = useState(false); // 이메일 인증 완료 상태
+  const [emailMessage, setEmailMessage] = useState<string | undefined>(); // 이메일 인증 상태 메세지
+  const [emailErrMessage, setEmailErrMessage] = useState<string | undefined>(); // 이메일 에러 메세지
   const [isServiceTerm, setIsServiceTerm] = useState(false);
+  const [isAgentPrivacyTerm, setIsAgentPrivacyTerm] = useState(false);
   const [isPrivacyTerm, setIsPrivacyTerm] = useState(false);
   const [isMarketingTerm, setIsMarketingTerm] = useState(false);
   const [selectedTerm, setSelectedTerm] = useState<TermType>('');
@@ -79,13 +93,38 @@ export default function AgentSignUpPage() {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<IForm>();
+  } = useForm<IForm>({
+    mode: 'onSubmit',
+    defaultValues: {
+      userName: '',
+      password: '',
+      password_check: '',
+      nick_name: '',
+      phone_num: '',
+      phone_check: '',
+      age: '',
+      join_paths: [],
+      agent_code: '',
+      business_code: '',
+      company_name: '',
+      agent_name: '',
+      company_phone_num: '',
+      assistant_name: '',
+      company_address: '',
+      company_address_detail: '',
+      company_email: '',
+      email_code: '',
+      estate: '',
+      service_term: false,
+      agent_term: false,
+    },
+  });
 
-  const { mutate: idCheckAPI } = useMutation((email: string) =>
+  const { mutate: idCheckAPI } = useMutation((userName: string) =>
     restFetcher({
       method: 'POST',
-      path: '/users/check/email',
-      body: { email },
+      path: '/users/check/user-name',
+      body: { userName },
     }),
   );
   const { mutate: nicknameCheckAPI } = useMutation((nick_name: string) =>
@@ -109,6 +148,21 @@ export default function AgentSignUpPage() {
       body: { phone_num: watch('phone_num'), code: phone_check },
     }),
   );
+  const { mutate: emailSendAPI } = useMutation((email: string) =>
+    restFetcher({
+      method: 'POST',
+      path: '/users/send/email',
+      body: { email },
+    }),
+  );
+  const { mutate: emailCheckAPI } = useMutation(
+    (body: { email: string; code: string }) =>
+      restFetcher({
+        method: 'POST',
+        path: '/users/check/email',
+        body,
+      }),
+  );
   const { mutate: singUpAPI } = useMutation((form: ISubmitForm) =>
     restFetcher({
       method: 'POST',
@@ -126,7 +180,7 @@ export default function AgentSignUpPage() {
   ] = useCheckAPI(
     idCheckAPI,
     /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g,
-    watch('email'),
+    watch('userName'),
     '사용가능한 ID입니다.',
     '이미 존재하는 아이디 입니다.',
     '4~20자리/영문, 숫자, 특수문자’_’만 사용해주세요.',
@@ -186,6 +240,48 @@ export default function AgentSignUpPage() {
       },
     });
   };
+  const onSendEmail = () => {
+    if (
+      /^([\w\.\_\-])*[a-zA-Z0-9]+([\w\.\_\-])*([a-zA-Z0-9])+([\w\.\_\-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/g.test(
+        watch('company_email'),
+      ) === false
+    )
+      return;
+    emailSendAPI(watch('company_email'), {
+      onSuccess: (res) => {
+        if (!res) throw Error;
+        setEmailErrMessage(undefined);
+        setIsCheckEmail(true);
+      },
+      onError: () => {
+        setEmailErrMessage('이미 가입된 이메일입니다.');
+      },
+    });
+  };
+  const onCheckEmail = () => {
+    if (
+      /^([\w\.\_\-])*[a-zA-Z0-9]+([\w\.\_\-])*([a-zA-Z0-9])+([\w\.\_\-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/g.test(
+        watch('email_code'),
+      ) === false
+    ) {
+      setEmailCheck(false);
+      setEmailMessage('잘못된 인증코드입니다.');
+    }
+    emailCheckAPI(
+      { email: watch('company_email'), code: watch('email_code') },
+      {
+        onSuccess: (res) => {
+          if (res.data === true) {
+            setEmailCheck(true);
+            setEmailMessage('인증에 성공하셨습니다.');
+          } else if (res.data === false) {
+            setEmailCheck(false);
+            setEmailMessage('인증코드가 일치하지 않습니다.');
+          }
+        },
+      },
+    );
+  };
   const onChangeInput = (
     setCheckState: React.Dispatch<React.SetStateAction<boolean>>,
     setMessage: React.Dispatch<React.SetStateAction<string>>,
@@ -197,6 +293,15 @@ export default function AgentSignUpPage() {
 
   const postCodeCallback = (fullAddress: string) => {
     setValue('company_address', fullAddress);
+  };
+
+  const getTerms = () => {
+    const termsArr: AgentSignUpTerm[] = [];
+    if (isServiceTerm) termsArr.push('SERVICE_USED_AGREE');
+    if (isAgentPrivacyTerm) termsArr.push('PERSONAL_INFO_NOTI');
+    if (isPrivacyTerm) termsArr.push('PERSONAL_INFO_USED_AGREE');
+    if (isMarketingTerm) termsArr.push('MARKETING_ADVERTISEMENT_AGREE');
+    return termsArr;
   };
 
   const onSubmit = (data: IForm) => {
@@ -212,8 +317,12 @@ export default function AgentSignUpPage() {
       alert('전화번호 인증을 해주세요.');
       return;
     }
+    if (!emailCheck) {
+      alert('이메일 인증을 해주세요.');
+      return;
+    }
     const form: ISubmitForm = {
-      email: data.email,
+      userName: data.userName,
       password: data.password,
       nick_name: data.nick_name,
       phone_num: data.phone_num,
@@ -229,6 +338,7 @@ export default function AgentSignUpPage() {
       company_address_detail: data.company_address_detail,
       company_email: data.company_email,
       estate: data.estate,
+      terms: getTerms(),
     };
     singUpAPI(form, {
       onSuccess: () => {
@@ -240,13 +350,14 @@ export default function AgentSignUpPage() {
 
   const handleAllSelect = (isSelected: boolean) => {
     setIsServiceTerm(isSelected);
+    setIsAgentPrivacyTerm(isSelected);
     setIsPrivacyTerm(isSelected);
     setIsMarketingTerm(isSelected);
   };
 
   useEffect(() => {
     onChangeInput(setIdCheck, setIdCheckMessage, '아이디');
-  }, [watch('email')]);
+  }, [watch('userName')]);
   useEffect(() => {
     onChangeInput(setNicknameCheck, setNicknameCheckMessage, '닉네임');
   }, [watch('nick_name')]);
@@ -254,6 +365,10 @@ export default function AgentSignUpPage() {
     setPhoneSMSCheck(false);
     setPhoneSMSMessage('전화번호 인증을 해주세요.');
   }, [watch('phone_num')]);
+  useEffect(() => {
+    setEmailCheck(false);
+    setEmailMessage('이메일 인증을 해주세요.');
+  }, [watch('company_email')]);
 
   if (token) {
     return <Navigate to="/" />;
@@ -306,10 +421,13 @@ export default function AgentSignUpPage() {
               className={signUpStyles.inputStyle}
               id="agent_code"
               type="text"
-              placeholder="‘-’ 포함하여 작성 숫자 14자리"
+              placeholder="‘-’빼고 10자리 숫자 입력"
               {...register('agent_code', {
                 required: '필수 입력입니다.',
-                // TODO: 형식에 맞는 정규표현식 작성 후 패턴 등록하기
+                pattern: {
+                  value: /^\d{10}$/g,
+                  message: '‘-’빼고 10자리 숫자를 입력해주세요',
+                },
               })}
             />
           </div>
@@ -325,10 +443,13 @@ export default function AgentSignUpPage() {
               className={signUpStyles.inputStyle}
               id="business_code"
               type="text"
-              placeholder="‘-’ 포함하여 작성 숫자 10자리"
+              placeholder="‘-’빼고 14자리 숫자 입력"
               {...register('business_code', {
                 required: '필수 입력입니다.',
-                // TODO: 형식에 맞는 정규표현식 작성 후 패턴 등록하기
+                pattern: {
+                  value: /^\d{14}$/g,
+                  message: '‘-’빼고 14자리 숫자를 입력해주세요',
+                },
               })}
             />
           </div>
@@ -476,11 +597,67 @@ export default function AgentSignUpPage() {
                 },
               })}
             />
+            <button
+              type="button"
+              className={
+                /^([\w\.\_\-])*[a-zA-Z0-9]+([\w\.\_\-])*([a-zA-Z0-9])+([\w\.\_\-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/g.test(
+                  watch('company_email'),
+                )
+                  ? signUpStyles.buttonStyleActive
+                  : signUpStyles.buttonStyle
+              }
+              onClick={onSendEmail}
+            >
+              인증요청
+            </button>
           </div>
           <p className={signUpStyles.errorMessage}>
             {errors.company_email && errors.company_email.message}
+            {!errors.company_email && emailErrMessage && emailErrMessage}
           </p>
         </div>
+        {isCheckEmail && (
+          <div className={signUpStyles.inputContainer}>
+            <label htmlFor="email_code">인증코드</label>
+            <div className={signUpStyles.inputInline}>
+              <input
+                className={signUpStyles.inputStyle}
+                id="email_code"
+                type="text"
+                placeholder="인증코드 4자리"
+                {...register('email_code', {
+                  required: '이메일 인증을 해주세요.',
+                  pattern: {
+                    value: /^(?=.*[0-9])[0-9]{4}$/g,
+                    message: '인증코드 4자리를 입력해주세요.',
+                  },
+                })}
+              />
+              <button
+                type="button"
+                className={
+                  /^(?=.*[0-9])[0-9]{4}$/g.test(watch('email_code'))
+                    ? signUpStyles.buttonStyleActive
+                    : signUpStyles.buttonStyle
+                }
+                onClick={onCheckEmail}
+              >
+                확인
+              </button>
+            </div>
+            <p
+              className={
+                emailCheck
+                  ? signUpStyles.correctMessage
+                  : signUpStyles.errorMessage
+              }
+            >
+              {errors.email_code && errors.email_code.message}
+              {!errors.email_code && emailMessage && emailMessage}
+            </p>
+          </div>
+        )}
+
         <div
           className={signUpStyles.horizonLine}
           style={{ marginTop: '4rem', marginBottom: '5rem' }}
@@ -494,7 +671,7 @@ export default function AgentSignUpPage() {
               id="id"
               type="text"
               placeholder="4~20자리/영문, 숫자, 특수문자’_’사용가능"
-              {...register('email', {
+              {...register('userName', {
                 required: '아이디는 필수 입력입니다.',
                 pattern: {
                   value: /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g,
@@ -505,7 +682,7 @@ export default function AgentSignUpPage() {
             <button
               type="button"
               className={
-                /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g.test(watch('email'))
+                /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g.test(watch('userName'))
                   ? signUpStyles.buttonStyleActive
                   : signUpStyles.buttonStyle
               }
@@ -519,8 +696,8 @@ export default function AgentSignUpPage() {
               idCheck ? signUpStyles.correctMessage : signUpStyles.errorMessage
             }
           >
-            {errors.email && errors.email.message}
-            {!errors.email && idCheckMessage && idCheckMessage}
+            {errors.userName && errors.userName.message}
+            {!errors.userName && idCheckMessage && idCheckMessage}
           </p>
         </div>
         {/* 비밀번호 */}
@@ -933,13 +1110,26 @@ export default function AgentSignUpPage() {
                 type="checkbox"
                 onChange={() => {
                   handleAllSelect(
-                    !(isServiceTerm && isPrivacyTerm && isMarketingTerm),
+                    !(
+                      isServiceTerm &&
+                      isAgentPrivacyTerm &&
+                      isPrivacyTerm &&
+                      isMarketingTerm
+                    ),
                   );
                   setValue('service_term', !isServiceTerm, {
                     shouldValidate: true,
                   });
+                  setValue('agent_term', !isAgentPrivacyTerm, {
+                    shouldValidate: true,
+                  });
                 }}
-                checked={isServiceTerm && isPrivacyTerm && isMarketingTerm}
+                checked={
+                  isServiceTerm &&
+                  isAgentPrivacyTerm &&
+                  isPrivacyTerm &&
+                  isMarketingTerm
+                }
               />
               <label htmlFor="allSelect">전체동의</label>
             </span>
@@ -969,6 +1159,35 @@ export default function AgentSignUpPage() {
           </div>
           <p className={signUpStyles.errorMessage}>
             {errors.service_term && errors.service_term.message}
+          </p>
+
+          <div className={signUpStyles.termsContainer} style={{ gap: 0 }}>
+            <span>
+              <input
+                id="agent_term"
+                type="checkbox"
+                {...register('agent_term', {
+                  required: '필수 선택입니다.',
+                  onChange: () => {
+                    setIsAgentPrivacyTerm((prev) => !prev);
+                  },
+                })}
+                checked={isAgentPrivacyTerm}
+              />
+              <label htmlFor="agent_term">
+                공인중개사 식별 개인정보 수집 이용 동의(필수)
+              </label>
+            </span>
+            <button
+              className={signUpStyles.termsButton}
+              type="button"
+              onClick={() => onToggleClick('AGENT')}
+            >
+              약관보기 &gt;
+            </button>
+          </div>
+          <p className={signUpStyles.errorMessage}>
+            {errors.agent_term && errors.agent_term.message}
           </p>
 
           <div
