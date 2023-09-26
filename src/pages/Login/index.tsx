@@ -19,7 +19,7 @@ export default function LoginPage() {
   };
   const handleLogin = async () => {
     const form: LoginForm = {
-      email: id,
+      userName: id,
       password,
     };
     const response = await LoginAPI(form);

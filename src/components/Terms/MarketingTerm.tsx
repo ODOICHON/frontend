@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 
-export type MarketingTermProps = {
+type MarketingTermProps = {
   onToggleClick: () => void;
 };
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { TermType } from '@/types/signUp';
+import AgentTerm from './AgentTerm';
 import MarketingTerm from './MarketingTerm';
 import PrivacyTerm from './PrivacyTerm';
 import ServiceTerm from './ServiceTerm';
@@ -21,6 +22,7 @@ export default function Terms({ selectedTerm, setToggle }: TermsProps) {
       {selectedTerm === 'SERVICE' && (
         <ServiceTerm onToggleClick={onToggleClick} />
       )}
+      {selectedTerm === 'AGENT' && <AgentTerm onToggleClick={onToggleClick} />}
       {selectedTerm === 'PRIVACY' && (
         <PrivacyTerm onToggleClick={onToggleClick} />
       )}
