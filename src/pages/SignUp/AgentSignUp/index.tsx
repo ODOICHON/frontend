@@ -307,22 +307,22 @@ export default function AgentSignUpPage() {
   };
 
   const onSubmit = (data: IForm) => {
-    // if (!idCheck) {
-    //   alert('아이디 중복검사를 해주세요.');
-    //   return;
-    // }
-    // if (!nicknameCheck) {
-    //   alert('닉네임 중복검사를 해주세요.');
-    //   return;
-    // }
-    // if (!phoneSMSCheck) {
-    //   alert('전화번호 인증을 해주세요.');
-    //   return;
-    // }
-    // if (!emailCheck) {
-    //   alert('이메일 인증을 해주세요.');
-    //   return;
-    // }
+    if (!idCheck) {
+      alert('아이디 중복검사를 해주세요.');
+      return;
+    }
+    if (!nicknameCheck) {
+      alert('닉네임 중복검사를 해주세요.');
+      return;
+    }
+    if (!phoneSMSCheck) {
+      alert('전화번호 인증을 해주세요.');
+      return;
+    }
+    if (!emailCheck) {
+      alert('이메일 인증을 해주세요.');
+      return;
+    }
     const form: ISubmitForm = {
       userName: data.userName,
       password: data.password,
