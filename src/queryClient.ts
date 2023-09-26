@@ -50,6 +50,7 @@ export const restFetcher = async ({
     return res.data;
   } catch (err) {
     console.error(err);
+    return Promise.reject(err);
   }
 };
 

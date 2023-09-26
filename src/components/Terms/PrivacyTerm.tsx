@@ -1,6 +1,6 @@
 import styles from './styles.module.scss';
 
-export type PrivacyTermProps = {
+type PrivacyTermProps = {
   onToggleClick: () => void;
 };
 
@@ -19,7 +19,7 @@ export default function PrivacyTerm({ onToggleClick }: PrivacyTermProps) {
         </article>
         <article style={{ marginTop: '2rem' }}>
           <h1 className={styles.title}>3. 처리하는 개인정보 항목</h1>
-          <p>이름, 이메일 주소, 전화번호, 주거래 매물, 연령대</p>
+          <p>□ 이름, 이메일 주소, 전화번호, 주거래 매물, 연령대</p>
         </article>
         <p style={{ marginTop: '3rem', marginBottom: '3rem' }}>
           이는 주말내집이 제공하는 서비스를 보다 원활하게 이용하도록 하기 위해서

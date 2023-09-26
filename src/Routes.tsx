@@ -5,7 +5,7 @@ import GlobalLayout from '@/pages/_layout';
 const MainPage = lazy(() => import('@/pages/Main'));
 const LoginPage = lazy(() => import('@/pages/Login'));
 const SignUpPage = lazy(() => import('@/pages/SignUp'));
-const AgentSignUpPage = lazy(() => import('@/pages/AgentSignUp'));
+const AgentSignUpPage = lazy(() => import('@/pages/SignUp/AgentSignUp'));
 const MyPage = lazy(() => import('@/pages/Mypage'));
 const IntroducePage = lazy(() => import('@/pages/Introduce'));
 const IntroWritePage = lazy(() => import('@/pages/Introduce/Write'));

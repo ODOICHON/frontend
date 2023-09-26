@@ -1,1 +1,1 @@
-export type TermType = '' | 'SERVICE' | 'PRIVACY' | 'MARKETING';
+export type TermType = '' | 'SERVICE' | 'AGENT' | 'PRIVACY' | 'MARKETING';

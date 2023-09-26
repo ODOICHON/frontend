@@ -25,3 +25,21 @@
     padding-left: 5rem;
   }
 }
+.buttonWrapper {
+  display: flex;
+  gap: 1rem;
+}
+.button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 0;
+  cursor: pointer;
+}
+
+.divider {
+  width: 1px;
+  height: 100%;
+  background-color: white;
+}
