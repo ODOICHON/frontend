@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { motion } from 'framer-motion';
 import eyeImage from '@/assets/common/eye.svg';
 import eyeClosedImage from '@/assets/common/eyeClosed.svg';
@@ -10,50 +11,87 @@ import { restFetcher } from '@/queryClient';
 import Terms from '@/components/Terms';
 import userStore from '@/store/userStore';
 import useCheckAPI from '@/hooks/useCheckAPI';
+import { ApiResponseType } from '@/types/apiResponseType';
+import { TermType } from '@/types/signUp';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
+type SignUpTerm =
+  | 'SERVICE_USED_AGREE'
+  | 'PERSONAL_INFO_USED_AGREE'
+  | 'MARKETING_ADVERTISEMENT_AGREE';
+
 type IForm = {
+  userName: string;
   email: string;
+  email_code: string;
   password: string;
-  passwordCheck: string;
+  password_check: string;
   nick_name: string;
   phone_num: string;
   phone_check: string;
   age: string;
   join_paths: string[];
-  terms: boolean;
+  service_term: boolean;
 };
 type ISubmitForm = {
+  userName: string;
   email: string;
   password: string;
   nick_name: string;
   phone_num: string;
   age: string;
   join_paths: string[];
+  terms: SignUpTerm[];
 };
 
 export default function SignUpPage() {
+  const { token } = userStore();
+  const navigate = useNavigate();
+
+  const [toggle, setToggle] = useState(false); // 약관 토글
+  const [eyeState, setEyeState] = useState(false);
+  const [eyeCheckState, setEyeCheckState] = useState(false);
+  const [isCheckNum, setIsCheckNum] = useState(false); // 전화번호 인증 중 상태
+  const [phoneSMSCheck, setPhoneSMSCheck] = useState(false); // 전화번호 인증 완료 상태
+  const [phoneSMSMessage, setPhoneSMSMessage] = useState<string | undefined>(); // 전화번호 인증 상태 메세지
+  const [phoneErrMessage, setPhoneErrMessage] = useState<string | undefined>(); // 전화번호 에러 메세지
+  const [isCheckEmail, setIsCheckEmail] = useState(false); // 이메일 인증 중 상태
+  const [emailCheck, setEmailCheck] = useState(false); // 이메일 인증 완료 상태
+  const [emailMessage, setEmailMessage] = useState<string | undefined>(); // 이메일 인증 상태 메세지
+  const [emailErrMessage, setEmailErrMessage] = useState<string | undefined>(); // 이메일 에러 메세지
+  const [isServiceTerm, setIsServiceTerm] = useState(false);
+  const [isPrivacyTerm, setIsPrivacyTerm] = useState(false);
+  const [isMarketingTerm, setIsMarketingTerm] = useState(false);
+  const [selectedTerm, setSelectedTerm] = useState<TermType>('');
+
   const {
     register,
     watch,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<IForm>({
     mode: 'onSubmit',
     defaultValues: {
+      userName: '',
       email: '',
+      email_code: '',
       password: '',
-      passwordCheck: '',
+      password_check: '',
       nick_name: '',
       phone_num: '',
+      phone_check: '',
+      age: '',
+      join_paths: [],
+      service_term: false,
     },
   });
-  const { mutate: idCheckAPI } = useMutation((email: string) =>
+  const { mutate: idCheckAPI } = useMutation((userName: string) =>
     restFetcher({
       method: 'POST',
-      path: '/users/check/email',
-      body: { email },
+      path: '/users/check/user-name',
+      body: { userName },
     }),
   );
   const { mutate: nicknameCheckAPI } = useMutation((nick_name: string) =>
@@ -77,6 +115,21 @@ export default function SignUpPage() {
       body: { phone_num: watch('phone_num'), code: phone_check },
     }),
   );
+  const { mutate: emailSendAPI } = useMutation((email: string) =>
+    restFetcher({
+      method: 'POST',
+      path: '/users/send/email',
+      body: { email },
+    }),
+  );
+  const { mutate: emailCheckAPI } = useMutation(
+    (body: { email: string; code: string }) =>
+      restFetcher({
+        method: 'POST',
+        path: '/users/check/email',
+        body,
+      }),
+  );
   const { mutate: singUpAPI } = useMutation((form: ISubmitForm) =>
     restFetcher({
       method: 'POST',
@@ -84,15 +137,7 @@ export default function SignUpPage() {
       body: form,
     }),
   );
-  const navigate = useNavigate();
-  const { token } = userStore();
-  const [toggle, setToggle] = useState(false); // 약관 토글
-  const [eyeState, setEyeState] = useState(false);
-  const [eyeCheckState, setEyeCheckState] = useState(false);
-  const [isCheckNum, setIsCheckNum] = useState(false); // 전화번호 인증 중 상태
-  const [phoneSMSCheck, setPhoneSMSCheck] = useState(false); // 전화번호 인증 완료 상태
-  const [phoneSMSMessage, setPhoneSMSMessage] = useState<string | undefined>(); // 전화번호 인증 완료 상태
-  const [phoneErrMessage, setPhoneErrMessage] = useState<string | undefined>(); // 전화번호 에러 메세지
+
   const [
     idCheck,
     idCheckMessage,
@@ -102,7 +147,7 @@ export default function SignUpPage() {
   ] = useCheckAPI(
     idCheckAPI,
     /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g,
-    watch('email'),
+    watch('userName'),
     '사용가능한 ID입니다.',
     '이미 존재하는 아이디 입니다.',
     '4~20자리/영문, 숫자, 특수문자’_’만 사용해주세요.',
@@ -121,10 +166,11 @@ export default function SignUpPage() {
     '이미 존재하는 닉네임 입니다.',
     '닉네임 형식에 맞지 않습니다.',
   );
-  const onToggleClick = () => {
+  const onToggleClick = (term: TermType) => {
     const bodyEl = document.querySelector('body');
     bodyEl?.classList.add('over_hidden');
     setToggle(true);
+    setSelectedTerm(term);
   };
   const onEyeClick = (e: React.MouseEvent<HTMLImageElement>) => {
     if (e.currentTarget.id === 'passwordEye') setEyeState((prev) => !prev);
@@ -161,6 +207,48 @@ export default function SignUpPage() {
       },
     });
   };
+  const onSendEmail = () => {
+    if (
+      /^([\w\.\_\-])*[a-zA-Z0-9]+([\w\.\_\-])*([a-zA-Z0-9])+([\w\.\_\-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/g.test(
+        watch('email'),
+      ) === false
+    )
+      return;
+    emailSendAPI(watch('email'), {
+      onSuccess: (res) => {
+        if (!res) throw Error;
+        setEmailErrMessage(undefined);
+        setIsCheckEmail(true);
+      },
+      onError: () => {
+        setEmailErrMessage('이미 가입된 이메일입니다.');
+      },
+    });
+  };
+  const onCheckEmail = () => {
+    if (
+      /^([\w\.\_\-])*[a-zA-Z0-9]+([\w\.\_\-])*([a-zA-Z0-9])+([\w\.\_\-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/g.test(
+        watch('email_code'),
+      ) === false
+    ) {
+      setEmailCheck(false);
+      setEmailMessage('잘못된 인증코드입니다.');
+    }
+    emailCheckAPI(
+      { email: watch('email'), code: watch('email_code') },
+      {
+        onSuccess: (res) => {
+          if (res.data === true) {
+            setEmailCheck(true);
+            setEmailMessage('인증에 성공하셨습니다.');
+          } else if (res.data === false) {
+            setEmailCheck(false);
+            setEmailMessage('인증코드가 일치하지 않습니다.');
+          }
+        },
+      },
+    );
+  };
   const onChangeInput = (
     setCheckState: React.Dispatch<React.SetStateAction<boolean>>,
     setMessage: React.Dispatch<React.SetStateAction<string>>,
@@ -168,6 +256,13 @@ export default function SignUpPage() {
   ) => {
     setCheckState(false);
     setMessage(`${feild} 중복검사를 해주세요`);
+  };
+  const getTerms = () => {
+    const termsArr: SignUpTerm[] = [];
+    if (isServiceTerm) termsArr.push('SERVICE_USED_AGREE');
+    if (isPrivacyTerm) termsArr.push('PERSONAL_INFO_USED_AGREE');
+    if (isMarketingTerm) termsArr.push('MARKETING_ADVERTISEMENT_AGREE');
+    return termsArr;
   };
   const onSubmit = (data: IForm) => {
     if (!idCheck) {
@@ -182,26 +277,42 @@ export default function SignUpPage() {
       alert('전화번호 인증을 해주세요.');
       return;
     }
+    if (!emailCheck) {
+      alert('이메일 인증을 해주세요.');
+      return;
+    }
     singUpAPI(
       {
+        userName: data.userName,
         email: data.email,
         password: data.password,
         nick_name: data.nick_name,
         phone_num: data.phone_num,
         age: data.age,
         join_paths: data.join_paths,
+        terms: getTerms(),
       },
       {
         onSuccess: () => {
           alert('회원가입에 성공하였습니다.');
           navigate('/login');
         },
+        onError: (err) => {
+          const error = err as AxiosError<ApiResponseType>;
+          alert(error.response?.data.message);
+        },
       },
     );
   };
+  const handleAllSelect = (isSelected: boolean) => {
+    setIsServiceTerm(isSelected);
+    setIsPrivacyTerm(isSelected);
+    setIsMarketingTerm(isSelected);
+  };
+
   useEffect(() => {
     onChangeInput(setIdCheck, setIdCheckMessage, '아이디');
-  }, [watch('email')]);
+  }, [watch('userName')]);
   useEffect(() => {
     onChangeInput(setNicknameCheck, setNicknameCheckMessage, '닉네임');
   }, [watch('nick_name')]);
@@ -209,6 +320,10 @@ export default function SignUpPage() {
     setPhoneSMSCheck(false);
     setPhoneSMSMessage('전화번호 인증을 해주세요.');
   }, [watch('phone_num')]);
+  useEffect(() => {
+    setEmailCheck(false);
+    setEmailMessage('이메일 인증을 해주세요.');
+  }, [watch('email')]);
 
   if (token) {
     return <Navigate to="/" />;
@@ -221,16 +336,29 @@ export default function SignUpPage() {
       className={styles.container}
     >
       <img className={styles.logo} src={logoImage} alt="로고" />
+      <span className={styles.agentSingUp}>
+        <h3>
+          <strong>공인중개사</strong> 회원이신가요?
+        </h3>
+        <button
+          className={styles.termsButton}
+          type="button"
+          onClick={() => navigate('/agentSignup')}
+        >
+          <p>공인중개사 회원가입</p> &gt;
+        </button>
+      </span>
       <form className={styles.formContent}>
+        {/* 아이디 */}
         <div className={styles.inputContainer}>
-          <label htmlFor="email">아이디</label>
+          <label htmlFor="userName">아이디</label>
           <div className={styles.inputInline}>
             <input
               className={styles.inputStyle}
-              id="email"
+              id="userName"
               type="text"
               placeholder="4~20자리/영문, 숫자, 특수문자’_’사용가능"
-              {...register('email', {
+              {...register('userName', {
                 required: '아이디는 필수 입력입니다.',
                 pattern: {
                   value: /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g,
@@ -241,7 +369,7 @@ export default function SignUpPage() {
             <button
               type="button"
               className={
-                /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g.test(watch('email'))
+                /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g.test(watch('userName'))
                   ? styles.buttonStyleActive
                   : styles.buttonStyle
               }
@@ -251,10 +379,11 @@ export default function SignUpPage() {
             </button>
           </div>
           <p className={idCheck ? styles.correctMessage : styles.errorMessage}>
-            {errors.email && errors.email.message}
-            {!errors.email && idCheckMessage && idCheckMessage}
+            {errors.userName && errors.userName.message}
+            {!errors.userName && idCheckMessage && idCheckMessage}
           </p>
         </div>
+        {/* 비밀번호 */}
         <div className={styles.inputContainer}>
           <label htmlFor="password">비밀번호</label>
           <input
@@ -286,14 +415,15 @@ export default function SignUpPage() {
             {errors.password && errors.password.message}
           </p>
         </div>
+        {/* 비밀번호 확인 */}
         <div className={styles.inputContainer}>
-          <label htmlFor="passwordCheck">비밀번호 확인</label>
+          <label htmlFor="password_check">비밀번호 확인</label>
           <input
             className={styles.inputStyle}
-            id="passwordCheck"
+            id="password_check"
             type={eyeCheckState ? 'text' : 'password'}
             placeholder="8~16자리/영문 대소문자, 숫자, 특수문자 조합"
-            {...register('passwordCheck', {
+            {...register('password_check', {
               required: '비밀번호를 확인해주세요.',
               validate: (val: string) => {
                 if (watch('password') !== val) {
@@ -302,10 +432,10 @@ export default function SignUpPage() {
               },
             })}
           />
-          {watch('passwordCheck') !== '' && (
+          {watch('password_check') !== '' && (
             <img
               role="presentation"
-              id="passwordCheckEye"
+              id="password_checkEye"
               className={styles.eyeImage}
               src={eyeCheckState ? eyeClosedImage : eyeImage}
               onClick={onEyeClick}
@@ -313,9 +443,10 @@ export default function SignUpPage() {
             />
           )}
           <p className={styles.errorMessage}>
-            {errors.passwordCheck && errors.passwordCheck.message}
+            {errors.password_check && errors.password_check.message}
           </p>
         </div>
+        {/* 닉네임 */}
         <div className={styles.inputContainer}>
           <label htmlFor="nick_name">닉네임</label>
           <div className={styles.inputInline}>
@@ -323,7 +454,7 @@ export default function SignUpPage() {
               className={styles.inputStyle}
               id="nick_name"
               type="text"
-              placeholder="20자 이하의 조합 "
+              placeholder="20자 이하의 조합"
               {...register('nick_name', {
                 required: '닉네임은 필수 입력입니다.',
                 pattern: {
@@ -355,6 +486,7 @@ export default function SignUpPage() {
             {!errors.nick_name && nicknameCheckMessage && nicknameCheckMessage}
           </p>
         </div>
+        {/* 전화번호 */}
         <div className={styles.inputContainer}>
           <label htmlFor="phone_num">휴대폰</label>
           <div className={styles.inputInline}>
@@ -385,9 +517,10 @@ export default function SignUpPage() {
           </div>
           <p className={styles.errorMessage}>
             {errors.phone_num && errors.phone_num.message}
-            {!errors.phone_num && phoneErrMessage && phoneErrMessage}
+            {!errors.phone_num && phoneErrMessage}
           </p>
         </div>
+        {/* 전화번호 인증 */}
         {isCheckNum && (
           <div className={styles.inputContainer}>
             <label htmlFor="phone_num">인증번호</label>
@@ -427,6 +560,85 @@ export default function SignUpPage() {
             </p>
           </div>
         )}
+        {/* 이메일 */}
+        <div className={styles.inputContainer}>
+          <label htmlFor="email">이메일</label>
+          <div className={styles.inputInline}>
+            <input
+              className={styles.inputStyle}
+              id="email"
+              type="email"
+              placeholder="@ 이후 포함 전체 이메일 작성/본인 명의 이메일"
+              {...register('email', {
+                required: '이메일을 입력해주세요.',
+                pattern: {
+                  value:
+                    /^([\w\.\_\-])*[a-zA-Z0-9]+([\w\.\_\-])*([a-zA-Z0-9])+([\w\.\_\-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/g,
+                  message: `@ 포함 유효한 이메일을 작성해 주세요.`,
+                },
+              })}
+            />
+            <button
+              type="button"
+              className={
+                /^([\w\.\_\-])*[a-zA-Z0-9]+([\w\.\_\-])*([a-zA-Z0-9])+([\w\.\_\-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/g.test(
+                  watch('email'),
+                )
+                  ? styles.buttonStyleActive
+                  : styles.buttonStyle
+              }
+              onClick={onSendEmail}
+            >
+              인증요청
+            </button>
+          </div>
+          <p className={styles.errorMessage}>
+            {errors.email && errors.email.message}
+            {!errors.email && emailErrMessage && emailErrMessage}
+          </p>
+        </div>
+        {/* 이메일 인증 */}
+        {isCheckEmail && (
+          <div className={styles.inputContainer}>
+            <label htmlFor="email_code">인증코드</label>
+            <div className={styles.inputInline}>
+              <input
+                className={styles.inputStyle}
+                id="email_code"
+                type="text"
+                placeholder="인증코드 4자리"
+                {...register('email_code', {
+                  required: '이메일 인증을 해주세요.',
+                  pattern: {
+                    value: /^(?=.*[0-9])[0-9]{4}$/g,
+                    message: '인증코드 4자리를 입력해주세요.',
+                  },
+                })}
+              />
+              <button
+                type="button"
+                className={
+                  /^(?=.*[0-9])[0-9]{4}$/g.test(watch('email_code'))
+                    ? styles.buttonStyleActive
+                    : styles.buttonStyle
+                }
+                onClick={onCheckEmail}
+              >
+                확인
+              </button>
+            </div>
+            <p
+              className={
+                emailCheck ? styles.correctMessage : styles.errorMessage
+              }
+            >
+              {errors.email_code && errors.email_code.message}
+              {!errors.email_code && emailMessage && emailMessage}
+            </p>
+          </div>
+        )}
+
+        {/* 연령대 */}
         <div className={styles.inputContainer}>
           <label>연령대</label>
           <div className={styles.boxContainer}>
@@ -471,6 +683,7 @@ export default function SignUpPage() {
             {errors.age && errors.age.message}
           </p>
         </div>
+        {/* 가입경로 */}
         <div className={styles.inputContainer}>
           <label>가입경로(복수선택 가능)</label>
           <div className={styles.boxContainer}>
@@ -554,29 +767,100 @@ export default function SignUpPage() {
           </p>
         </div>
         <div className={styles.horizonLine} />
+        {/* 약관 */}
         <div className={styles.inputContainer}>
-          <label>약관</label>
+          <div className={styles.inputContainerTitle}>
+            <label>약관</label>
+            <span>
+              <input
+                id="allSelect"
+                type="checkbox"
+                onChange={() => {
+                  handleAllSelect(
+                    !(isServiceTerm && isPrivacyTerm && isMarketingTerm),
+                  );
+                  setValue('service_term', !isServiceTerm, {
+                    shouldValidate: true,
+                  });
+                }}
+                checked={isServiceTerm && isPrivacyTerm && isMarketingTerm}
+              />
+              <label htmlFor="allSelect">전체동의</label>
+            </span>
+          </div>
           <div className={styles.termsContainer}>
             <span>
               <input
-                id="terms"
+                id="service_term"
                 type="checkbox"
-                {...register('terms', { required: '필수 선택입니다.' })}
+                {...register('service_term', {
+                  required: '필수 선택입니다.',
+                  onChange: () => {
+                    setIsServiceTerm((prev) => !prev);
+                  },
+                })}
+                checked={isServiceTerm}
               />
-              <label htmlFor="terms">서비스 이용약관에 동의(필수)</label>
+              <label htmlFor="service_term">서비스 이용약관에 동의(필수)</label>
             </span>
             <button
               className={styles.termsButton}
               type="button"
-              onClick={onToggleClick}
+              onClick={() => onToggleClick('SERVICE')}
             >
               약관보기 &gt;
             </button>
           </div>
           <p className={styles.errorMessage}>
-            {errors.terms && errors.terms.message}
+            {errors.service_term && errors.service_term.message}
           </p>
+
+          <div
+            className={styles.termsContainer}
+            style={{ marginBottom: '1.7rem' }}
+          >
+            <span>
+              <input
+                id="privacy_term"
+                type="checkbox"
+                checked={isPrivacyTerm}
+                onChange={() => setIsPrivacyTerm((prev) => !prev)}
+              />
+              <label htmlFor="privacy_term">
+                개인정보 수집 및 이용 동의(선택)
+              </label>
+            </span>
+            <button
+              className={styles.termsButton}
+              type="button"
+              onClick={() => onToggleClick('PRIVACY')}
+            >
+              약관보기 &gt;
+            </button>
+          </div>
+
+          <div className={styles.termsContainer}>
+            <span>
+              <input
+                id="marketing_term"
+                type="checkbox"
+                checked={isMarketingTerm}
+                onChange={() => setIsMarketingTerm((prev) => !prev)}
+              />
+              <label htmlFor="marketing_term">
+                마켓팅 활용 및 광고성 정보 수신 동의(선택)
+              </label>
+            </span>
+            <button
+              className={styles.termsButton}
+              type="button"
+              onClick={() => onToggleClick('MARKETING')}
+            >
+              약관보기 &gt;
+            </button>
+          </div>
         </div>
+
         <button
           type="button"
           className={styles.signUpButton}
@@ -585,7 +869,9 @@ export default function SignUpPage() {
           회원가입
         </button>
       </form>
-      {toggle ? <Terms setToggle={setToggle} /> : null}
+      {toggle ? (
+        <Terms selectedTerm={selectedTerm} setToggle={setToggle} />
+      ) : null}
     </motion.div>
   );
 }
