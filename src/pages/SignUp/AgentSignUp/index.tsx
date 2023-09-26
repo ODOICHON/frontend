@@ -166,7 +166,7 @@ export default function AgentSignUpPage() {
   const { mutate: singUpAPI } = useMutation((form: ISubmitForm) =>
     restFetcher({
       method: 'POST',
-      path: '/users/sign-up',
+      path: '/agents/sign-up',
       body: form,
     }),
   );
@@ -342,7 +342,9 @@ export default function AgentSignUpPage() {
     };
     singUpAPI(form, {
       onSuccess: () => {
-        alert('회원가입에 성공하였습니다.');
+        alert(
+          '회원가입에 성공하였습니다.\n공인중개사 회원은 관리자 승인 이후에 로그인이 가능합니다.',
+        );
         navigate('/login');
       },
     });
