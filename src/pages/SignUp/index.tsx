@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { motion } from 'framer-motion';
 import eyeImage from '@/assets/common/eye.svg';
 import eyeClosedImage from '@/assets/common/eyeClosed.svg';
@@ -10,6 +11,7 @@ import { restFetcher } from '@/queryClient';
 import Terms from '@/components/Terms';
 import userStore from '@/store/userStore';
 import useCheckAPI from '@/hooks/useCheckAPI';
+import { ApiResponseType } from '@/types/apiResponseType';
 import { TermType } from '@/types/signUp';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
@@ -294,6 +296,10 @@ export default function SignUpPage() {
         onSuccess: () => {
           alert('회원가입에 성공하였습니다.');
           navigate('/login');
+        },
+        onError: (err) => {
+          const error = err as AxiosError<ApiResponseType>;
+          alert(error.response?.data.message);
         },
       },
     );

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { motion } from 'framer-motion';
 import eyeImage from '@/assets/common/eye.svg';
 import eyeClosedImage from '@/assets/common/eyeClosed.svg';
@@ -11,6 +12,7 @@ import { restFetcher } from '@/queryClient';
 import Terms from '@/components/Terms';
 import userStore from '@/store/userStore';
 import useCheckAPI from '@/hooks/useCheckAPI';
+import { ApiResponseType } from '@/types/apiResponseType';
 import { TermType } from '@/types/signUp';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
@@ -305,22 +307,22 @@ export default function AgentSignUpPage() {
   };
 
   const onSubmit = (data: IForm) => {
-    if (!idCheck) {
-      alert('아이디 중복검사를 해주세요.');
-      return;
-    }
-    if (!nicknameCheck) {
-      alert('닉네임 중복검사를 해주세요.');
-      return;
-    }
-    if (!phoneSMSCheck) {
-      alert('전화번호 인증을 해주세요.');
-      return;
-    }
-    if (!emailCheck) {
-      alert('이메일 인증을 해주세요.');
-      return;
-    }
+    // if (!idCheck) {
+    //   alert('아이디 중복검사를 해주세요.');
+    //   return;
+    // }
+    // if (!nicknameCheck) {
+    //   alert('닉네임 중복검사를 해주세요.');
+    //   return;
+    // }
+    // if (!phoneSMSCheck) {
+    //   alert('전화번호 인증을 해주세요.');
+    //   return;
+    // }
+    // if (!emailCheck) {
+    //   alert('이메일 인증을 해주세요.');
+    //   return;
+    // }
     const form: ISubmitForm = {
       userName: data.userName,
       password: data.password,
@@ -346,6 +348,10 @@ export default function AgentSignUpPage() {
           '회원가입에 성공하였습니다.\n공인중개사 회원은 관리자 승인 이후에 로그인이 가능합니다.',
         );
         navigate('/login');
+      },
+      onError: (err) => {
+        const error = err as AxiosError<ApiResponseType>;
+        alert(error.response?.data.message);
       },
     });
   };
