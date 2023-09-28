@@ -30,7 +30,44 @@ export const routes: RouteObject[] = [
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignUpPage /> },
       { path: 'agentSignup', element: <AgentSignUpPage /> },
-      { path: 'mypage', element: <MyPage /> },
+      {
+        path: 'mypage',
+        element: <MyPage />,
+        children: [
+          {
+            path: 'home',
+            element: <div>homepage</div>,
+          },
+          {
+            path: 'trade/myself',
+            element: <div>myself</div>,
+          },
+          {
+            path: 'trade/save',
+            element: <div>save</div>,
+          },
+          {
+            path: 'trade/scrap',
+            element: <div>scrap</div>,
+          },
+          {
+            path: 'community/write',
+            element: <div>write</div>,
+          },
+          {
+            path: 'community/comment',
+            element: <div>comment</div>,
+          },
+          {
+            path: 'community/like',
+            element: <div>like</div>,
+          },
+          {
+            path: 'setting',
+            element: <div>setting</div>,
+          },
+        ],
+      },
       { path: 'introduce', element: <IntroducePage /> },
       { path: 'intro_write', element: <IntroWritePage /> },
       { path: 'intro_board/:id', element: <IntroBoardPage /> },

@@ -1,0 +1,42 @@
+.ulContainer {
+  color: #878d91;
+  font-family: Pretendard;
+  font-size: 1.375rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  width: 16.5rem;
+}
+
+.menuItem {
+  color: inherit;
+  display: flex;
+  height: 3.125rem;
+  align-items: center;
+  & > span:first-child {
+    margin-right: 1rem;
+  }
+  & > span:nth-child(2) {
+    margin-right: auto;
+  }
+}
+
+.menuSubItem {
+  display: flex;
+  align-items: center;
+  height: 3.125rem;
+  & > a:first-child {
+    margin-left: 2.3rem;
+  }
+}
+
+.selectMenu {
+  color: var(--main-color);
+}
+
+.selectSubMenu {
+  color: var(--main-color);
+  background: rgba(248, 177, 152, 0.21);
+}
