@@ -7,6 +7,7 @@ const LoginPage = lazy(() => import('@/pages/Login'));
 const SignUpPage = lazy(() => import('@/pages/SignUp'));
 const AgentSignUpPage = lazy(() => import('@/pages/SignUp/AgentSignUp'));
 const MyPage = lazy(() => import('@/pages/Mypage'));
+const MyPageHome = lazy(() => import('@/pages/Mypage/home'));
 const IntroducePage = lazy(() => import('@/pages/Introduce'));
 const IntroWritePage = lazy(() => import('@/pages/Introduce/Write'));
 const IntroBoardPage = lazy(() => import('@/pages/Introduce/Board'));
@@ -20,7 +21,6 @@ const TradeBoardPage = lazy(() => import('@/pages/Trade/Board'));
 const TradeWritePage = lazy(() => import('@/pages/Trade/Write'));
 const TradeProcessPage = lazy(() => import('@/pages/Trade/Process'));
 const NotFoundPage = lazy(() => import('@/pages/NotFound'));
-
 export const routes: RouteObject[] = [
   {
     path: '/',
@@ -36,7 +36,7 @@ export const routes: RouteObject[] = [
         children: [
           {
             path: 'home',
-            element: <div>homepage</div>,
+            element: <MyPageHome />,
           },
           {
             path: 'trade/myself',
