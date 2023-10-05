@@ -2,6 +2,8 @@ import { Link, Navigate, useLocation } from 'react-router-dom';
 import { AiOutlineHome } from 'react-icons/ai';
 import { FiMap, FiMessageSquare, FiSettings } from 'react-icons/fi';
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from 'react-icons/md';
+import { AnimatePresence, motion } from 'framer-motion';
+import { myPageMenuVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 type NavListType = {
@@ -83,31 +85,36 @@ function MyPageNavbar() {
   if (location.pathname === '/mypage') return <Navigate to="/mypage/home" />;
 
   return (
-    <div>
-      <ul className={styles.ulContainer}>
-        {navList.map((nav, index) => (
-          <li key={index}>
-            <Link
-              to={nav.path}
-              className={[
-                location.pathname.includes(nav.path.split('/')[2])
-                  ? styles.selectMenu
-                  : undefined,
-                styles.menuItem,
-              ].join(' ')}
-            >
-              <span>{nav.icon}</span>
-              <span>{nav.title}</span>
-              {nav.path
-                .split('/')
-                .includes(location.pathname.split('/').at(-1) ?? 'nothing')
-                ? nav.arrowUp
-                : nav.arrowDown}
-            </Link>
+    <ul className={styles.ulContainer}>
+      {navList.map((nav, index) => (
+        <li key={index}>
+          <Link
+            to={nav.path}
+            className={[
+              location.pathname.includes(nav.path.split('/')[2])
+                ? styles.selectMenu
+                : undefined,
+              styles.menuItem,
+            ].join(' ')}
+          >
+            <span>{nav.icon}</span>
+            <span>{nav.title}</span>
+            {nav.path
+              .split('/')
+              .includes(location.pathname.split('/').at(-1) ?? 'nothing')
+              ? nav.arrowUp
+              : nav.arrowDown}
+          </Link>
+          <AnimatePresence>
             {nav.path
               .split('/')
               .includes(location.pathname.split('/')[2] ?? 'nothing') && (
-              <ul>
+              <motion.ul
+                variants={myPageMenuVariants}
+                initial="initial"
+                animate="visiable"
+                exit="exit"
+              >
                 {nav.subList.map((sub, i) => (
                   <li
                     key={i}
@@ -123,12 +130,12 @@ function MyPageNavbar() {
                     </Link>
                   </li>
                 ))}
-              </ul>
+              </motion.ul>
             )}
-          </li>
-        ))}
-      </ul>
-    </div>
+          </AnimatePresence>
+        </li>
+      ))}
+    </ul>
   );
 }
 
