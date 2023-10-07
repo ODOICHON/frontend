@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Loading from '@/components/Common/Loading';
@@ -24,10 +29,13 @@ export default function CommunityBoardPage() {
   const { category } = useParams();
   const navigate = useNavigate();
   const { token } = userStore();
+  const { state } = useLocation();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [focusedCategory, setFocusedCategory] = useState('ALL');
-  const [focusedFilter, setFocusedFilter] = useState('RECENT');
+  const [focusedFilter, setFocusedFilter] = useState(
+    state?.location ? 'POPULAR' : 'RECENT',
+  );
   const [search, handleSearch, setSearch] = useInput('');
 
   const queryClient = useQueryClient();

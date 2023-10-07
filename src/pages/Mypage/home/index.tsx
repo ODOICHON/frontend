@@ -28,7 +28,7 @@ function MyPageHome() {
     restFetcher({
       method: 'GET',
       path: 'boards/my',
-      params: { page: 0 },
+      params: { page: 0, limit: 3 },
     }),
   );
 
@@ -113,7 +113,7 @@ function MyPageHome() {
         {myScrapBoardListData &&
         myScrapBoardListData.data.content.length > 0 ? (
           <ul className={styles.boardWrapper}>
-            {myScrapBoardListData.data.content.map((content) => (
+            {myScrapBoardListData.data.content.slice(0, 2).map((content) => (
               <TradeBoard
                 key={content.houseId}
                 houseId={content.houseId}
@@ -138,8 +138,8 @@ function MyPageHome() {
       <article>
         <div className={styles.titleContainer}>
           <span className={styles.title}>이번주 인기 게시글</span>
-          {/* TODO: 인기 게시글로 이동시키기 */}
-          <Link to="/community/free_board">
+          {/* TODO: location으로 넘겨서 조건 처리로 우선 적용 ( 고민중 ) */}
+          <Link to="/community/free_board" state={{ location: '/mypage/home' }}>
             더보러가기 <MdOutlineArrowForwardIos />
           </Link>
         </div>
