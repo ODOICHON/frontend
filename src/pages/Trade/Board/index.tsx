@@ -158,7 +158,7 @@ export default function TradeBoardPage() {
               navigate('/trade/process');
             }}
           >
-            중계 프로세스 확인하기
+            중개 프로세스 확인하기
           </button>
         </section>
       </section>
