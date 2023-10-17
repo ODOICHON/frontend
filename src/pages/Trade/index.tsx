@@ -89,7 +89,7 @@ export default function TradePage() {
     >
       <section className={styles.titleContainer}>
         <div className={styles.title}>
-          <h1>빈집중개</h1>
+          <h1>빈집거래</h1>
           <pre>
             {`자신의 빈집을 등록하거나 다양한 지역의
 빈집을 구경할 수 있는 공간입니다.`}

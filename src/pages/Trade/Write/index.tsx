@@ -97,7 +97,7 @@ export default function TradeWritePage() {
         <p>주의사항</p>
         <ul>
           <li>
-            일반 회원은 매물 신청 후 관리자의 승인 이후 빈집중개 게시물 내
+            일반 회원은 매물 신청 후 관리자의 승인 이후 빈집거래 게시물 내
             반영됩니다.
           </li>
           <li>
