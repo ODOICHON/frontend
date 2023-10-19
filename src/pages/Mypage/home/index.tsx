@@ -81,7 +81,7 @@ function MyPageHome() {
     <section className={styles.container}>
       <article>
         <div className={styles.titleContainer}>
-          <span>{user?.nick_name}님의 마이페이지</span>
+          <h1>{user?.nick_name}님의 마이페이지</h1>
         </div>
         <ul className={styles.cardWrapper}>
           <MyHomeCard
@@ -104,7 +104,7 @@ function MyPageHome() {
 
       <article>
         <div className={styles.titleContainer}>
-          <span className={styles.title}>스크랩한 글</span>
+          <h2>스크랩한 글</h2>
           <Link to="/mypage/trade/scrap">
             더보기
             <MdOutlineArrowForwardIos />
@@ -131,13 +131,13 @@ function MyPageHome() {
             ))}
           </ul>
         ) : (
-          <NoPosts />
+          <NoPosts text="스크랩한 공고가 없어요." padding={false} />
         )}
       </article>
 
       <article>
         <div className={styles.titleContainer}>
-          <span className={styles.title}>이번주 인기 게시글</span>
+          <h2>이번주 인기 게시글</h2>
           {/* TODO: location으로 넘겨서 조건 처리로 우선 적용 ( 고민중 ) */}
           <Link to="/community/free_board" state={{ location: '/mypage/home' }}>
             더보러가기 <MdOutlineArrowForwardIos />
@@ -158,7 +158,11 @@ function MyPageHome() {
             ))}
           </ul>
         ) : (
-          <NoPosts />
+          <NoPosts
+            text="아직은 글이 없어요."
+            subText="글을 작성해서 자유롭게 오도이촌 이야기를 해보아요!"
+            padding={false}
+          />
         )}
       </article>
     </section>

@@ -132,7 +132,7 @@ export default function TradePage() {
             ))}
           </ul>
         ) : (
-          <NoPosts />
+          <NoPosts text="아직은 글이 없어요." />
         )}
         <button
           className={styles.writeButton}

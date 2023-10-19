@@ -192,7 +192,14 @@ export default function CommunityBoardPage() {
               />
             ))
           ) : (
-            <NoPosts />
+            <NoPosts
+              text="아직은 글이 없어요."
+              subText={
+                category === 'free_board'
+                  ? '글을 작성해서 자유롭게 오도이촌 이야기를 해보아요!'
+                  : '오도이촌에 필요한 업체를 소개해보세요. '
+              }
+            />
           )}
         </ul>
         <button

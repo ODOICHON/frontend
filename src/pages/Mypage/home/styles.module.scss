@@ -29,18 +29,23 @@
   width: 100%;
   margin-bottom: 3rem;
 
-  & > span {
+  & > h1 {
     font-style: 'NanumSquareAcB';
     font-weight: 700;
-    font-size: 2.5rem;
-
+    font-size: 2.25rem;
+    color: #000000;
+  }
+  & > h2 {
+    font-style: 'NanumSquareAcB';
+    font-weight: 700;
+    font-size: 1.75rem;
     color: #000000;
   }
 
   & > a {
     display: flex;
     font-style: 'NanumSquareAcB';
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: #9f9a9a;
     margin-left: auto;
   }
