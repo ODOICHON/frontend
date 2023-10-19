@@ -8,9 +8,9 @@ import {
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Loading from '@/components/Common/Loading';
+import NoPosts from '@/components/Common/NoPosts';
 import Pagenation from '@/components/Common/Pagenation';
 import CommunityBoard from '@/components/Community/Board';
-import NoPosts from '@/components/Community/NoPosts';
 import { restFetcher, QueryKeys } from '@/queryClient';
 import { CommunityBoardPageType } from '@/types/Board/communityType';
 import userStore from '@/store/userStore';

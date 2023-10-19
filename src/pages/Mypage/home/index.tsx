@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import { useQuery } from '@tanstack/react-query';
-import NoPosts from '@/components/Community/NoPosts';
+import NoPosts from '@/components/Common/NoPosts';
 import MyHomeCard from '@/components/MyPage/MyHomeCard';
 import MyHomePopularCard from '@/components/MyPage/MyHomePopularCard';
 import TradeBoard from '@/components/Trade/Board';
@@ -81,7 +81,7 @@ function MyPageHome() {
     <section className={styles.container}>
       <article>
         <div className={styles.titleContainer}>
-          <span>{user?.userName}님의 마이페이지</span>
+          <span>{user?.nick_name}님의 마이페이지</span>
         </div>
         <ul className={styles.cardWrapper}>
           <MyHomeCard
