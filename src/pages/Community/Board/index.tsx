@@ -34,7 +34,7 @@ export default function CommunityBoardPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [focusedCategory, setFocusedCategory] = useState('ALL');
   const [focusedFilter, setFocusedFilter] = useState(
-    state?.location ? 'POPULAR' : 'RECENT',
+    state?.location === '/mypage/home' ? 'POPULAR' : 'RECENT',
   );
   const [search, handleSearch, setSearch] = useInput('');
 
