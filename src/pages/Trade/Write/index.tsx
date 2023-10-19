@@ -1,12 +1,16 @@
 import { useRef, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { FiSearch } from 'react-icons/fi';
 import { MdUploadFile } from 'react-icons/md';
 import { AxiosError } from 'axios';
 import { motion } from 'framer-motion';
 import AddressModal from '@/components/Trade/AddressModal';
 import TradeQuill from '@/components/Trade/Quill';
-import { RentalType, TradeBoardForm } from '@/types/Board/tradeType';
+import {
+  RentalType,
+  TradeBoardDetailType,
+  TradeBoardForm,
+} from '@/types/Board/tradeType';
 import { uploadFile } from '@/apis/uploadS3';
 import userStore from '@/store/userStore';
 import { getRentalPriceType } from '@/utils/utils';
@@ -20,43 +24,45 @@ const { VITE_S3_DOMAIN, VITE_CLOUD_FRONT_DOMAIN } = import.meta.env;
 export default function TradeWritePage() {
   const { user } = userStore();
 
+  const { state }: { state: { data: TradeBoardDetailType } } = useLocation();
+
   const [form, setForm] = useState<TradeBoardForm>({
-    rentalType: 'SALE',
-    city: '',
-    zipCode: '',
-    size: '',
-    purpose: '',
-    floorNum: 0,
-    contact: '',
-    createdDate: '',
-    price: 0,
-    monthlyPrice: 0,
-    agentName: '',
-    title: '',
-    code: '',
-    imageUrls: [],
-    tmpYn: false,
-    recommendedTag: [],
+    rentalType: state?.data.rentalType || 'SALE',
+    city: state?.data.city || '',
+    zipCode: state?.data.zipCode || '',
+    size: state?.data.size || '',
+    purpose: state?.data.purpose || '',
+    floorNum: state?.data.floorNum || 0,
+    contact: state?.data.contact || '',
+    createdDate: state?.data.createdDate || '',
+    price: state?.data.price || 0,
+    monthlyPrice: state?.data.monthlyPrice || 0,
+    agentName: state?.data.agentName || '',
+    title: state?.data.title || '',
+    code: state?.data.code || '',
+    imageUrls: state?.data.imageUrls || [],
+    tmpYn: state?.data.tmpYn || false,
+    recommendedTag: state?.data.recommendedTag || [],
   });
 
-  const [thumbnail, setThumbnail] = useState('');
-  const [thumbnailTitle, setThumbnailTitle] = useState('');
+  const [thumbnail, setThumbnail] = useState(state.data.imageUrls[0] || '');
+  const [thumbnailTitle, setThumbnailTitle] = useState(
+    state.data.imageUrls[0].split('/')[3] || '',
+  );
   const thumbnailRef = useRef<HTMLInputElement>(null);
   // 매물특징
-  // const appendSpecialCategory = (category: string) => {};
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
 
-  const postCodeCallback = (fullAddress: string, zipCode?: string) => {
+  const postCodeCallback = (fullAddress: string, zipCodePost?: string) => {
     setForm((prev: TradeBoardForm) => ({
       ...prev,
       city: fullAddress,
-      zipCode: zipCode ?? '',
+      zipCode: zipCodePost ?? '',
     }));
   };
 
   const onChangeForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -212,6 +218,7 @@ export default function TradeWritePage() {
               type="number"
               placeholder="만원으로 표기"
               name="price"
+              value={form.price}
               onChange={onChangeForm}
             />
           </div>
@@ -226,6 +233,7 @@ export default function TradeWritePage() {
               type="number"
               placeholder="만원으로 표기"
               name="monthlyPrice"
+              value={form.monthlyPrice}
               onChange={onChangeForm}
             />
           </div>
@@ -236,6 +244,7 @@ export default function TradeWritePage() {
               type="text"
               placeholder="01000000000 표기(매물 관련 연락 가능한 연락처)"
               name="contact"
+              value={form.contact}
               onChange={onChangeForm}
             />
           </div>
@@ -247,6 +256,7 @@ export default function TradeWritePage() {
                 type="text"
                 placeholder="부동산명 표기"
                 name="agentName"
+                value={form.agentName}
                 onChange={onChangeForm}
               />
             </div>
@@ -266,6 +276,7 @@ export default function TradeWritePage() {
               type="text"
               placeholder="m2로 표기"
               name="size"
+              value={form.size}
               onChange={onChangeForm}
             />
           </div>
@@ -278,6 +289,7 @@ export default function TradeWritePage() {
               type="text"
               placeholder="년도로 표기"
               name="createdDate"
+              value={form.createdDate}
               onChange={onChangeForm}
             />
           </div>
@@ -290,6 +302,7 @@ export default function TradeWritePage() {
               type="text"
               placeholder="용도 및 방 개수, 화장실 개수 포함"
               name="purpose"
+              value={form.purpose}
               onChange={onChangeForm}
             />
           </div>
@@ -300,6 +313,7 @@ export default function TradeWritePage() {
               type="number"
               placeholder="아파트, 빌라와 같은 다가구 주택만 작성"
               name="floorNum"
+              value={form.floorNum}
               onChange={onChangeForm}
             />
           </div>

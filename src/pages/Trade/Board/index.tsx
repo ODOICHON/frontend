@@ -17,6 +17,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { TradeBoardDetailType } from '@/types/Board/tradeType';
+import { DeleteHouseAPI } from '@/apis/houses';
 import userStore from '@/store/userStore';
 import { getMoveInType, getRentalName, getUserType } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
@@ -38,6 +39,19 @@ export default function TradeBoardPage() {
   const [_, updateState] = useState(false);
   const [modal, setModal] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  const handleDeleteButtonClick = async (houseId: number) => {
+    if (houseId === 0) throw new Error('없는 빈집거래 게시물입니다.');
+    await DeleteHouseAPI(houseId);
+    alert('삭제되었습니다.');
+    navigate('/trade');
+  };
+
+  const handleEditButtonClick = () => {
+    navigate(`/trade/write`, {
+      state: { data: data?.data },
+    });
+  };
 
   useEffect(() => {
     updateState(true);
@@ -86,7 +100,23 @@ export default function TradeBoardPage() {
             </p>
             {user?.nick_name === data?.data.nickName ? (
               <div>
-                <span>수정</span> | <span>삭제</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleEditButtonClick();
+                  }}
+                >
+                  수정
+                </button>{' '}
+                |{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleDeleteButtonClick(data?.data.houseId || 0);
+                  }}
+                >
+                  삭제
+                </button>
               </div>
             ) : null}
           </div>

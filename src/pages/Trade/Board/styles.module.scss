@@ -62,6 +62,7 @@
 
   & > div {
     display: flex;
+    align-items: center;
     gap: 1rem;
     font-size: 1.25rem;
     font-weight: 400;
@@ -70,8 +71,11 @@
       font-weight: 200;
     }
 
-    & > div > span {
+    & > div > button {
       cursor: pointer;
+      background: inherit;
+      border: none;
+      color: var(--darkgray-color);
       &:hover {
         color: var(--main-color);
       }
