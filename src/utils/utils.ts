@@ -58,6 +58,20 @@ export const getRentalName = (rental: string) => {
   }
 };
 
+// 매매 타입 이름 가져오기
+export const getDealStateName = (dealState: string) => {
+  switch (dealState) {
+    case 'APPLYING':
+      return '승인중';
+    case 'ONGOING':
+      return '판매중';
+    case 'COMPLETED':
+      return '판매완료';
+    default:
+      return '';
+  }
+};
+
 // 매매 타입에 따른 가격 이름
 export const getRentalPriceType = (rental: string) => {
   switch (rental) {

@@ -3,6 +3,8 @@
   display: flex;
   flex-direction: column;
   background-color: var(--background-color);
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 .innerContainer {
   flex-grow: 1;
@@ -17,6 +19,7 @@
   display: flex;
   margin: 4rem 0;
   padding-top: 0.65625rem;
+  flex-grow: 1;
 }
 
 .boundaryLine {

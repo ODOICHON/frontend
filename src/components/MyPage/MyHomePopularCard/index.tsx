@@ -30,7 +30,11 @@ function MyHomePopularCard({
         className={styles.imgWrapper}
         src={imgUrl || logoImg}
         alt="thumbnail"
-        style={imgUrl ? { objectFit: 'cover' } : { objectFit: 'contain' }}
+        style={
+          imgUrl
+            ? { objectFit: 'cover' }
+            : { objectFit: 'contain', backdropFilter: 'brightness(0.95)' }
+        }
       />
       <h1 className={styles.title}>{title}</h1>
       <p className={styles.sub}>
