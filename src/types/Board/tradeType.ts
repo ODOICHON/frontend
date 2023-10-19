@@ -47,7 +47,7 @@ export type TradeBoardDetailType = {
   houseId: number;
   rentalType: RentalType;
   city: string;
-  zipcode: string;
+  zipCode: string;
   size: string;
   purpose: string;
   floorNum: number;
@@ -64,6 +64,7 @@ export type TradeBoardDetailType = {
   createdAt: Date;
   isCompleted: boolean;
   isScraped: boolean;
+  tmpYn: boolean;
   recommendedTag: RecommendedTagType[];
   recommendedTagName: string[];
 };

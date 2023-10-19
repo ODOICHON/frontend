@@ -49,25 +49,21 @@ export default function TradePage() {
     return restFetcher({ method: 'GET', path: 'houses', params });
   };
 
-  const { refetch: fetchBoard, isLoading: isBoardLoading } = useQuery<
-    ApiResponseWithDataType<TradeBoardPageType>
-  >([QueryKeys.TRADE_BOARD], () => fetchBoardList(), {
-    onSuccess: (response) => {
-      setBoardListData(response.data.content);
-      setIsLastPage(response.data.last);
+  const {
+    refetch: fetchBoard,
+    isLoading: isBoardLoading,
+    isInitialLoading: isMoreBoardLoading,
+  } = useQuery<ApiResponseWithDataType<TradeBoardPageType>>(
+    [QueryKeys.TRADE_BOARD, currentPage],
+    () => fetchBoardList(currentPage),
+    {
+      onSuccess: (response) => {
+        setBoardListData((prev) => [...prev, ...response.data.content]);
+        setIsLastPage(response.data.last);
+      },
+      staleTime: 0,
     },
-  });
-
-  const { isInitialLoading: isMoreBoardLoading } = useQuery<
-    ApiResponseWithDataType<TradeBoardPageType>
-  >([QueryKeys.TRADE_BOARD, currentPage], () => fetchBoardList(currentPage), {
-    enabled: currentPage !== 0,
-    onSuccess: (response) => {
-      setBoardListData((prev) => [...prev, ...response.data.content]);
-      setIsLastPage(response.data.last);
-    },
-    staleTime: 0,
-  });
+  );
 
   const handleMoreBoards = () => {
     if (!isLastPage) {
@@ -76,6 +72,7 @@ export default function TradePage() {
   };
 
   useEffect(() => {
+    setBoardListData([]);
     fetchBoard();
     setCurrentPage(0);
   }, [recommendedTags, dealState]);
