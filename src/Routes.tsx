@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import GlobalLayout from '@/pages/_layout';
+import MyselfPage from './pages/Mypage/trade/myself';
 
 const MainPage = lazy(() => import('@/pages/Main'));
 const LoginPage = lazy(() => import('@/pages/Login'));
@@ -41,7 +42,7 @@ export const routes: RouteObject[] = [
           },
           {
             path: 'trade/myself',
-            element: <div>myself</div>,
+            element: <MyselfPage />,
           },
           {
             path: 'trade/save',

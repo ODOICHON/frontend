@@ -7,7 +7,9 @@
   line-height: normal;
   display: flex;
   flex-direction: column;
-  width: 16.5rem;
+  flex-shrink: 0;
+  flex-basis: 16rem;
+  margin: 4rem 0;
 }
 
 .menuItem {

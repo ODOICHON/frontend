@@ -33,6 +33,32 @@ export const dropdownVariants = {
     opacity: 0,
   },
 };
+export const myPageMenuVariants = {
+  initial: {
+    height: 0,
+    opacity: 0,
+    transition: {
+      opacity: { delay: 0 },
+      height: { delay: 0.12 },
+    },
+  },
+  visiable: {
+    height: 'auto',
+    opacity: 1,
+    transition: {
+      opacity: { delay: 0.12 },
+      height: { delay: 0 },
+    },
+  },
+  exit: {
+    height: 0,
+    opacity: 0,
+    transition: {
+      opacity: { delay: 0 },
+      height: { delay: 0.12 },
+    },
+  },
+};
 
 export const tradeDropdownVariants = {
   initial: {

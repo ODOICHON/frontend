@@ -11,15 +11,17 @@ export default function MyPage() {
   if (!token) return <Navigate to="/login" />;
   return (
     <motion.div
+      className={styles.container}
       variants={opacityVariants}
       initial="initial"
       animate="mount"
-      className={styles.container}
     >
-      <MyPageNavbar />
-      <div className={styles.contentContainer}>
+      <div className={styles.innerContainer}>
+        <MyPageNavbar />
         <div className={styles.boundaryLine} />
-        <Outlet />
+        <div className={styles.contentContainer}>
+          <Outlet />
+        </div>
       </div>
     </motion.div>
   );
