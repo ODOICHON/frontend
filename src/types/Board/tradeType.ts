@@ -9,6 +9,10 @@ export type RecommendedTagType =
 
 export type RentalType = 'SALE' | 'JEONSE' | 'MONTHLYRENT';
 
+export type MenuType = 'none' | 'rentalType' | 'city' | 'search';
+
+export type DealStateType = 'APPLYING' | 'ONGOING' | 'COMPLETED';
+
 export type TradeBoardForm = {
   rentalType: RentalType;
   city: string;
@@ -74,5 +78,3 @@ export type ReportFormType = {
   reportType: string;
   reportReason: string;
 };
-
-export type MenuType = 'none' | 'rentalType' | 'city' | 'search';
