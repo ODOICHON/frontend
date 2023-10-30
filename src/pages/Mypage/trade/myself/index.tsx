@@ -1,46 +1,40 @@
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import Loading from '@/components/Common/Loading';
+import NoPosts from '@/components/Common/NoPosts';
+import Pagination from '@/components/Common/Pagination';
 import MyTradeCard from '@/components/MyPage/MyTradeCard';
+import { QueryKeys, restFetcher } from '@/queryClient';
+import { BoardPageType } from '@/types/Board/boardType';
+import { Count, MyTradeHouseType } from '@/types/Board/tradeType';
 import useInput from '@/hooks/useInput';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import styles from './styles.module.scss';
-
-type DUMMY_TYPE = {
-  rentalType: 'SALE' | 'JEONSE' | 'MONTHLYRENT';
-  imageUrl: string;
-  title: string;
-  city: string;
-  dealState: 'APPLYING' | 'ONGOING' | 'COMPLETED';
-};
-const DUMMY: DUMMY_TYPE[] = [
-  {
-    rentalType: 'SALE',
-    imageUrl:
-      'https://d2xwcesrm8to6h.cloudfront.net/_.jpeg/102385d441c5-483c-8e87-5179bdd15be2.jpeg?f=webp&q=80',
-    title: '도시인듯 아닌듯 현대적인 분위기, 안성맞춤 집',
-    city: '경상남도 남해군 이동면 다정리 705-5',
-    dealState: 'ONGOING',
-  },
-  {
-    rentalType: 'JEONSE',
-    imageUrl:
-      'https://d2xwcesrm8to6h.cloudfront.net/_.jpeg/102385d441c5-483c-8e87-5179bdd15be2.jpeg?f=webp&q=80',
-    title: '도시인듯 아닌듯 현대적인 분위기, 안성맞춤 집',
-    city: '경상남도 남해군 이동면 다정리 705-5',
-    dealState: 'APPLYING',
-  },
-  {
-    rentalType: 'MONTHLYRENT',
-    imageUrl:
-      'https://d2xwcesrm8to6h.cloudfront.net/_.jpeg/102385d441c5-483c-8e87-5179bdd15be2.jpeg?f=webp&q=80',
-    title: '도시인듯 아닌듯 현대적인 분위기, 안성맞춤 집',
-    city: '경상남도 남해군 이동면 다정리 705-5',
-    dealState: 'COMPLETED',
-  },
-];
 
 export default function MyselfPage() {
   const [search, handleSearch, setSearch] = useInput('');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const fetchMyHouseList = (page: number) => {
+    const params = {
+      ...(search && { keyword: search }),
+      page: page - 1,
+    };
+    return restFetcher({ method: 'GET', path: 'houses/my', params });
+  };
+
+  const {
+    data: myHouseData,
+    refetch,
+    isLoading,
+  } = useQuery<
+    ApiResponseWithDataType<BoardPageType<MyTradeHouseType> & { count: Count }>
+  >([QueryKeys.MY_HOUSES], () => fetchMyHouseList(currentPage));
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    refetch();
+    setCurrentPage(0);
     setSearch('');
   };
   return (
@@ -52,15 +46,15 @@ export default function MyselfPage() {
       <article className={styles.countBoxWrapper}>
         <div>
           <p>승인 중인 매물</p>
-          <strong>0</strong>
+          <strong>{myHouseData?.data.count.applying}</strong>
         </div>
         <div>
           <p>판매 중인 매물</p>
-          <strong>0</strong>
+          <strong>{myHouseData?.data.count.ongoing}</strong>
         </div>
         <div>
           <p>판매완료된 매물</p>
-          <strong>0</strong>
+          <strong>{myHouseData?.data.count.completed}</strong>
         </div>
       </article>
       <article>
@@ -84,11 +78,33 @@ export default function MyselfPage() {
             </tr>
           </thead>
           <tbody className={styles.resultContent}>
-            {DUMMY.map((item, index) => (
-              <MyTradeCard key={index} tradeItem={item} />
-            ))}
+            {isLoading && (
+              <tr style={{ backgroundColor: '#f8fafb' }}>
+                <td colSpan={5}>
+                  <Loading />
+                </td>
+              </tr>
+            )}
+            {myHouseData && myHouseData?.data.content.length > 0 ? (
+              myHouseData?.data.content.map((item, index) => (
+                <MyTradeCard key={index} tradeItem={item} />
+              ))
+            ) : (
+              <tr style={{ backgroundColor: '#f8fafb' }}>
+                <td colSpan={5}>
+                  <NoPosts text="관리 중인 매물이 없어요." />
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
+        {myHouseData && myHouseData.data.content.length > 0 && (
+          <Pagination
+            totalPage={myHouseData.data.totalPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </article>
     </section>
   );

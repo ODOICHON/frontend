@@ -78,3 +78,20 @@ export type ReportFormType = {
   reportType: string;
   reportReason: string;
 };
+
+export type MyTradeHouseType = {
+  houseId: number;
+  rentalType: RentalType;
+  city: string;
+  title: string;
+  imageUrl: string;
+  dealState: DealStateType;
+  dealStateName: string;
+};
+
+export type Count = {
+  all: number;
+  applying: number;
+  ongoing: number;
+  completed: number;
+};

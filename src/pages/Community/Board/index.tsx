@@ -9,7 +9,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Loading from '@/components/Common/Loading';
 import NoPosts from '@/components/Common/NoPosts';
-import Pagenation from '@/components/Common/Pagenation';
+import Pagination from '@/components/Common/Pagination';
 import CommunityBoard from '@/components/Community/Board';
 import { restFetcher, QueryKeys } from '@/queryClient';
 import { CommunityBoardPageType } from '@/types/Board/communityType';
@@ -214,7 +214,7 @@ export default function CommunityBoardPage() {
           글쓰기
         </button>
         {boardListData && boardListData.data.content.length > 0 && (
-          <Pagenation
+          <Pagination
             totalPage={boardListData.data.totalPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
