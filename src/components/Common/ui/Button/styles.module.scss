@@ -10,3 +10,11 @@
     opacity: 0.8;
   }
 }
+
+.disabledButton {
+  @extend .button;
+  cursor: auto;
+  &:hover {
+    opacity: 1;
+  }
+}

@@ -62,7 +62,7 @@ export default function TradeBoardPage() {
       <div className={styles.title}>
         <div className={styles.innerTitle}>
           <ul className={styles.categoryList}>
-            <li>{getRentalName(data?.data.rentalType || '')}</li>
+            <li>{getRentalName(data?.data.rentalType || 'JEONSE')}</li>
             <li>{getMoveInType(data?.data.isCompleted || false)}</li>
             <li
               className={
@@ -71,7 +71,7 @@ export default function TradeBoardPage() {
                   : styles.userTypeNormal
               }
             >
-              {getUserType(data?.data.userType || '')}
+              {getUserType(data?.data.userType || 'NONE')}
             </li>
           </ul>
           <h1>{data?.data.title}</h1>

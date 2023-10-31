@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import Loading from '@/components/Common/Loading';
 import NoPosts from '@/components/Common/NoPosts';
 import Pagination from '@/components/Common/Pagination';
+import DealStateModal from '@/components/MyPage/DealStateModal';
 import MyTradeCard from '@/components/MyPage/MyTradeCard';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { BoardPageType } from '@/types/Board/boardType';
@@ -13,7 +14,10 @@ import styles from './styles.module.scss';
 
 export default function MyselfPage() {
   const [search, handleSearch, setSearch] = useInput('');
+
   const [currentPage, setCurrentPage] = useState(1);
+  const [modal, setModal] = useState(false);
+  const [clickedHouseId, setClickedHouseId] = useState(0);
 
   const fetchMyHouseList = (page: number) => {
     const params = {
@@ -39,6 +43,9 @@ export default function MyselfPage() {
   };
   return (
     <section className={styles.container}>
+      {modal && (
+        <DealStateModal clickedHouseId={clickedHouseId} setModal={setModal} />
+      )}
       <article className={styles.titleWrapper}>
         <h1>내 매물 관리</h1>
         <p>내가 거래하고 있는 매물들을 관리할 수 있어요.</p>
@@ -87,7 +94,14 @@ export default function MyselfPage() {
             )}
             {myHouseData && myHouseData?.data.content.length > 0 ? (
               myHouseData?.data.content.map((item, index) => (
-                <MyTradeCard key={index} tradeItem={item} />
+                <MyTradeCard
+                  key={index}
+                  tradeItem={item}
+                  onClickButton={() => {
+                    setClickedHouseId(item.houseId);
+                    setModal(true);
+                  }}
+                />
               ))
             ) : (
               <tr style={{ backgroundColor: '#f8fafb' }}>

@@ -75,6 +75,21 @@ export const tradeDropdownVariants = {
   },
 };
 
+export const DropdownVariants = {
+  initial: {
+    top: 0,
+    opacity: 0,
+  },
+  visiable: {
+    top: 'calc(100% + 1rem)',
+    opacity: 1,
+  },
+  exit: {
+    top: 0,
+    opacity: 0,
+  },
+};
+
 export const updownVariants = {
   initial: {
     top: 20,
