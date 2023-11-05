@@ -38,7 +38,7 @@ export default function MyselfPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     refetch();
-    setCurrentPage(0);
+    setCurrentPage(1);
     setSearch('');
   };
   return (
