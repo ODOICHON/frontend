@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Loading from '@/components/Common/Loading';
 import NoPosts from '@/components/Common/NoPosts';
@@ -92,24 +92,26 @@ export default function MyselfPage() {
                 </td>
               </tr>
             )}
-            {myHouseData && myHouseData?.data.content.length > 0 ? (
-              myHouseData?.data.content.map((item, index) => (
-                <MyTradeCard
-                  key={index}
-                  tradeItem={item}
-                  onClickButton={() => {
-                    setClickedHouseId(item.houseId);
-                    setModal(true);
-                  }}
-                />
-              ))
-            ) : (
-              <tr style={{ backgroundColor: '#f8fafb' }}>
-                <td colSpan={5}>
-                  <NoPosts text="관리 중인 매물이 없어요." />
-                </td>
-              </tr>
-            )}
+            {myHouseData &&
+              (myHouseData?.data.content.length > 0 ? (
+                myHouseData?.data.content.map((item, index) => (
+                  <MyTradeCard
+                    key={index}
+                    tradeItem={item}
+                    onClickButton={(e: React.MouseEvent<HTMLButtonElement>) => {
+                      e.stopPropagation();
+                      setClickedHouseId(item.houseId);
+                      setModal(true);
+                    }}
+                  />
+                ))
+              ) : (
+                <tr style={{ backgroundColor: '#f8fafb' }}>
+                  <td colSpan={5}>
+                    <NoPosts text="관리 중인 매물이 없어요." />
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
         {myHouseData && myHouseData.data.content.length > 0 && (

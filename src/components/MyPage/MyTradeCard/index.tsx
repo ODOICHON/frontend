@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import Button from '@/components/Common/ui/Button';
 import { MyTradeHouseType } from '@/types/Board/tradeType';
 import { getDealStateName, getRentalName } from '@/utils/utils';
@@ -5,13 +6,14 @@ import styles from './styles.module.scss';
 
 type MyTraeCardProps = {
   tradeItem: MyTradeHouseType;
-  onClickButton: () => void;
+  onClickButton: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function MyTradeCard({
-  tradeItem: { rentalType, imageUrl, title, city, dealState },
+  tradeItem: { rentalType, imageUrl, title, city, dealState, houseId },
   onClickButton,
 }: MyTraeCardProps) {
+  const navigate = useNavigate();
   const getButtonStyle = (state: 'APPLYING' | 'ONGOING' | 'COMPLETED') => {
     switch (state) {
       case 'APPLYING':
@@ -41,7 +43,10 @@ export default function MyTradeCard({
   };
 
   return (
-    <tr className={styles.tradeCardWrapper}>
+    <tr
+      className={styles.tradeCardWrapper}
+      onClick={() => navigate(`/trade/trade_board/${houseId}`)}
+    >
       <td>{getRentalName(rentalType)}</td>
       <td>
         <img className={styles.image} src={imageUrl} alt="tradeImage" />
