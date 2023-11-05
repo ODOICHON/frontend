@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { CategoryType, PrefixCategoryType } from '@/types/Board/boardType';
 import {
   DealStateType,
   RecommendedTagType,
@@ -14,7 +13,7 @@ export const setInterceptor = (token: string) => {
   return true;
 };
 
-export const getCategoryName = (category: CategoryType) => {
+export const getCategoryName = (category: string) => {
   switch (category) {
     case 'TREND':
       return '트렌드';
@@ -35,7 +34,7 @@ export const getCategoryName = (category: CategoryType) => {
   }
 };
 
-export const getPrefixCategoryName = (category: PrefixCategoryType) => {
+export const getPrefixCategoryName = (category: string) => {
   switch (category) {
     case 'DEFAULT':
       return 'free_board';
