@@ -100,7 +100,7 @@ export const getUserType = (userType: UserType) => {
 
 // 입주가능, 입주불가 구분 함수
 export const getMoveInType = (isCompleted: boolean) => {
-  return isCompleted ? '입주불가' : '입주가능';
+  return isCompleted ? '거래완료' : '입주가능';
 };
 
 export const checkBeforePost = (
