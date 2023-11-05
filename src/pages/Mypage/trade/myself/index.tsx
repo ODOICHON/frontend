@@ -33,7 +33,7 @@ export default function MyselfPage() {
     isLoading,
   } = useQuery<
     ApiResponseWithDataType<BoardPageType<MyTradeHouseType> & { count: Count }>
-  >([QueryKeys.MY_HOUSES], () => fetchMyHouseList(currentPage));
+  >([QueryKeys.MY_HOUSES, currentPage], () => fetchMyHouseList(currentPage));
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
