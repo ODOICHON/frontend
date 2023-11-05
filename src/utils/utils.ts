@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { CategoryType, PrefixCategoryType } from '@/types/Board/boardType';
 import {
+  DealStateType,
   RecommendedTagType,
   RentalType,
   TradeBoardForm,
@@ -12,7 +14,7 @@ export const setInterceptor = (token: string) => {
   return true;
 };
 
-export const getCategoryName = (category: string) => {
+export const getCategoryName = (category: CategoryType) => {
   switch (category) {
     case 'TREND':
       return '트렌드';
@@ -33,7 +35,7 @@ export const getCategoryName = (category: string) => {
   }
 };
 
-export const getPrefixCategoryName = (category: string) => {
+export const getPrefixCategoryName = (category: PrefixCategoryType) => {
   switch (category) {
     case 'DEFAULT':
       return 'free_board';
@@ -45,7 +47,7 @@ export const getPrefixCategoryName = (category: string) => {
 };
 
 // 매매 타입 이름 가져오기
-export const getRentalName = (rental: string) => {
+export const getRentalName = (rental: RentalType) => {
   switch (rental) {
     case 'MONTHLYRENT':
       return '월세';
@@ -58,8 +60,22 @@ export const getRentalName = (rental: string) => {
   }
 };
 
+// 매매 타입 이름 가져오기
+export const getDealStateName = (dealState: DealStateType) => {
+  switch (dealState) {
+    case 'APPLYING':
+      return '승인중';
+    case 'ONGOING':
+      return '판매중';
+    case 'COMPLETED':
+      return '판매완료';
+    default:
+      return '';
+  }
+};
+
 // 매매 타입에 따른 가격 이름
-export const getRentalPriceType = (rental: string) => {
+export const getRentalPriceType = (rental: RentalType) => {
   switch (rental) {
     case 'MONTHLYRENT':
       return '보증금';
@@ -73,7 +89,7 @@ export const getRentalPriceType = (rental: string) => {
 };
 
 // 일반회원, 중개사 회원 구분 함수
-export const getUserType = (userType: string) => {
+export const getUserType = (userType: UserType) => {
   switch (userType) {
     case 'AGENT':
       return '공인중개사 매물';

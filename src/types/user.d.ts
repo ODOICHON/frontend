@@ -1,6 +1,8 @@
 export {};
 
 declare global {
+  type UserType = 'NONE' | 'AGENT' | 'WEB' | 'SERVER';
+
   type User = {
     id: string;
     userName: string;
@@ -8,7 +10,7 @@ declare global {
     nick_name: string;
     phone_num: string;
     authority: 'USER' | 'ADMIN';
-    userType: 'NONE' | 'AGENT' | 'WEB' | 'SERVER';
+    userType: UserType;
     age: string;
     profile_image_url?: string | null;
   };

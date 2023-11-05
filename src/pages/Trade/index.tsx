@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Loading from '@/components/Common/Loading';
-import NoPosts from '@/components/Community/NoPosts';
+import NoPosts from '@/components/Common/NoPosts';
 import TradeBoard from '@/components/Trade/Board';
 import CategorySelect from '@/components/Trade/CategorySelect';
 import FilterOption from '@/components/Trade/FilterOption';
@@ -132,7 +132,7 @@ export default function TradePage() {
             ))}
           </ul>
         ) : (
-          <NoPosts />
+          <NoPosts text="아직은 글이 없어요." />
         )}
         <button
           className={styles.writeButton}

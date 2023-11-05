@@ -42,3 +42,14 @@ export type CommentType = {
   content: string;
   createdAt: Date;
 };
+
+export type CategoryType =
+  | 'TREND'
+  | 'REVIEW'
+  | 'INTERIOR'
+  | 'ESTATE'
+  | 'REAL_ESTATE'
+  | 'QUESTION'
+  | 'DAILY';
+
+export type PrefixCategoryType = 'DEFAULT' | 'ADVERTISEMENT';
