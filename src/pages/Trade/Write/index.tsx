@@ -85,8 +85,6 @@ export default function TradeWritePage() {
     }
   };
 
-  console.log(form);
-
   if (!user) return <Navigate to="/login" />;
 
   return (
