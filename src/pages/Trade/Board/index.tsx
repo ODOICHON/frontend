@@ -162,7 +162,7 @@ export default function TradeBoardPage() {
             <span>매물 특징</span>
             <ul>
               {data?.data.recommendedTagName.map((tag) => (
-                <div>{tag}</div>
+                <div key={tag}>{tag}</div>
               ))}
             </ul>
           </article>

@@ -27,27 +27,29 @@ export default function TradeWritePage() {
   const { state }: { state: { data: TradeBoardDetailType } } = useLocation();
 
   const [form, setForm] = useState<TradeBoardForm>({
-    rentalType: state?.data.rentalType || 'SALE',
-    city: state?.data.city || '',
-    zipCode: state?.data.zipCode || '',
-    size: state?.data.size || '',
-    purpose: state?.data.purpose || '',
-    floorNum: state?.data.floorNum || 0,
-    contact: state?.data.contact || '',
-    createdDate: state?.data.createdDate || '',
-    price: state?.data.price || 0,
-    monthlyPrice: state?.data.monthlyPrice || 0,
-    agentName: state?.data.agentName || '',
-    title: state?.data.title || '',
-    code: state?.data.code || '',
-    imageUrls: state?.data.imageUrls || [],
-    tmpYn: state?.data.tmpYn || false,
-    recommendedTag: state?.data.recommendedTag || [],
+    rentalType: state ? state.data.rentalType : 'SALE',
+    city: state ? state.data.city : '',
+    zipCode: state ? state.data.zipCode : '',
+    size: state ? state.data.size : '',
+    purpose: state ? state.data.purpose : '',
+    floorNum: state ? state.data.floorNum : 0,
+    contact: state ? state.data.contact : '',
+    createdDate: state ? state.data.createdDate : '',
+    price: state ? state.data.price : 0,
+    monthlyPrice: state ? state.data.monthlyPrice : 0,
+    agentName: state ? state.data.agentName : '',
+    title: state ? state.data.title : '',
+    code: state ? state.data.code : '',
+    imageUrls: state ? state.data.imageUrls : [],
+    tmpYn: state ? state.data.tmpYn : false,
+    recommendedTag: state ? state.data.recommendedTag : [],
   });
 
-  const [thumbnail, setThumbnail] = useState(state.data.imageUrls[0] || '');
+  const [thumbnail, setThumbnail] = useState(
+    state ? state.data.imageUrls[0] : '',
+  );
   const [thumbnailTitle, setThumbnailTitle] = useState(
-    state.data.imageUrls[0].split('/')[3] || '',
+    state ? state.data.imageUrls[0].split('/')[3] : '',
   );
   const thumbnailRef = useRef<HTMLInputElement>(null);
   // 매물특징
@@ -82,6 +84,8 @@ export default function TradeWritePage() {
       }
     }
   };
+
+  console.log(form);
 
   if (!user) return <Navigate to="/login" />;
 

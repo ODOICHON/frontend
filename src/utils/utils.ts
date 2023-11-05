@@ -142,6 +142,7 @@ export const checkBeforeTradePost = (
     contact,
     agentName,
     size,
+    floorNum,
     createdDate,
     purpose,
     title,
@@ -182,6 +183,10 @@ export const checkBeforeTradePost = (
   }
   if (size === '') {
     alert('평수를 입력해주세요.');
+    return false;
+  }
+  if (floorNum < 0) {
+    alert('1층 이상의 값만 작성해주세요.');
     return false;
   }
   if (createdDate === '') {

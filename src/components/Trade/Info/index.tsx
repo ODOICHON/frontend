@@ -26,10 +26,10 @@ function TradeBoardInfo({ info }: TradeBoardInfoProps) {
           용도 <p>{info?.purpose}</p>
         </div>
         <div>
-          준공연도 <p>{dayjs(info?.createdDate).format('YYYY.MM.DD')}</p>
+          준공연도 <p>{dayjs(info?.createdDate).format('YYYY')}년</p>
         </div>
         <div>
-          층수 <p>{info?.floorNum}</p>
+          층수 <p>{info?.floorNum === 0 ? '-' : `${info?.floorNum}층`}</p>
         </div>
       </article>
       <article>
@@ -37,7 +37,8 @@ function TradeBoardInfo({ info }: TradeBoardInfoProps) {
         <div>
           가격{' '}
           <p>
-            {getRentalName(info?.rentalType || '')} {info?.price}만원
+            {info?.rentalType && getRentalName(info?.rentalType)} {info?.price}
+            만원
           </p>
         </div>
         <div>

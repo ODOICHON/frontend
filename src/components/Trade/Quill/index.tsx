@@ -57,8 +57,14 @@ export default function TradeQuill({
   const onPost = async () => {
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
 
+    const extractedYear = form.createdDate.match(/\d{4}/);
+    const createdDate = extractedYear ? extractedYear[0] : '2002';
+
     const newForm = {
       ...form,
+      contact: form.contact.replace(/\-/g, ''),
+      size: form.size.replace(/m2/g, ''),
+      createdDate,
       imageUrls,
     };
 
@@ -76,8 +82,14 @@ export default function TradeQuill({
   const onUpdate = async () => {
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
 
+    const extractedYear = form.createdDate.match(/\d{4}/);
+    const createdDate = extractedYear ? extractedYear[0] : '2002';
+
     const newForm = {
       ...form,
+      contact: form.contact.replace(/\-/g, ''),
+      size: form.size.replace(/m2/g, ''),
+      createdDate,
       imageUrls,
     };
 
