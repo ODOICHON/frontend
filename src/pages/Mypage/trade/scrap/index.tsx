@@ -10,18 +10,31 @@ import { TradeBoardType } from '@/types/Board/tradeType';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import styles from './styles.module.scss';
 
+type ScrapFilterType = '' | 'ONGOING' | 'COMPLETED';
+
+const INITIAL_FILTER = '';
+const INITIAL_PAGE = 1;
+
 function ScrapPage() {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
+  const [filter, setFilter] = useState<ScrapFilterType>(INITIAL_FILTER);
   const { data: scrapBoardListData, isLoading: isScrapBoardListData } =
     useQuery<ApiResponseWithDataType<BoardPageType<TradeBoardType>>>(
-      [QueryKeys.TRADE_BOARD, QueryKeys.MINE, currentPage],
+      [QueryKeys.TRADE_BOARD, QueryKeys.MINE, currentPage, filter],
       () =>
         restFetcher({
           method: 'GET',
           path: 'houses/scrap',
-          params: { page: currentPage - 1 },
+          params: { page: currentPage - 1, filter },
         }),
     );
+
+  const handleFilter = () => {
+    const changedFilter = filter === INITIAL_FILTER ? 'ONGOING' : '';
+
+    setFilter(changedFilter);
+    setCurrentPage(1);
+  };
 
   return (
     <section className={styles.container}>
@@ -31,9 +44,12 @@ function ScrapPage() {
       </article>
       <article className={styles.wrapper}>
         <button
-          className={styles.button}
+          className={[
+            styles.button,
+            filter ? undefined : styles.unselected,
+          ].join(' ')}
           type="button"
-          onClick={() => alert('준비중입니다.')}
+          onClick={handleFilter}
         >
           ✔ 거래 중인 매물만 보기
         </button>
