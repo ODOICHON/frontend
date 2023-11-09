@@ -15,7 +15,6 @@ export default function Button({
   backgroundColor,
   onClick,
 }: ButtonProps) {
-  console.log(text);
   return (
     <button
       type="button"
