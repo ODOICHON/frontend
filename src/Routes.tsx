@@ -9,6 +9,7 @@ const SignUpPage = lazy(() => import('@/pages/SignUp'));
 const AgentSignUpPage = lazy(() => import('@/pages/SignUp/AgentSignUp'));
 const MyPage = lazy(() => import('@/pages/Mypage'));
 const MyPageHome = lazy(() => import('@/pages/Mypage/home'));
+const MyWritePage = lazy(() => import('@/pages/Mypage/community/write'));
 const IntroducePage = lazy(() => import('@/pages/Introduce'));
 const IntroWritePage = lazy(() => import('@/pages/Introduce/Write'));
 const IntroBoardPage = lazy(() => import('@/pages/Introduce/Board'));
@@ -53,7 +54,7 @@ export const routes: RouteObject[] = [
           },
           {
             path: 'community/write',
-            element: <div>write</div>,
+            element: <MyWritePage />,
           },
           {
             path: 'community/comment',
