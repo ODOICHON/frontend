@@ -141,10 +141,16 @@
     font-size: 1.375rem;
     padding: 0.5rem 1rem;
     line-height: normal;
-    border: 1px solid var(--main-color);
-    background-color: var(--main-color);
     color: white;
     border-radius: 24px;
+  }
+  & > .isCompletedTrade {
+    border: 1px solid black;
+    background-color: black;
+  }
+  & > .isNotCompletedTrade {
+    border: 1px solid var(--main-color);
+    background-color: var(--main-color);
   }
   & > .userTypeAgent {
     background-color: var(--sub-color);
