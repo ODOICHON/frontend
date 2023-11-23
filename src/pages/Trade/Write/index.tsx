@@ -27,6 +27,7 @@ export default function TradeWritePage() {
   const { state }: { state: { data: TradeBoardDetailType } } = useLocation();
 
   const [form, setForm] = useState<TradeBoardForm>({
+
     rentalType: state ? state.data.rentalType : 'SALE',
     city: state ? state.data.city : '',
     zipCode: state ? state.data.zipCode : '',
@@ -50,6 +51,7 @@ export default function TradeWritePage() {
   );
   const [thumbnailTitle, setThumbnailTitle] = useState(
     state ? state.data.imageUrls[0].split('/')[3] : '',
+
   );
   const thumbnailRef = useRef<HTMLInputElement>(null);
   // 매물특징
