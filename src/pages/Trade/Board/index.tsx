@@ -19,7 +19,7 @@ import 'swiper/css/navigation';
 import { TradeBoardDetailType } from '@/types/Board/tradeType';
 import { DeleteHouseAPI } from '@/apis/houses';
 import userStore from '@/store/userStore';
-import { getMoveInType, getRentalName, getUserType } from '@/utils/utils';
+import { getMoveInType, getUserType } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
@@ -76,8 +76,15 @@ export default function TradeBoardPage() {
       <div className={styles.title}>
         <div className={styles.innerTitle}>
           <ul className={styles.categoryList}>
-            <li>{getRentalName(data?.data.rentalType || '')}</li>
-            <li>{getMoveInType(data?.data.isCompleted || false)}</li>
+            <li
+              className={
+                data?.data.isCompleted
+                  ? styles.isCompletedTrade
+                  : styles.isNotCompletedTrade
+              }
+            >
+              {getMoveInType(data?.data.isCompleted || false)}
+            </li>
             <li
               className={
                 data?.data.userType === 'AGENT'
@@ -85,7 +92,7 @@ export default function TradeBoardPage() {
                   : styles.userTypeNormal
               }
             >
-              {getUserType(data?.data.userType || '')}
+              {getUserType(data?.data.userType || 'NONE')}
             </li>
           </ul>
           <h1>{data?.data.title}</h1>
@@ -162,7 +169,7 @@ export default function TradeBoardPage() {
             <span>매물 특징</span>
             <ul>
               {data?.data.recommendedTagName.map((tag) => (
-                <div>{tag}</div>
+                <div key={tag}>{tag}</div>
               ))}
             </ul>
           </article>

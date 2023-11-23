@@ -3,7 +3,7 @@ import nextArrow from '@/assets/common/nextArrow.svg';
 import prevArrow from '@/assets/common/prevArrow.svg';
 import styles from './styles.module.scss';
 
-type PagenationProps = {
+type PaginationProps = {
   totalPage: number;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
@@ -11,11 +11,11 @@ type PagenationProps = {
 
 const PAEG_LIMIT = 5; // 한 번에 최대 5개의 페이지가 보여짐
 
-export default function Pagenation({
+export default function Pagination({
   totalPage,
   currentPage,
   setCurrentPage,
-}: PagenationProps) {
+}: PaginationProps) {
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
 
   const getPageNumbers = useCallback(
@@ -60,7 +60,7 @@ export default function Pagenation({
   }, [totalPage, currentPage]);
 
   return (
-    <div className={styles.pagenation}>
+    <div className={styles.pagination}>
       <button
         id="prevPage"
         className={styles.pageButton}

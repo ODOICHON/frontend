@@ -9,6 +9,10 @@ export type RecommendedTagType =
 
 export type RentalType = 'SALE' | 'JEONSE' | 'MONTHLYRENT';
 
+export type MenuType = 'none' | 'rentalType' | 'city' | 'search';
+
+export type DealStateType = 'APPLYING' | 'ONGOING' | 'COMPLETED';
+
 export type TradeBoardForm = {
   rentalType: RentalType;
   city: string;
@@ -60,7 +64,7 @@ export type TradeBoardDetailType = {
   code: string;
   imageUrls: string[];
   nickName: string;
-  userType: string;
+  userType: UserType;
   createdAt: Date;
   isCompleted: boolean;
   isScraped: boolean;
@@ -76,4 +80,19 @@ export type ReportFormType = {
   reportReason: string;
 };
 
-export type MenuType = 'none' | 'rentalType' | 'city' | 'search';
+export type MyTradeHouseType = {
+  houseId: number;
+  rentalType: RentalType;
+  city: string;
+  title: string;
+  imageUrl: string;
+  dealState: DealStateType;
+  dealStateName: string;
+};
+
+export type Count = {
+  all: number;
+  applying: number;
+  ongoing: number;
+  completed: number;
+};
