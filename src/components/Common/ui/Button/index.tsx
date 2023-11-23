@@ -6,7 +6,7 @@ type ButtonProps = {
   textColor?: string;
   backgroundColor?: string;
   disabled?: boolean;
-  onClick: () => void;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function Button({

@@ -1,3 +1,10 @@
+.tradeCardWrapper {
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
 .image {
   width: 10rem;
   height: 7.5rem;

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { CategoryType, PrefixCategoryType } from '@/types/Board/boardType';
 import {
   DealStateType,
   RecommendedTagType,
@@ -14,7 +13,7 @@ export const setInterceptor = (token: string) => {
   return true;
 };
 
-export const getCategoryName = (category: CategoryType) => {
+export const getCategoryName = (category: string) => {
   switch (category) {
     case 'TREND':
       return '트렌드';
@@ -35,7 +34,7 @@ export const getCategoryName = (category: CategoryType) => {
   }
 };
 
-export const getPrefixCategoryName = (category: PrefixCategoryType) => {
+export const getPrefixCategoryName = (category: string) => {
   switch (category) {
     case 'DEFAULT':
       return 'free_board';
@@ -100,7 +99,7 @@ export const getUserType = (userType: UserType) => {
 
 // 입주가능, 입주불가 구분 함수
 export const getMoveInType = (isCompleted: boolean) => {
-  return isCompleted ? '입주불가' : '입주가능';
+  return isCompleted ? '거래완료' : '입주가능';
 };
 
 export const checkBeforePost = (
@@ -142,6 +141,7 @@ export const checkBeforeTradePost = (
     contact,
     agentName,
     size,
+    floorNum,
     createdDate,
     purpose,
     title,
@@ -182,6 +182,10 @@ export const checkBeforeTradePost = (
   }
   if (size === '') {
     alert('평수를 입력해주세요.');
+    return false;
+  }
+  if (floorNum < 0) {
+    alert('1층 이상의 값만 작성해주세요.');
     return false;
   }
   if (createdDate === '') {
