@@ -44,7 +44,7 @@ export default function MyWritePage() {
               key={content.boardId}
               boardId={content.boardId}
               category={content.category}
-              prefixCategory={content.category || ''}
+              prefixCategory={content.prefixCategory || ''}
               title={content.title}
               oneLineContent={content.oneLineContent}
               imageUrl={content.imageUrl}
