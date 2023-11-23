@@ -60,7 +60,7 @@ export default function TradeQuill({
     const extractedYear = form.createdDate.match(/\d{4}/);
     const createdDate = extractedYear ? extractedYear[0] : '2002';
 
-    const newForm = {
+    const newForm: TradeBoardForm = {
       ...form,
       contact: form.contact.replace(/\-/g, ''),
       size: form.size.replace(/m2/g, ''),
@@ -84,18 +84,32 @@ export default function TradeQuill({
     const extractedYear = form.createdDate.match(/\d{4}/);
     const createdDate = extractedYear ? extractedYear[0] : '2002';
 
-    const newForm = {
+    const newForm: TradeBoardForm = {
       ...form,
       contact: form.contact.replace(/\-/g, ''),
       size: form.size.replace(/m2/g, ''),
       createdDate,
-
       imageUrls,
     };
 
     if (!checkBeforeTradePost(user!, newForm)) return;
 
     mutate(newForm);
+  };
+
+  const onTempSave = async () => {
+    const imageUrls = [thumbnail, ...getImageUrls(form.code)];
+    const newForm: TradeBoardForm = {
+      ...form,
+      imageUrls,
+      tmpYn: true,
+    };
+    try {
+      await PostHouseAPI(newForm);
+      alert('게시글이 임시저장 되었습니다.');
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <div className={styles.container}>
@@ -128,13 +142,7 @@ export default function TradeQuill({
         </span>
       </section>
       <section>
-        <button
-          type="button"
-          onClick={() => {
-            // TODO: 임시저장 기능 구현
-            alert('준비중입니다.');
-          }}
-        >
+        <button type="button" onClick={onTempSave}>
           임시저장
         </button>
         {state ? (
