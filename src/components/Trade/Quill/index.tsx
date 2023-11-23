@@ -54,7 +54,7 @@ export default function TradeQuill({
     },
   );
 
-  const onPost = async () => {
+  const onPost = async ({ isTempSave }: { isTempSave: boolean }) => {
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
 
     const extractedYear = form.createdDate.match(/\d{4}/);
@@ -66,14 +66,21 @@ export default function TradeQuill({
       size: form.size.replace(/m2/g, ''),
       createdDate,
       imageUrls,
+      tmpYn: isTempSave,
     };
 
-    if (!checkBeforeTradePost(user!, newForm)) return;
+    if (!isTempSave) {
+      if (!checkBeforeTradePost(user!, newForm)) return;
+    }
 
     try {
       await PostHouseAPI(newForm);
-      alert('등록되었습니다.');
-      navigate(`/trade`);
+      if (isTempSave) {
+        alert('게시글이 임시저장 되었습니다.');
+      } else {
+        alert('게시글이 등록되었습니다.');
+        navigate(`/trade`);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -97,20 +104,6 @@ export default function TradeQuill({
     mutate(newForm);
   };
 
-  const onTempSave = async () => {
-    const imageUrls = [thumbnail, ...getImageUrls(form.code)];
-    const newForm: TradeBoardForm = {
-      ...form,
-      imageUrls,
-      tmpYn: true,
-    };
-    try {
-      await PostHouseAPI(newForm);
-      alert('게시글이 임시저장 되었습니다.');
-    } catch (error) {
-      console.error(error);
-    }
-  };
   return (
     <div className={styles.container}>
       <section className={styles.sectionWrapper}>
@@ -142,7 +135,7 @@ export default function TradeQuill({
         </span>
       </section>
       <section>
-        <button type="button" onClick={onTempSave}>
+        <button type="button" onClick={() => onPost({ isTempSave: true })}>
           임시저장
         </button>
         {state ? (
@@ -150,7 +143,7 @@ export default function TradeQuill({
             수정하기
           </button>
         ) : (
-          <button type="button" onClick={onPost}>
+          <button type="button" onClick={() => onPost({ isTempSave: false })}>
             등록하기
           </button>
         )}
