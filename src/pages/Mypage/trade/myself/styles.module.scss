@@ -94,15 +94,12 @@
   & th,
   & td {
     vertical-align: middle;
-  }
-  & td {
-    border-bottom: 1px solid #ced3d6;
-  }
-  & td,
-  & th {
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
     padding-right: 1.5rem;
+  }
+  & td {
+    border-bottom: 1px solid #ced3d6;
   }
   & td:first-child,
   & th:first-child {
