@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Loading from '@/components/Common/Loading';
 import NoPosts from '@/components/Common/NoPosts';
-import Pagenation from '@/components/Common/Pagenation';
+import Pagination from '@/components/Common/Pagination';
 import TradeBoard from '@/components/Trade/Board';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { BoardPageType } from '@/types/Board/boardType';
@@ -82,7 +82,7 @@ function ScrapPage() {
       </article>
       <article className={styles.pagination}>
         {scrapBoardListData && scrapBoardListData.data.content.length > 0 && (
-          <Pagenation
+          <Pagination
             totalPage={scrapBoardListData.data.totalPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
