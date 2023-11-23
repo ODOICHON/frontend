@@ -1,7 +1,6 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import GlobalLayout from '@/pages/_layout';
-import MyselfPage from './pages/Mypage/trade/myself';
 
 const MainPage = lazy(() => import('@/pages/Main'));
 const LoginPage = lazy(() => import('@/pages/Login'));
@@ -9,6 +8,7 @@ const SignUpPage = lazy(() => import('@/pages/SignUp'));
 const AgentSignUpPage = lazy(() => import('@/pages/SignUp/AgentSignUp'));
 const MyPage = lazy(() => import('@/pages/Mypage'));
 const MyPageHome = lazy(() => import('@/pages/Mypage/home'));
+const MyselfPage = lazy(() => import('@/pages/Mypage/trade/myself'));
 const MyWritePage = lazy(() => import('@/pages/Mypage/community/write'));
 const MyPageTradeScrap = lazy(() => import('@/pages/Mypage/trade/scrap'));
 const IntroducePage = lazy(() => import('@/pages/Introduce'));
