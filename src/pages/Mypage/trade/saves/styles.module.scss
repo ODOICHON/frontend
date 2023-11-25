@@ -1,0 +1,38 @@
+@import '@/styles/media.scss';
+
+.container {
+  width: 100%;
+  font-family: 'Pretendard';
+}
+
+.titleWrapper {
+  & > h1 {
+    font-family: 'NanumSquareAcB';
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+  & > p {
+    font-size: 1.5rem;
+  }
+}
+
+.resultWrapper {
+  margin-top: 3.375rem;
+  & > h3 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+.cardWrapper {
+  border-top: 2px solid #9a9a9a;
+  border-bottom: 2px solid #9a9a9a;
+  margin-bottom: 6rem;
+  & > li {
+    border-top: 1px solid #ced3d6;
+  }
+  & > li:first-child {
+    border-top: none;
+  }
+}

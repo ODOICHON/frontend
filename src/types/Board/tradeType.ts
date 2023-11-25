@@ -39,7 +39,7 @@ export type TradeBoardType = {
   price: number;
   monthlyPrice: number;
   nickName: string;
-  createdAt: string;
+  createdAt: Date;
   isCompleted: boolean;
   imageUrl: string;
   title: string;
@@ -56,7 +56,7 @@ export type TradeBoardDetailType = {
   purpose: string;
   floorNum: number;
   contact: string;
-  createdDate: string;
+  createdDate: Date;
   price: number;
   monthlyPrice: number;
   agentName: string;
