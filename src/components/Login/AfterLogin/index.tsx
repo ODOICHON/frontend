@@ -32,6 +32,10 @@ function DesktopMenu({
   navigate,
 }: DesktopMenuProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const handleMyPageClick = () => {
+    navigate('/mypage');
+    setIsClicked(false);
+  };
   useEffect(() => {
     const handleCloseModal = (e: Event | React.MouseEvent) => {
       if (
@@ -74,7 +78,7 @@ function DesktopMenu({
             <li
               role="presentation"
               className={styles.dropdownMenu}
-              onClick={() => navigate('/mypage')}
+              onClick={handleMyPageClick}
             >
               <img className={styles.image} src={homeImage} alt="home" />
               <p>마이페이지</p>
