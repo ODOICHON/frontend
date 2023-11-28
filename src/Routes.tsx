@@ -1,17 +1,17 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import GlobalLayout from '@/pages/_layout';
+import MyPage from './pages/Mypage';
+import MyWritePage from './pages/Mypage/community/write';
+import MyPageHome from './pages/Mypage/home';
+import MyselfPage from './pages/Mypage/trade/myself';
+import SavesPage from './pages/Mypage/trade/saves';
+import ScrapPage from './pages/Mypage/trade/scrap';
 
 const MainPage = lazy(() => import('@/pages/Main'));
 const LoginPage = lazy(() => import('@/pages/Login'));
 const SignUpPage = lazy(() => import('@/pages/SignUp'));
 const AgentSignUpPage = lazy(() => import('@/pages/SignUp/AgentSignUp'));
-const MyPage = lazy(() => import('@/pages/Mypage'));
-const MyPageHome = lazy(() => import('@/pages/Mypage/home'));
-const MyselfPage = lazy(() => import('@/pages/Mypage/trade/myself'));
-const MyWritePage = lazy(() => import('@/pages/Mypage/community/write'));
-const MyPageTradeScrap = lazy(() => import('@/pages/Mypage/trade/scrap'));
-const MyPageSaves = lazy(() => import('@/pages/Mypage/trade/saves'));
 const IntroducePage = lazy(() => import('@/pages/Introduce'));
 const IntroWritePage = lazy(() => import('@/pages/Introduce/Write'));
 const IntroBoardPage = lazy(() => import('@/pages/Introduce/Board'));
@@ -48,11 +48,11 @@ export const routes: RouteObject[] = [
           },
           {
             path: 'trade/saves',
-            element: <MyPageSaves />,
+            element: <SavesPage />,
           },
           {
             path: 'trade/scrap',
-            element: <MyPageTradeScrap />,
+            element: <ScrapPage />,
           },
           {
             path: 'community/write',
