@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { CommunityBoardType } from '@/types/Board/communityType';
-import { getCategoryName } from '@/utils/utils';
+import { getCategoryName, getPrefixCategoryName } from '@/utils/utils';
 import { THUMBNAIL_SIZE_OPTION } from '@/constants/image';
 import styles from './styles.module.scss';
 
@@ -21,12 +21,17 @@ export default function CommunityBoard({
 }: CommunityBoardProps) {
   const navigate = useNavigate();
 
+  const handleClick = (check: string, id: string) => {
+    if (check === 'INTRO') navigate(`/intro_board/${id}`);
+    else navigate(`/community/${getPrefixCategoryName(prefixCategory)}/${id}`);
+  };
+
   return (
     <>
       <li
         role="presentation"
         className={styles.wrapper}
-        onClick={() => navigate(`/community/${prefixCategory}/${boardId}`)}
+        onClick={() => handleClick(prefixCategory, boardId)}
       >
         <span className={styles.title}>
           {fixed && <span className={styles.advertisement}>광고</span>}
