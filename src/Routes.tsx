@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import GlobalLayout from '@/pages/_layout';
+import MyLikesPage from './pages/Mypage/community/likes';
 
 const MainPage = lazy(() => import('@/pages/Main'));
 const LoginPage = lazy(() => import('@/pages/Login'));
@@ -63,8 +64,8 @@ export const routes: RouteObject[] = [
             element: <div>comment</div>,
           },
           {
-            path: 'community/like',
-            element: <div>like</div>,
+            path: 'community/likes',
+            element: <MyLikesPage />,
           },
           {
             path: 'setting',
