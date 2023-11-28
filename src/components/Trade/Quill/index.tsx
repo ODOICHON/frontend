@@ -60,7 +60,7 @@ export default function TradeQuill({
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
 
     const extractedYear = form.createdDate.match(/\d{4}/);
-    const createdDate = extractedYear ? extractedYear[0] : '2002';
+    const createdDate = extractedYear ? extractedYear[0] : '';
 
     const newForm: TradeBoardForm = {
       ...form,

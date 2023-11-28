@@ -56,7 +56,7 @@ export type TradeBoardDetailType = {
   purpose: string;
   floorNum: number;
   contact: string;
-  createdDate: Date;
+  createdDate: string;
   price: number;
   monthlyPrice: number;
   agentName: string;

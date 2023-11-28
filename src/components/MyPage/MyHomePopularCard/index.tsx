@@ -8,7 +8,7 @@ type MyHomePopularCardProps = {
   imgUrl: string;
   title: string;
   nickName: string;
-  createdAt: string;
+  createdAt: Date;
 };
 
 function MyHomePopularCard({
