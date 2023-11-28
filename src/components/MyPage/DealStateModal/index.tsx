@@ -78,14 +78,18 @@ export default function DealStateModal({
     const score = clickedRating.filter(Boolean).length;
     if (score === 0 || nowDate === '날짜' || contact === '') {
       alert('필수 항목을 입력해주세요.');
-      return 0;
+      return;
+    }
+    if (!contact.match(/(\d{2,3}-\d{3,4}-\d{4})$/g)) {
+      alert('전화번호 형식이 맞지 않습니다.');
+      return;
     }
     const form: HouseStatusType = {
       score,
       review,
       nickName,
       age: age === '구매자 연령' ? '' : age,
-      contact,
+      contact: contact.replace(/\-/g, ''),
       dealDate: nowDate,
     };
     const response = await PutHouseStatusAPI(form, clickedHouseId);

@@ -30,6 +30,7 @@ export const PutHouseStatusAPI = async (
     return response.data;
   } catch (error) {
     const err = error as AxiosError<ApiResponseType>;
+    alert(err.response?.data.message);
     return Promise.reject(err);
   }
 };
