@@ -3,10 +3,10 @@ import { RouteObject } from 'react-router-dom';
 import GlobalLayout from '@/pages/_layout';
 import MyPage from './pages/Mypage';
 import MyWritePage from './pages/Mypage/community/write';
-import MyPageHome from './pages/Mypage/home';
-import MyselfPage from './pages/Mypage/trade/myself';
-import SavesPage from './pages/Mypage/trade/saves';
-import ScrapPage from './pages/Mypage/trade/scrap';
+import MyHomePage from './pages/Mypage/home';
+import MySelfPage from './pages/Mypage/trade/myself';
+import MySavesPage from './pages/Mypage/trade/saves';
+import MyScrapPage from './pages/Mypage/trade/scrap';
 
 const MainPage = lazy(() => import('@/pages/Main'));
 const LoginPage = lazy(() => import('@/pages/Login'));
@@ -40,19 +40,19 @@ export const routes: RouteObject[] = [
         children: [
           {
             path: 'home',
-            element: <MyPageHome />,
+            element: <MyHomePage />,
           },
           {
             path: 'trade/myself',
-            element: <MyselfPage />,
+            element: <MySelfPage />,
           },
           {
             path: 'trade/saves',
-            element: <SavesPage />,
+            element: <MySavesPage />,
           },
           {
             path: 'trade/scrap',
-            element: <ScrapPage />,
+            element: <MyScrapPage />,
           },
           {
             path: 'community/write',
