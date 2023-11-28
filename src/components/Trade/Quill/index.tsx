@@ -82,7 +82,6 @@ export default function TradeQuill({
   const onUpdate = async () => {
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
 
-
     const extractedYear = form.createdDate.match(/\d{4}/);
     const createdDate = extractedYear ? extractedYear[0] : '2002';
 
