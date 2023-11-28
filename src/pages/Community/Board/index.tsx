@@ -181,7 +181,7 @@ export default function CommunityBoardPage() {
                 key={content.boardId}
                 boardId={content.boardId}
                 category={content.category}
-                prefixCategory={category || ''}
+                prefixCategory={content.prefixCategory}
                 title={content.title}
                 oneLineContent={content.oneLineContent}
                 imageUrl={content.imageUrl}
