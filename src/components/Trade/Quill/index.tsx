@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -32,8 +32,10 @@ export default function TradeQuill({
   // 이미지를 업로드 하기 위한 함수
   const modules = useQuillModules(QuillRef);
 
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const queryClient = useQueryClient();
-  const { mutate } = useMutation(
+  const { mutate, isLoading: isUpdateLoading } = useMutation(
     (tradeBoardForm: TradeBoardForm) =>
       restFetcher({
         method: 'PUT',
@@ -54,6 +56,7 @@ export default function TradeQuill({
   );
 
   const onPost = async ({ isTempSave }: { isTempSave: boolean }) => {
+    setIsProcessing(true);
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
 
     const extractedYear = form.createdDate.match(/\d{4}/);
@@ -84,6 +87,8 @@ export default function TradeQuill({
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -160,6 +165,7 @@ export default function TradeQuill({
                 ? onPost({ isTempSave: true })
                 : onUpdate({ isTempSave: true })
             }
+            disabled={isProcessing || isUpdateLoading}
           >
             임시저장
           </button>
@@ -171,6 +177,7 @@ export default function TradeQuill({
               ? onPost({ isTempSave: false })
               : onUpdate({ isTempSave: false })
           }
+          disabled={isProcessing || isUpdateLoading}
         >
           {isUpdating ? '수정하기' : '등록하기'}
         </button>

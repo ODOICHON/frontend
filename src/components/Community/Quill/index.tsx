@@ -30,6 +30,8 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   const [title, setTitle] = useState(boardData ? boardData.title : '');
   const [contents, setContents] = useState('');
   const [category, setCategory] = useState(boardData ? boardData.category : '');
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const prefixCategory =
     queryParam === 'free_board' ? 'DEFAULT' : 'ADVERTISEMENT';
   const categoryList =
@@ -37,7 +39,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(
+  const { mutate, isLoading: isUpdateLoading } = useMutation(
     (BoardForm: BoardFormType) =>
       restFetcher({
         method: 'PUT',
@@ -69,6 +71,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   };
 
   const onPost = async () => {
+    setIsProcessing(true);
     const imageUrls = [...getImageUrls(contents)];
     if (!checkBeforePost(title, contents, category)) return;
 
@@ -80,11 +83,19 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
       prefixCategory,
       fixed: false,
     };
-    const response = await PostBoardAPI(BoardForm);
-    if (response?.code === 'SUCCESS') {
-      alert('게시글이 작성되었습니다😄');
-      queryClient.refetchQueries([QueryKeys.COMMUNITY_BOARD]);
-      navigate(`/community/${queryParam}`);
+    try {
+      const response = await PostBoardAPI(BoardForm);
+      if (response?.code === 'SUCCESS') {
+        alert('게시글이 작성되었습니다😄');
+        queryClient.refetchQueries([QueryKeys.COMMUNITY_BOARD]);
+        navigate(`/community/${queryParam}`);
+      } else {
+        throw new Error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -163,11 +174,11 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
       </section>
       <section>
         {boardData ? (
-          <button type="button" onClick={onUpdate}>
+          <button type="button" onClick={onUpdate} disabled={isUpdateLoading}>
             수정하기
           </button>
         ) : (
-          <button type="button" onClick={onPost}>
+          <button type="button" onClick={onPost} disabled={isProcessing}>
             등록하기
           </button>
         )}
