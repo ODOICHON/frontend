@@ -36,10 +36,11 @@ export default function IntroduceQuill() {
   const [thumbnailTitle, setThumbnailTitle] = useState(
     boardData ? boardData.imageUrls[0].split('/')[3] : '',
   );
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(
+  const { mutate, isLoading: isUpdateLoading } = useMutation(
     (BoardForm: BoardFormType) =>
       restFetcher({
         method: 'PUT',
@@ -88,6 +89,7 @@ export default function IntroduceQuill() {
   };
 
   const onPost = async () => {
+    setIsProcessing(true);
     const imageUrls = [thumbnail, ...getImageUrls(contents)];
     if (!checkBeforePost(title, contents, category, imageUrls)) return;
 
@@ -99,11 +101,19 @@ export default function IntroduceQuill() {
       prefixCategory: 'INTRO',
       fixed: false,
     };
-    const response = await PostBoardAPI(BoardForm);
-    if (response?.code === 'SUCCESS') {
-      alert('게시글이 작성되었습니다.');
-      queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
-      navigate('/introduce');
+    try {
+      const response = await PostBoardAPI(BoardForm);
+      if (response?.code === 'SUCCESS') {
+        alert('게시글이 작성되었습니다.');
+        queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
+        navigate('/introduce');
+      } else {
+        throw new Error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -196,11 +206,11 @@ export default function IntroduceQuill() {
         </span>
       </section>
       {boardData ? (
-        <button type="button" onClick={onUpdate}>
+        <button type="button" onClick={onUpdate} disabled={isUpdateLoading}>
           수정하기
         </button>
       ) : (
-        <button type="button" onClick={onPost}>
+        <button type="button" onClick={onPost} disabled={isProcessing}>
           등록하기
         </button>
       )}

@@ -6,7 +6,7 @@ export type IntroBoardType = {
   code: string;
   oneLineContent: string;
   nickName: string;
-  createdAt: string;
+  createdAt: Date;
   imageUrl: string;
   commentCount: number;
   category: string;

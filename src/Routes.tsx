@@ -11,6 +11,7 @@ const MyPageHome = lazy(() => import('@/pages/Mypage/home'));
 const MyselfPage = lazy(() => import('@/pages/Mypage/trade/myself'));
 const MyWritePage = lazy(() => import('@/pages/Mypage/community/write'));
 const MyPageTradeScrap = lazy(() => import('@/pages/Mypage/trade/scrap'));
+const MyPageSaves = lazy(() => import('@/pages/Mypage/trade/saves'));
 const IntroducePage = lazy(() => import('@/pages/Introduce'));
 const IntroWritePage = lazy(() => import('@/pages/Introduce/Write'));
 const IntroBoardPage = lazy(() => import('@/pages/Introduce/Board'));
@@ -46,8 +47,8 @@ export const routes: RouteObject[] = [
             element: <MyselfPage />,
           },
           {
-            path: 'trade/save',
-            element: <div>save</div>,
+            path: 'trade/saves',
+            element: <MyPageSaves />,
           },
           {
             path: 'trade/scrap',

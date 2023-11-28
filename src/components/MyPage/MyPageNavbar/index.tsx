@@ -40,7 +40,7 @@ const navList: NavListType[] = [
       },
       {
         title: '임시저장',
-        path: '/mypage/trade/save',
+        path: '/mypage/trade/saves',
       },
       {
         title: '스크랩',

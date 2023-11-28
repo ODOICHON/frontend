@@ -64,4 +64,5 @@ export const QueryKeys = {
   MINE: 'MINE',
   LIKE: 'LIKE',
   MY_HOUSES: 'MY_HOUSES',
+  MY_SAVES: 'MY_SAVES',
 };
