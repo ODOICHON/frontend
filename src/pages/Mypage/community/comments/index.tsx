@@ -3,13 +3,9 @@ import { useQuery } from '@tanstack/react-query';
 import Loading from '@/components/Common/Loading';
 import NoPosts from '@/components/Common/NoPosts';
 import Pagination from '@/components/Common/Pagination';
-import CommunityBoard from '@/components/Community/Board';
 import MyCommentCard from '@/components/MyPage/MyCommentCard';
 import { QueryKeys, restFetcher } from '@/queryClient';
-import {
-  CommunityBoardPageType,
-  MyCommentPageType,
-} from '@/types/Board/communityType';
+import { MyCommentPageType } from '@/types/Board/communityType';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import styles from './styles.module.scss';
 
