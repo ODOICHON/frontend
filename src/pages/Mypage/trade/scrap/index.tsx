@@ -15,7 +15,7 @@ type ScrapFilterType = '' | 'ONGOING' | 'COMPLETED';
 const INITIAL_FILTER = '';
 const INITIAL_PAGE = 1;
 
-function ScrapPage() {
+function MyScrapPage() {
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE);
   const [filter, setFilter] = useState<ScrapFilterType>(INITIAL_FILTER);
   const { data: scrapBoardListData, isLoading: isScrapBoardListData } =
@@ -93,4 +93,4 @@ function ScrapPage() {
   );
 }
 
-export default ScrapPage;
+export default MyScrapPage;
