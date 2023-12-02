@@ -32,7 +32,7 @@ export default function MyWritePage() {
       </article>
       <article className={styles.countWrapper}>
         <div className={styles.count}>
-          총 {boardListData?.data.totalElements}
+          총 {boardListData?.data.totalElements}개
         </div>
         <div className={styles.divider} />
       </article>

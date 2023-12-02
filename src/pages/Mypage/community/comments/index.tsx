@@ -27,12 +27,12 @@ export default function MyCommentsPage() {
   return (
     <section className={styles.container}>
       <article className={styles.titleWrapper}>
-        <h1>내가 댓글 글</h1>
+        <h1>내가 쓴 댓글</h1>
         <p>내가 남긴 댓글을 확인할 수 있어요.</p>
       </article>
       <article className={styles.countWrapper}>
         <div className={styles.count}>
-          총 {commentsData?.data.totalElements}
+          총 {commentsData?.data.totalElements}개
         </div>
         <div className={styles.divider} />
       </article>
