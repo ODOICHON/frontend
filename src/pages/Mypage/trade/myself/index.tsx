@@ -12,7 +12,7 @@ import useInput from '@/hooks/useInput';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import styles from './styles.module.scss';
 
-export default function MyselfPage() {
+export default function MySelfPage() {
   const [search, handleSearch, setSearch] = useInput('');
 
   const [currentPage, setCurrentPage] = useState(1);

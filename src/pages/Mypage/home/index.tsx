@@ -19,7 +19,7 @@ type myBoardType = Omit<
   'code' | 'nickName' | 'commentCount' | 'fixed'
 >;
 
-function MyPageHome() {
+function MyHomePage() {
   const { user } = userStore();
 
   const { data: myBoardListData } = useQuery<
@@ -169,4 +169,4 @@ function MyPageHome() {
   );
 }
 
-export default MyPageHome;
+export default MyHomePage;
