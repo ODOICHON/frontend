@@ -1,18 +1,20 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import GlobalLayout from '@/pages/_layout';
+
 import MyLikesPage from './pages/Mypage/community/likes';
+import MyPage from './pages/Mypage';
+import MyWritePage from './pages/Mypage/community/write';
+import MyHomePage from './pages/Mypage/home';
+import MySelfPage from './pages/Mypage/trade/myself';
+import MySavesPage from './pages/Mypage/trade/saves';
+import MyScrapPage from './pages/Mypage/trade/scrap';
+
 
 const MainPage = lazy(() => import('@/pages/Main'));
 const LoginPage = lazy(() => import('@/pages/Login'));
 const SignUpPage = lazy(() => import('@/pages/SignUp'));
 const AgentSignUpPage = lazy(() => import('@/pages/SignUp/AgentSignUp'));
-const MyPage = lazy(() => import('@/pages/Mypage'));
-const MyPageHome = lazy(() => import('@/pages/Mypage/home'));
-const MyselfPage = lazy(() => import('@/pages/Mypage/trade/myself'));
-const MyWritePage = lazy(() => import('@/pages/Mypage/community/write'));
-const MyPageTradeScrap = lazy(() => import('@/pages/Mypage/trade/scrap'));
-const MyPageSaves = lazy(() => import('@/pages/Mypage/trade/saves'));
 const IntroducePage = lazy(() => import('@/pages/Introduce'));
 const IntroWritePage = lazy(() => import('@/pages/Introduce/Write'));
 const IntroBoardPage = lazy(() => import('@/pages/Introduce/Board'));
@@ -41,19 +43,19 @@ export const routes: RouteObject[] = [
         children: [
           {
             path: 'home',
-            element: <MyPageHome />,
+            element: <MyHomePage />,
           },
           {
             path: 'trade/myself',
-            element: <MyselfPage />,
+            element: <MySelfPage />,
           },
           {
             path: 'trade/saves',
-            element: <MyPageSaves />,
+            element: <MySavesPage />,
           },
           {
             path: 'trade/scrap',
-            element: <MyPageTradeScrap />,
+            element: <MyScrapPage />,
           },
           {
             path: 'community/write',
