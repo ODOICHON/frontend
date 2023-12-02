@@ -65,7 +65,7 @@ const navList: NavListType[] = [
       },
       {
         title: '내가 좋아한 게시글',
-        path: '/mypage/community/like',
+        path: '/mypage/community/likes',
       },
     ],
   },
