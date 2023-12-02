@@ -17,7 +17,7 @@ function MyCommentCard({ boardId, title, commentContent }: MyCommentCardProps) {
   return (
     <>
       <div role="presentation" className={styles.wrapper} onClick={handleClick}>
-        <h1 className={styles.title}>{title}</h1>
+        <h1 className={styles.title}>게시글 제목: {title}</h1>
         <p className={styles.comment}>{commentContent}</p>
       </div>
       <div className={styles.divider} />
