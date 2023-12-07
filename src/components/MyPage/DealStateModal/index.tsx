@@ -80,7 +80,7 @@ export default function DealStateModal({
       alert('필수 항목을 입력해주세요.');
       return;
     }
-    if (!contact.match(/(\d{2,3}-\d{3,4}-\d{4})$/g)) {
+    if (!contact.match(/^(\d{2,3}\d{3,4}\d{4})$/g)) {
       alert('전화번호 형식이 맞지 않습니다.');
       return;
     }
