@@ -39,11 +39,20 @@ export default function MySaveCard({ saveData }: MySaveCardProps) {
       className={styles.wrapper}
       onClick={() => handleEditButtonClick(detailData?.data)}
     >
-      <h1 className={styles.title}>
-        {saveData.title}
-        <img src={clipImage} alt="클립이미지" />
-      </h1>
-      <p>{dayjs(saveData.createdAt).format('YYYY.MM.DD')}</p>
+      <div className={styles.descWrapper}>
+        <h1 className={styles.title}>
+          {saveData.title === '' ? '[임시저장]' : saveData.title}
+          {saveData.imageUrl !== '' && <img src={clipImage} alt="클립이미지" />}
+        </h1>
+        <p>{dayjs(saveData.createdAt).format('YYYY.MM.DD')}</p>
+      </div>
+      {saveData.imageUrl !== '' && (
+        <img
+          className={styles.thumbnail}
+          src={saveData.imageUrl}
+          alt="thumbnail"
+        />
+      )}
     </li>
   );
 }
