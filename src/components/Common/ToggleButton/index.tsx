@@ -14,7 +14,11 @@ function ToggleButton({
   offIcon,
 }: ToggleButtonProps) {
   return (
-    <button type="button" onClick={() => onToggle()}>
+    <button
+      style={{ background: 'none', border: 'none' }}
+      type="button"
+      onClick={() => onToggle()}
+    >
       {toggled ? onIcon : offIcon}
     </button>
   );
