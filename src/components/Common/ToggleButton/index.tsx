@@ -2,7 +2,7 @@ import React from 'react';
 
 type ToggleButtonProps = {
   toggled: boolean;
-  onToggle: (toggled: boolean) => void;
+  onToggle: () => void;
   onIcon: React.ReactNode;
   offIcon: React.ReactNode;
 };
@@ -14,7 +14,7 @@ function ToggleButton({
   offIcon,
 }: ToggleButtonProps) {
   return (
-    <button type="button" onClick={() => onToggle(!toggled)}>
+    <button type="button" onClick={() => onToggle()}>
       {toggled ? onIcon : offIcon}
     </button>
   );
