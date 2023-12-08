@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import GlobalLayout from '@/pages/_layout';
+import WithdrawalFromMembership from './components/MyPage/MySetting/WithdrawalFromMembership';
 
 const MainPage = lazy(() => import('@/pages/Main'));
 const LoginPage = lazy(() => import('@/pages/Login'));
@@ -68,7 +69,7 @@ export const routes: RouteObject[] = [
           },
           {
             path: 'setting',
-            element: <div>setting</div>,
+            element: <WithdrawalFromMembership />,
           },
         ],
       },
