@@ -20,6 +20,14 @@
   border: 1px solid var(--Basic-Text-Color, #878d91);
   background: #fff;
   padding: 1.375rem;
+
+  & > ol {
+    font-size: 1.25rem;
+    line-height: 2rem;
+    padding-left: 1.375rem;
+    list-style-position: inside;
+    list-style: decimal;
+  }
 }
 
 .title {
@@ -31,13 +39,6 @@
 
 .mainColor {
   color: var(--main-color);
-}
-
-.ol {
-  font-size: 1.25rem;
-  line-height: 2rem;
-  list-style-position: inside;
-  list-style: decimal;
 }
 
 .mainCheck {
