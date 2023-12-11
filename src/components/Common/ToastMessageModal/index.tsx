@@ -5,12 +5,12 @@ import styles from './styles.module.scss';
 
 type ICON_TYPE = 'SUCCESS' | 'ERROR' | 'DEFAULT';
 
-type ToastMessageModal = {
+export type ToastMessageModalProps = {
   message: string;
   subMessage?: string;
   confirmModal?: boolean;
   iconType: ICON_TYPE;
-  onClose: () => void;
+  onClose?: () => void;
   onConfirm?: () => void;
 };
 
@@ -27,7 +27,7 @@ function ToastMessageModal({
   iconType,
   onClose,
   onConfirm,
-}: ToastMessageModal) {
+}: ToastMessageModalProps) {
   return (
     <article className={styles.container}>
       <div className={styles.box}>
