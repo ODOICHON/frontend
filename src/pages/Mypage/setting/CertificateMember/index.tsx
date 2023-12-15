@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate, useNavigate, useOutletContext } from 'react-router-dom';
 import eyeImage from '@/assets/common/eye.svg';
 import eyeClosedImage from '@/assets/common/eyeClosed.svg';
+import { checkPasswordAPI } from '@/apis/user';
 import { certificateStore } from '@/store/certificateStore';
 import useInput from '@/hooks/useInput';
 import { SettingStep } from '@/constants/myPage';
@@ -16,12 +17,26 @@ export default function CertificateMember() {
   const { isCertificated, setIsCertificated } = certificateStore();
   const { setSettingStep } = useOutletContext<SettingOutletContext>();
   const navigate = useNavigate();
-  const [password, handlePassword] = useInput('');
+
   const [eyeCheckState, setEyeCheckState] = useState(false);
-  const onCheckPassword = () => {
-    setIsCertificated(true);
-    setSettingStep('editInfo');
-    navigate('/mypage/setting/edit');
+  const [password, handlePassword] = useInput('');
+
+  const onCheckPassword = async (pw: string) => {
+    const { data: isPassed } = await checkPasswordAPI(pw);
+    if (isPassed) {
+      setIsCertificated(true);
+      setSettingStep('editInfo');
+      navigate('/mypage/setting/edit');
+    } else {
+      // TODO: 공용 모달로 띄워주기
+      alert('비밀번호가 일치하지 않습니다.');
+    }
+  };
+
+  const checkPasswordRegex = (pw: string) => {
+    const regex =
+      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*.?])[A-Za-z0-9!@#$%^&*.?]{8,16}$/g;
+    return regex.test(pw);
   };
 
   if (isCertificated) {
@@ -29,34 +44,49 @@ export default function CertificateMember() {
   }
   return (
     <div className={styles.container}>
-      <div className={styles.inputContainer}>
-        <label htmlFor="password">현재 비밀번호</label>
-        <input
-          className={styles.inputStyle}
-          id="password"
-          type={eyeCheckState ? 'text' : 'password'}
-          value={password}
-          onChange={handlePassword}
-          placeholder="현재 비밀번호를 입력하세요."
-        />
-        {password !== '' && (
-          <img
-            role="presentation"
-            id="password_checkEye"
-            className={styles.eyeImage}
-            src={eyeCheckState ? eyeClosedImage : eyeImage}
-            onClick={() => setEyeCheckState((prev) => !prev)}
-            alt="eyeImage"
+      <form
+        className={styles.contentContainer}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onCheckPassword(password);
+        }}
+      >
+        <div className={styles.inputContainer}>
+          <label htmlFor="password">현재 비밀번호</label>
+          <input
+            className={styles.inputStyle}
+            id="password"
+            type={eyeCheckState ? 'text' : 'password'}
+            placeholder="현재 비밀번호를 입력하세요."
+            value={password}
+            onChange={handlePassword}
           />
-        )}
+          {password !== '' && (
+            <img
+              role="presentation"
+              id="password_checkEye"
+              className={styles.eyeImage}
+              src={eyeCheckState ? eyeClosedImage : eyeImage}
+              onClick={() => setEyeCheckState((prev) => !prev)}
+              alt="eyeImage"
+            />
+          )}
+          <p className={styles.errorMessage}>
+            {!checkPasswordRegex(password) &&
+              (password === ''
+                ? '비밀번호를 입력하세요.'
+                : '비밀번호 형식이 맞지 않습니다.')}
+          </p>
+        </div>
         <button
-          className={styles.button}
-          type="button"
-          onClick={onCheckPassword}
+          className={
+            checkPasswordRegex(password) ? styles.button : styles.disabledButton
+          }
+          type="submit"
         >
           확인
         </button>
-      </div>
+      </form>
     </div>
   );
 }

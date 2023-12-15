@@ -8,20 +8,26 @@
   height: 100%;
 }
 
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 30rem;
+  gap: 1rem;
+}
+
 .inputContainer {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
   width: 100%;
-  max-width: 30rem;
-  margin-bottom: 1.5rem;
   & > label {
     font-family: 'Pretendard';
     font-weight: 700;
     font-size: 1.25rem;
     color: #4d5256;
     margin-left: 0.5rem;
+    margin-bottom: 1.25rem;
   }
 }
 
@@ -63,4 +69,22 @@
   font-family: 'Pretendard';
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+.disabledButton {
+  @extend .button;
+  cursor: auto;
+  background-color: var(--darkgray-color);
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.errorMessage {
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  min-height: 1.2rem;
+  color: #f24147;
+  font-family: 'Pretendard';
+  font-size: 1rem;
 }
