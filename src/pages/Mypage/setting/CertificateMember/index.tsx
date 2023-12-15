@@ -1,19 +1,32 @@
 import { useState } from 'react';
+import { Navigate, useNavigate, useOutletContext } from 'react-router-dom';
 import eyeImage from '@/assets/common/eye.svg';
 import eyeClosedImage from '@/assets/common/eyeClosed.svg';
-import { SettingStep } from '@/types/MyPage/settingType';
+import { certificateStore } from '@/store/certificateStore';
 import useInput from '@/hooks/useInput';
+import { SettingStep } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
-type CertificateMemberProps = {
+type SettingOutletContext = {
+  settingStep: SettingStep;
   setSettingStep: React.Dispatch<React.SetStateAction<SettingStep>>;
 };
 
-export default function CertificateMember({
-  setSettingStep,
-}: CertificateMemberProps) {
+export default function CertificateMember() {
+  const { isCertificated, setIsCertificated } = certificateStore();
+  const { setSettingStep } = useOutletContext<SettingOutletContext>();
+  const navigate = useNavigate();
   const [password, handlePassword] = useInput('');
   const [eyeCheckState, setEyeCheckState] = useState(false);
+  const onCheckPassword = () => {
+    setIsCertificated(true);
+    setSettingStep('editInfo');
+    navigate('/mypage/setting/edit');
+  };
+
+  if (isCertificated) {
+    return <Navigate to="/mypage/setting/edit" />;
+  }
   return (
     <div className={styles.container}>
       <div className={styles.inputContainer}>
@@ -39,7 +52,7 @@ export default function CertificateMember({
         <button
           className={styles.button}
           type="button"
-          onClick={() => setSettingStep('editInfo')}
+          onClick={onCheckPassword}
         >
           확인
         </button>

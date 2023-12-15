@@ -1,13 +1,22 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Button from '@/components/Common/ui/Button';
-import { SettingStep } from '@/types/MyPage/settingType';
-import { settingInfo } from '@/constants/components';
+import { certificateStore } from '@/store/certificateStore';
+import { SettingStep, settingInfo } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
 export default function MySettingsPage() {
+  const { isCertificated, setIsCertificated } = certificateStore();
   const navigate = useNavigate();
-  const [settingStep, setSettingStep] = useState<SettingStep>('certification');
+  const [settingStep, setSettingStep] = useState<SettingStep>(
+    isCertificated ? 'editInfo' : 'certification',
+  );
+
+  const onClickWithdraw = () => {
+    setIsCertificated(true);
+    setSettingStep('withdraw');
+    navigate('/mypage/setting/withdraw');
+  };
   return (
     <section className={styles.container}>
       <article className={styles.titleWrapper}>
@@ -15,7 +24,12 @@ export default function MySettingsPage() {
         <p>{settingInfo[settingStep].subTitle}</p>
       </article>
       <article className={styles.contentWrapper}>
-        {settingInfo[settingStep].component(setSettingStep)}
+        <Outlet
+          context={{
+            settingStep,
+            setSettingStep,
+          }}
+        />
       </article>
       <article className={styles.buttonWrapper}>
         {settingStep !== 'withdraw' && (
@@ -24,8 +38,8 @@ export default function MySettingsPage() {
             borderColor="#eaeeef"
             backgroundColor="#eaeeef"
             textColor="black"
-            disabled={settingStep === 'certification'}
-            onClick={() => setSettingStep('withdraw')}
+            disabled={!isCertificated}
+            onClick={onClickWithdraw}
           />
         )}
         <Button

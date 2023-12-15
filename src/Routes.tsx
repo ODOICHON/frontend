@@ -7,7 +7,10 @@ import MyCommentsPage from './pages/Mypage/community/comments';
 import MyLikesPage from './pages/Mypage/community/likes';
 import MyWritePage from './pages/Mypage/community/write';
 import MyHomePage from './pages/Mypage/home';
-import MySettinsPage from './pages/Mypage/setting';
+import MySettingsPage from './pages/Mypage/setting';
+import CertificateMember from './pages/Mypage/setting/CertificateMember';
+import EditMember from './pages/Mypage/setting/EditMember';
+import WithdrawalFromMembership from './pages/Mypage/setting/WithdrawalFromMembership';
 import MySelfPage from './pages/Mypage/trade/myself';
 import MySavesPage from './pages/Mypage/trade/saves';
 import MyScrapPage from './pages/Mypage/trade/scrap';
@@ -72,7 +75,18 @@ export const routes: RouteObject[] = [
           },
           {
             path: 'setting',
-            element: <MySettinsPage />,
+            element: <MySettingsPage />,
+            children: [
+              { index: true, element: <CertificateMember /> },
+              {
+                path: 'edit',
+                element: <EditMember />,
+              },
+              {
+                path: 'withdraw',
+                element: <WithdrawalFromMembership />,
+              },
+            ],
           },
         ],
       },
