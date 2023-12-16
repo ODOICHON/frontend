@@ -55,3 +55,18 @@ export const updateEmailAPI = async (email: string) => {
     return Promise.reject(err);
   }
 };
+
+export const updatePasswordAPI = async (password: string) => {
+  try {
+    const response = await axios.put<ApiResponseType>(
+      '/users/update/password',
+      {
+        password,
+      },
+    );
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<ApiResponseType>;
+    return Promise.reject(err.response?.data.code);
+  }
+};

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useOutletContext } from 'react-router-dom';
+import { Navigate, useNavigate, useOutletContext } from 'react-router-dom';
 import EditEmailInfo from '@/components/MyPage/EditInfo/EditEmailInfo';
 import EditNicknameInfo from '@/components/MyPage/EditInfo/EditNicknameInfo';
 import EditPhoneInfo from '@/components/MyPage/EditInfo/EditPhoneInfo';
@@ -15,11 +15,17 @@ type SettingOutletContext = {
 };
 
 export default function EditMember() {
+  const navigate = useNavigate();
   const { isCertificated } = certificateStore();
   const { user } = userStore();
   const { setSettingStep } = useOutletContext<SettingOutletContext>();
 
   const [editMode, setEditMode] = useState<EditMode>('none');
+
+  const onClickEditPassword = () => {
+    setSettingStep('password');
+    navigate('/mypage/setting/password');
+  };
 
   useEffect(() => {
     if (isCertificated) {
@@ -81,7 +87,9 @@ export default function EditMember() {
         <h1 className={styles.title}>보안정보</h1>
         <li className={styles.securityInfoWrapper}>
           <p>비밀번호</p>
-          <button type="button">수정</button>
+          <button type="button" onClick={onClickEditPassword}>
+            수정
+          </button>
         </li>
       </section>
     </div>

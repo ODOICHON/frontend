@@ -1,6 +1,11 @@
 import { SettingInfo } from '@/types/MyPage/settingType';
 
-export const settingStep = ['certification', 'editInfo', 'withdraw'] as const;
+export const settingStep = [
+  'certification',
+  'editInfo',
+  'withdraw',
+  'password',
+] as const;
 export const editMode = ['none', 'nickname', 'phone', 'email'] as const;
 
 export type SettingStep = (typeof settingStep)[number];
@@ -19,5 +24,9 @@ export const settingInfo: SettingInfo = {
   withdraw: {
     title: '회원 탈퇴',
     subTitle: '회원 탈퇴 신청에 앞서 아래 내용을 반드시 확인해주세요.',
+  },
+  password: {
+    title: '회원 정보 수정',
+    subTitle: '회원 정보를 수정할 수 있어요.',
   },
 };

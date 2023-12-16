@@ -75,13 +75,14 @@ export default function CertificateMember() {
             {!checkPasswordRegex(password) &&
               (password === ''
                 ? '비밀번호를 입력하세요.'
-                : '비밀번호 형식이 맞지 않습니다.')}
+                : '비밀번호 형식에 맞지 않습니다.')}
           </p>
         </div>
         <button
           className={
             checkPasswordRegex(password) ? styles.button : styles.disabledButton
           }
+          disabled={!checkPasswordRegex(password)}
           type="submit"
         >
           확인
