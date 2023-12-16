@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useOutletContext } from 'react-router-dom';
 import EditNicknameInfo from '@/components/MyPage/EditInfo/EditNicknameInfo';
+import EditPhoneInfo from '@/components/MyPage/EditInfo/EditPhoneInfo';
 import UserInfo from '@/components/MyPage/UserInfo';
 import { certificateStore } from '@/store/certificateStore';
 import userStore from '@/store/userStore';
@@ -47,11 +48,19 @@ export default function EditMember() {
               />
             )}
 
-            <UserInfo
-              title="전화번호"
-              value={user?.phone_num}
-              setEditMode={setEditMode}
-            />
+            {editMode === 'phone' ? (
+              <EditPhoneInfo
+                phone={user?.phone_num}
+                setEditMode={setEditMode}
+              />
+            ) : (
+              <UserInfo
+                title="전화번호"
+                value={user?.phone_num}
+                setEditMode={setEditMode}
+              />
+            )}
+
             <UserInfo
               title="이메일"
               value={user?.email}

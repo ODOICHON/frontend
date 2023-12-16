@@ -65,8 +65,8 @@ export default function EditNicknameInfo({
   const onUpdateNickname = async (data: Form) => {
     try {
       await updateNicknameAPI(data.nick_name);
-      setEditMode('none');
       queryClient.refetchQueries([QueryKeys.USER]);
+      setEditMode('none');
     } catch (err) {
       // TODO: 공용 모달로 띄워주기
       alert('닉네임 변경에 실패했습니다.');

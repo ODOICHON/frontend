@@ -228,7 +228,7 @@ export default function AgentSignUpPage() {
   const onCheckSMS = () => {
     if (/^(?=.*[0-9])[0-9]{4}$/g.test(watch('phone_check')) === false) {
       setPhoneSMSCheck(false);
-      setPhoneSMSMessage('잘못된 인증번호입니다.');
+      setPhoneSMSMessage('인증문자 4자리를 입력해주세요.');
     }
     phoneCheckAPI(watch('phone_check'), {
       onSuccess: (res) => {
@@ -371,6 +371,7 @@ export default function AgentSignUpPage() {
   }, [watch('nick_name')]);
   useEffect(() => {
     setPhoneSMSCheck(false);
+    setIsCheckNum(false);
     setPhoneSMSMessage('전화번호 인증을 해주세요.');
   }, [watch('phone_num')]);
   useEffect(() => {
