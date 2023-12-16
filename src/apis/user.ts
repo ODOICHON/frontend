@@ -43,3 +43,15 @@ export const updatePhoneNumAPI = async (phone_num: string) => {
     return Promise.reject(err);
   }
 };
+
+export const updateEmailAPI = async (email: string) => {
+  try {
+    const response = await axios.put<ApiResponseType>('/users/update/email', {
+      email,
+    });
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<ApiResponseType>;
+    return Promise.reject(err);
+  }
+};

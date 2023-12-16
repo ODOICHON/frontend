@@ -323,6 +323,7 @@ export default function SignUpPage() {
   }, [watch('phone_num')]);
   useEffect(() => {
     setEmailCheck(false);
+    setIsCheckEmail(false);
     setEmailMessage('이메일 인증을 해주세요.');
   }, [watch('email')]);
 

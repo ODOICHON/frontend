@@ -8,7 +8,7 @@ import { EditMode } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
 type EditNicknameInfoProps = {
-  nickname: string;
+  currentNickname: string;
   setEditMode: React.Dispatch<React.SetStateAction<EditMode>>;
 };
 
@@ -17,7 +17,7 @@ type Form = {
 };
 
 export default function EditNicknameInfo({
-  nickname,
+  currentNickname,
   setEditMode,
 }: EditNicknameInfoProps) {
   const queryClient = useQueryClient();
@@ -29,7 +29,7 @@ export default function EditNicknameInfo({
   } = useForm<Form>({
     mode: 'onSubmit',
     defaultValues: {
-      nick_name: nickname,
+      nick_name: currentNickname,
     },
   });
   const { mutate: nicknameCheckAPI } = useMutation((nick_name: string) =>

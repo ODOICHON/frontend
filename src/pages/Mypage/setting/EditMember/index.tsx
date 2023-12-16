@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useOutletContext } from 'react-router-dom';
+import EditEmailInfo from '@/components/MyPage/EditInfo/EditEmailInfo';
 import EditNicknameInfo from '@/components/MyPage/EditInfo/EditNicknameInfo';
 import EditPhoneInfo from '@/components/MyPage/EditInfo/EditPhoneInfo';
 import UserInfo from '@/components/MyPage/UserInfo';
@@ -37,7 +38,7 @@ export default function EditMember() {
 
             {editMode === 'nickname' ? (
               <EditNicknameInfo
-                nickname={user?.nick_name}
+                currentNickname={user?.nick_name}
                 setEditMode={setEditMode}
               />
             ) : (
@@ -50,7 +51,7 @@ export default function EditMember() {
 
             {editMode === 'phone' ? (
               <EditPhoneInfo
-                phone={user?.phone_num}
+                currentPhoneNum={user?.phone_num}
                 setEditMode={setEditMode}
               />
             ) : (
@@ -61,11 +62,18 @@ export default function EditMember() {
               />
             )}
 
-            <UserInfo
-              title="이메일"
-              value={user?.email}
-              setEditMode={setEditMode}
-            />
+            {editMode === 'email' ? (
+              <EditEmailInfo
+                currentEmail={user.email}
+                setEditMode={setEditMode}
+              />
+            ) : (
+              <UserInfo
+                title="이메일"
+                value={user?.email}
+                setEditMode={setEditMode}
+              />
+            )}
           </ul>
         </section>
       )}

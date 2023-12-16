@@ -7,7 +7,7 @@ import { EditMode } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
 type EditPhoneInfoProps = {
-  phone: string;
+  currentPhoneNum: string;
   setEditMode: React.Dispatch<React.SetStateAction<EditMode>>;
 };
 type Form = {
@@ -16,7 +16,7 @@ type Form = {
 };
 
 export default function EditPhoneInfo({
-  phone,
+  currentPhoneNum,
   setEditMode,
 }: EditPhoneInfoProps) {
   const [isCheckNum, setIsCheckNum] = useState(false); // 전화번호 인증 중 상태
@@ -33,7 +33,7 @@ export default function EditPhoneInfo({
   } = useForm<Form>({
     mode: 'onSubmit',
     defaultValues: {
-      phone_num: phone,
+      phone_num: currentPhoneNum,
       phone_check: '',
     },
   });
