@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, useOutletContext } from 'react-router-dom';
-import EditInfo from '@/components/MyPage/EditInfo';
+import EditNicknameInfo from '@/components/MyPage/EditInfo/EditNicknameInfo';
+import UserInfo from '@/components/MyPage/UserInfo';
 import { certificateStore } from '@/store/certificateStore';
 import userStore from '@/store/userStore';
-import { SettingStep } from '@/constants/myPage';
+import { EditMode, SettingStep } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
 type SettingOutletContext = {
@@ -15,6 +16,8 @@ export default function EditMember() {
   const { isCertificated } = certificateStore();
   const { user } = userStore();
   const { setSettingStep } = useOutletContext<SettingOutletContext>();
+
+  const [editMode, setEditMode] = useState<EditMode>('none');
 
   useEffect(() => {
     if (isCertificated) {
@@ -29,10 +32,31 @@ export default function EditMember() {
         <section>
           <h1 className={styles.title}>기본정보</h1>
           <ul className={styles.infoWrapper}>
-            <EditInfo title="아이디" value={user?.userName} />
-            <EditInfo title="닉네임" value={user?.nick_name} editable />
-            <EditInfo title="전화번호" value={user?.phone_num} editable />
-            <EditInfo title="이메일" value={user?.email} editable />
+            <UserInfo title="아이디" value={user?.userName} />
+
+            {editMode === 'nickname' ? (
+              <EditNicknameInfo
+                nickname={user?.nick_name}
+                setEditMode={setEditMode}
+              />
+            ) : (
+              <UserInfo
+                title="닉네임"
+                value={user?.nick_name}
+                setEditMode={setEditMode}
+              />
+            )}
+
+            <UserInfo
+              title="전화번호"
+              value={user?.phone_num}
+              setEditMode={setEditMode}
+            />
+            <UserInfo
+              title="이메일"
+              value={user?.email}
+              setEditMode={setEditMode}
+            />
           </ul>
         </section>
       )}

@@ -1,7 +1,10 @@
 import { SettingInfo } from '@/types/MyPage/settingType';
 
 export const settingStep = ['certification', 'editInfo', 'withdraw'] as const;
+export const editMode = ['none', 'nickname', 'phone', 'email'] as const;
+
 export type SettingStep = (typeof settingStep)[number];
+export type EditMode = (typeof editMode)[number];
 
 export const settingInfo: SettingInfo = {
   certification: {
