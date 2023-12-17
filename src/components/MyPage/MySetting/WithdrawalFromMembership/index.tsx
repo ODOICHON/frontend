@@ -44,7 +44,7 @@ function WithdrawalFromMembership() {
     const membershipWithdrawalReasonValue: MembershipWithdrawalReasonValueType =
       MEMBERSHIP_WITHDRAWAL_REASON[membershipWithdrawalReasonKey];
 
-    const updatedReasonChechBox = reasonCheckBox.includes(
+    const updatedReasonCheckBox = reasonCheckBox.includes(
       membershipWithdrawalReasonValue,
     )
       ? reasonCheckBox.filter(
@@ -52,7 +52,7 @@ function WithdrawalFromMembership() {
         )
       : [...reasonCheckBox, membershipWithdrawalReasonValue];
 
-    setReasonCheckBox(updatedReasonChechBox);
+    setReasonCheckBox(updatedReasonCheckBox);
   };
 
   const onSubmitHandler = () => {
