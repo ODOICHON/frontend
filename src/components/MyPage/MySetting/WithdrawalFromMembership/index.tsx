@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { MembershipWithdrawalReasonValueType } from '@/types/Mypage/settingType';
+import {
+  MembershipWithdrawalReasonKeyType,
+  MembershipWithdrawalReasonValueType,
+} from '@/types/Mypage/settingType';
 import { withdrawalAPI } from '@/apis/user';
 import useInput from '@/hooks/useInput';
 import {
   MAX_LENGTH_MEMBERSHIP_WITHDRAWAL_REASON_CONTENT,
   MEMBERSHIP_WITHDRAWAL_NOTE_LIST,
-  MEMBERSHIP_WITHDRAWAL_REASON_VALUES,
+  MEMBERSHIP_WITHDRAWAL_REASON,
 } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
@@ -35,18 +38,21 @@ function WithdrawalFromMembership() {
   };
 
   const onSelectHandler = (e: React.MouseEvent<HTMLInputElement>) => {
-    const membershipWithdrawalReasonValue = e.currentTarget
-      .id as MembershipWithdrawalReasonValueType;
+    const membershipWithdrawalReasonKey = e.currentTarget
+      .id as MembershipWithdrawalReasonKeyType;
 
-    if (reasonCheckBox.includes(membershipWithdrawalReasonValue)) {
-      setReasonCheckBox(
-        reasonCheckBox.filter(
+    const membershipWithdrawalReasonValue: MembershipWithdrawalReasonValueType =
+      MEMBERSHIP_WITHDRAWAL_REASON[membershipWithdrawalReasonKey];
+
+    const updatedReasonChechBox = reasonCheckBox.includes(
+      membershipWithdrawalReasonValue,
+    )
+      ? reasonCheckBox.filter(
           (item) => item !== membershipWithdrawalReasonValue,
-        ),
-      );
-    } else {
-      setReasonCheckBox([...reasonCheckBox, membershipWithdrawalReasonValue]);
-    }
+        )
+      : [...reasonCheckBox, membershipWithdrawalReasonValue];
+
+    setReasonCheckBox(updatedReasonChechBox);
   };
 
   const onSubmitHandler = () => {
@@ -84,10 +90,10 @@ function WithdrawalFromMembership() {
         </h3>
         <div className={styles.box}>
           <ul className={styles.checkList}>
-            {MEMBERSHIP_WITHDRAWAL_REASON_VALUES.map((item) => (
-              <li key={item}>
-                <input type="checkbox" id={item} onClick={onSelectHandler} />
-                <label htmlFor={item}>{item}</label>
+            {Object.entries(MEMBERSHIP_WITHDRAWAL_REASON).map(([key, text]) => (
+              <li key={key}>
+                <input type="checkbox" id={key} onClick={onSelectHandler} />
+                <label htmlFor={key}>{text}</label>
               </li>
             ))}
           </ul>
