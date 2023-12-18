@@ -96,3 +96,22 @@
   font-size: 1.5rem;
   border: none;
 }
+
+input {
+  appearance: none;
+  background-color: var(--gray-color);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 5px;
+  margin: 0;
+  margin-right: 0.25rem;
+  cursor: pointer;
+  &:checked {
+    background-color: var(--main-color);
+  }
+}
+
+label:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
