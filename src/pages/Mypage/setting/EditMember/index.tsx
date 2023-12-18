@@ -6,7 +6,12 @@ import EditPhoneInfo from '@/components/MyPage/MySetting/EditInfo/EditPhoneInfo'
 import UserInfo from '@/components/MyPage/MySetting/UserInfo';
 import { certificateStore } from '@/store/certificateStore';
 import userStore from '@/store/userStore';
-import { EDIT_MODE, EditMode, SettingStep } from '@/constants/myPage';
+import {
+  EDIT_MODE,
+  EditMode,
+  SETTING_STEP,
+  SettingStep,
+} from '@/constants/myPage';
 import styles from './styles.module.scss';
 
 type SettingOutletContext = {
@@ -28,7 +33,7 @@ export default function EditMember() {
 
   useEffect(() => {
     if (isCertificated) {
-      setSettingStep('editInfo');
+      setSettingStep(SETTING_STEP.EDIT_INFO);
     }
   }, []);
 
@@ -41,7 +46,7 @@ export default function EditMember() {
           <ul className={styles.infoWrapper}>
             <UserInfo title="아이디" value={user?.userName} />
 
-            {editMode === 'nickname' ? (
+            {editMode === EDIT_MODE.NICKNAME ? (
               <EditNicknameInfo
                 currentNickname={user?.nick_name}
                 setEditMode={setEditMode}
@@ -54,7 +59,7 @@ export default function EditMember() {
               />
             )}
 
-            {editMode === 'phone' ? (
+            {editMode === EDIT_MODE.PHONE ? (
               <EditPhoneInfo
                 currentPhoneNum={user?.phone_num}
                 setEditMode={setEditMode}
@@ -67,7 +72,7 @@ export default function EditMember() {
               />
             )}
 
-            {editMode === 'email' ? (
+            {editMode === EDIT_MODE.EMAIL ? (
               <EditEmailInfo
                 currentEmail={user.email}
                 setEditMode={setEditMode}

@@ -4,6 +4,16 @@ import {
   ApiResponseWithDataType,
 } from '@/types/apiResponseType';
 
+export const withdrawalAPI = async (reason: string[], content: string) => {
+  try {
+    const response = await axios.post(`/users/withdrawal`, { reason, content });
+    return response.data;
+  } catch (error) {
+    const err = error as AxiosError<ApiResponseType>;
+    return Promise.reject(err);
+  }
+};
+
 export const checkPasswordAPI = async (password: string) => {
   try {
     const response = await axios.post<ApiResponseWithDataType<boolean>>(

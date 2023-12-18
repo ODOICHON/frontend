@@ -84,7 +84,7 @@ export const routes: RouteObject[] = [
                 element: <EditMember />,
               },
               {
-                path: 'withdraw',
+                path: 'withdrawal',
                 element: <WithdrawalFromMembership />,
               },
               {

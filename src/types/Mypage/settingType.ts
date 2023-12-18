@@ -6,6 +6,6 @@ export type SettingInfoData = {
 export type SettingInfo = {
   certification: SettingInfoData;
   editInfo: SettingInfoData;
-  withdraw: SettingInfoData;
+  withdrawal: SettingInfoData;
   password: SettingInfoData;
 };

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Button from '@/components/Common/ui/Button';
 import { certificateStore } from '@/store/certificateStore';
-import { SettingStep, settingInfo } from '@/constants/myPage';
+import { SETTING_STEP, SettingStep, settingInfo } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
 export default function MySettingsPage() {
@@ -14,8 +14,8 @@ export default function MySettingsPage() {
 
   const onClickWithdraw = () => {
     setIsCertificated(true);
-    setSettingStep('withdraw');
-    navigate('/mypage/setting/withdraw');
+    setSettingStep(SETTING_STEP.WITHDRAWAL);
+    navigate('/mypage/setting/withdrawal');
   };
   return (
     <section className={styles.container}>
@@ -32,7 +32,7 @@ export default function MySettingsPage() {
         />
       </article>
       <article className={styles.buttonWrapper}>
-        {settingStep !== 'withdraw' && (
+        {settingStep !== SETTING_STEP.WITHDRAWAL && (
           <Button
             text="회원 탈퇴"
             borderColor="#eaeeef"

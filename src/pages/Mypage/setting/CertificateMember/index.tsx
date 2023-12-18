@@ -5,7 +5,7 @@ import eyeClosedImage from '@/assets/common/eyeClosed.svg';
 import { checkPasswordAPI } from '@/apis/user';
 import { certificateStore } from '@/store/certificateStore';
 import useInput from '@/hooks/useInput';
-import { SettingStep } from '@/constants/myPage';
+import { SETTING_STEP, SettingStep } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
 type SettingOutletContext = {
@@ -25,7 +25,7 @@ export default function CertificateMember() {
     const { data: isPassed } = await checkPasswordAPI(pw);
     if (isPassed) {
       setIsCertificated(true);
-      setSettingStep('editInfo');
+      setSettingStep(SETTING_STEP.EDIT_INFO);
       navigate('/mypage/setting/edit');
     } else {
       // TODO: 공용 모달로 띄워주기

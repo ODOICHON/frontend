@@ -5,7 +5,7 @@ import eyeImage from '@/assets/common/eye.svg';
 import eyeClosedImage from '@/assets/common/eyeClosed.svg';
 import { checkPasswordAPI, updatePasswordAPI } from '@/apis/user';
 import { certificateStore } from '@/store/certificateStore';
-import { SettingStep } from '@/constants/myPage';
+import { SETTING_STEP, SettingStep } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
 type SettingOutletContext = {
@@ -81,7 +81,7 @@ export default function EditPassword() {
 
   useEffect(() => {
     if (isCertificated) {
-      setSettingStep('password');
+      setSettingStep(SETTING_STEP.PASSWORD);
     }
   }, []);
 
