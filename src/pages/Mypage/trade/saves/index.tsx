@@ -10,7 +10,7 @@ import { TradeBoardType } from '@/types/Board/tradeType';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import styles from './styles.module.scss';
 
-export default function SavesPage() {
+export default function MySavesPage() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const fetchMySaves = (page: number) => {

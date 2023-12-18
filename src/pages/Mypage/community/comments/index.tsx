@@ -3,55 +3,48 @@ import { useQuery } from '@tanstack/react-query';
 import Loading from '@/components/Common/Loading';
 import NoPosts from '@/components/Common/NoPosts';
 import Pagination from '@/components/Common/Pagination';
-import CommunityBoard from '@/components/Community/Board';
+import MyCommentCard from '@/components/MyPage/MyCommentCard';
 import { QueryKeys, restFetcher } from '@/queryClient';
-import { CommunityBoardPageType } from '@/types/Board/communityType';
+import { MyCommentPageType } from '@/types/Board/communityType';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import styles from './styles.module.scss';
 
-export default function MyWritePage() {
+export default function MyCommentsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const fetchBoardList = (page: number) => {
     const params = {
       page: page - 1,
     };
-    return restFetcher({ method: 'GET', path: 'boards/my', params });
+    return restFetcher({ method: 'GET', path: 'boards/my/comment', params });
   };
 
-  const { data: boardListData, isLoading } = useQuery<
-    ApiResponseWithDataType<CommunityBoardPageType>
-  >([QueryKeys.COMMUNITY_BOARD, QueryKeys.MY_HOUSES, currentPage], () =>
+  const { data: commentsData, isLoading } = useQuery<
+    ApiResponseWithDataType<MyCommentPageType>
+  >([QueryKeys.COMMUNITY_BOARD, QueryKeys.MY_COMMENTS, currentPage], () =>
     fetchBoardList(currentPage),
   );
 
   return (
     <section className={styles.container}>
       <article className={styles.titleWrapper}>
-        <h1>내가 쓴 글</h1>
-        <p>내가 남긴 글을 확인할 수 있어요.</p>
+        <h1>내가 쓴 댓글</h1>
+        <p>내가 남긴 댓글을 확인할 수 있어요.</p>
       </article>
       <article className={styles.countWrapper}>
         <div className={styles.count}>
-          총 {boardListData?.data.totalElements}개
+          총 {commentsData?.data.totalElements}개
         </div>
         <div className={styles.divider} />
       </article>
       <ul>
         {isLoading && <Loading />}
-        {boardListData && boardListData.data.content.length > 0 ? (
-          boardListData?.data.content.map((content) => (
-            <CommunityBoard
-              key={content.boardId}
+        {commentsData && commentsData.data.content.length > 0 ? (
+          commentsData?.data.content.map((content) => (
+            <MyCommentCard
+              key={content.commentContent}
               boardId={content.boardId}
-              category={content.category}
-              prefixCategory={content.prefixCategory || ''}
               title={content.title}
-              oneLineContent={content.oneLineContent}
-              imageUrl={content.imageUrl}
-              commentCount={content.commentCount}
-              nickName={content.nickName}
-              createdAt={content.createdAt}
-              fixed={content.fixed}
+              commentContent={content.commentContent}
             />
           ))
         ) : (
@@ -62,9 +55,9 @@ export default function MyWritePage() {
         )}
       </ul>
       <div className={styles.paginationWrapper}>
-        {boardListData && boardListData.data.content.length > 0 && (
+        {commentsData && commentsData.data.content.length > 0 && (
           <Pagination
-            totalPage={boardListData.data.totalPages}
+            totalPage={commentsData.data.totalPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
           />

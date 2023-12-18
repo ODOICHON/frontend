@@ -1,23 +1,31 @@
-import { useState } from 'react';
-import {
-  MembershipWithdrawalReasonKeyType,
-  MembershipWithdrawalReasonValueType,
-} from '@/types/Mypage/settingType';
+import { useEffect, useState } from 'react';
+import { Navigate, useOutletContext } from 'react-router-dom';
 import { withdrawalAPI } from '@/apis/user';
+import { certificateStore } from '@/store/certificateStore';
 import useInput from '@/hooks/useInput';
 import {
   MAX_LENGTH_MEMBERSHIP_WITHDRAWAL_REASON_CONTENT,
   MEMBERSHIP_WITHDRAWAL_NOTE_LIST,
   MEMBERSHIP_WITHDRAWAL_REASON,
+  MembershipWithdrawalReason,
+  SETTING_STEP,
+  SettingStep,
 } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
+type SettingOutletContext = {
+  settingStep: SettingStep;
+  setSettingStep: React.Dispatch<React.SetStateAction<SettingStep>>;
+};
+
 function WithdrawalFromMembership() {
+  const { isCertificated } = certificateStore();
+  const { setSettingStep } = useOutletContext<SettingOutletContext>();
   const [requiredCheckBox, setRequiredCheckBox] = useState<boolean>(false);
   const [inputCount, setInputCount] = useState(0);
   const [content, contentHandler] = useInput<string>('');
   const [requiredReasonCheckBox, setRequiredReasonCheckBox] = useState<
-    MembershipWithdrawalReasonValueType[]
+    (typeof MEMBERSHIP_WITHDRAWAL_REASON)[MembershipWithdrawalReason][]
   >([]);
 
   const onInputLengthCheckHandler = (
@@ -38,11 +46,11 @@ function WithdrawalFromMembership() {
   };
 
   const onSelectHandler = (e: React.MouseEvent<HTMLInputElement>) => {
-    const membershipWithdrawalReasonKey = e.currentTarget
-      .id as MembershipWithdrawalReasonKeyType;
+    const membershipWithdrawalReason = e.currentTarget
+      .id as MembershipWithdrawalReason;
 
-    const membershipWithdrawalReasonValue: MembershipWithdrawalReasonValueType =
-      MEMBERSHIP_WITHDRAWAL_REASON[membershipWithdrawalReasonKey];
+    const membershipWithdrawalReasonValue: (typeof MEMBERSHIP_WITHDRAWAL_REASON)[MembershipWithdrawalReason] =
+      MEMBERSHIP_WITHDRAWAL_REASON[membershipWithdrawalReason];
 
     const updatedReasonCheckBox = requiredReasonCheckBox.includes(
       membershipWithdrawalReasonValue,
@@ -66,6 +74,13 @@ function WithdrawalFromMembership() {
     });
   };
 
+  useEffect(() => {
+    if (isCertificated) {
+      setSettingStep(SETTING_STEP.WITHDRAWAL);
+    }
+  }, []);
+
+  if (!isCertificated) return <Navigate to="/mypage/setting" />;
   return (
     <article className={styles.wrapper}>
       <div>
