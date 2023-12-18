@@ -8,6 +8,7 @@
   border: 1px solid var(--grey-4, #ced3d6);
   background: #fff;
   padding: 3.25rem 2.25rem;
+  font-family: 'Pretendard';
   & > div {
     width: 100%;
   }
@@ -31,7 +32,6 @@
 }
 
 .title {
-  font-family: 'Pretendard';
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -64,7 +64,6 @@
 
 .sub {
   color: #4d5256;
-  font-family: 'Pretendard';
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
 }
@@ -76,13 +75,10 @@
   resize: none;
   font-size: 1.25rem;
   line-height: 2rem;
-  font-family: 'Pretendard';
-  outline: none;
 }
 
 .count {
   color: #9a9a9a;
-  font-family: 'Pretendard';
   font-size: 1rem;
   margin-left: auto;
 }
