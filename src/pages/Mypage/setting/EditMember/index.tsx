@@ -6,7 +6,7 @@ import EditPhoneInfo from '@/components/MyPage/MySetting/EditInfo/EditPhoneInfo'
 import UserInfo from '@/components/MyPage/MySetting/UserInfo';
 import { certificateStore } from '@/store/certificateStore';
 import userStore from '@/store/userStore';
-import { EditMode, SettingStep } from '@/constants/myPage';
+import { EDIT_MODE, EditMode, SettingStep } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
 type SettingOutletContext = {
@@ -19,8 +19,7 @@ export default function EditMember() {
   const { isCertificated } = certificateStore();
   const { user } = userStore();
   const { setSettingStep } = useOutletContext<SettingOutletContext>();
-
-  const [editMode, setEditMode] = useState<EditMode>('none');
+  const [editMode, setEditMode] = useState<EditMode>(EDIT_MODE.NONE);
 
   const onClickEditPassword = () => {
     setSettingStep('password');

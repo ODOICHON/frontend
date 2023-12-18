@@ -1,15 +1,20 @@
 import { SettingInfo } from '@/types/MyPage/settingType';
 
-export const settingStep = [
-  'certification',
-  'editInfo',
-  'withdraw',
-  'password',
-] as const;
-export const editMode = ['none', 'nickname', 'phone', 'email'] as const;
+export const SETTING_STEP = {
+  CERTIFICATION: 'certification',
+  EDIT_INFO: 'editInfo',
+  WITHDRAWAL: 'withdrawal',
+  PASSWORD: 'password',
+} as const;
 
-export type SettingStep = (typeof settingStep)[number];
-export type EditMode = (typeof editMode)[number];
+export const EDIT_MODE = {
+  NONE: 'none',
+  NICKNAME: 'nickname',
+  PHONE: 'phone',
+  EMAIL: 'email',
+} as const;
+export type SettingStep = (typeof SETTING_STEP)[keyof typeof SETTING_STEP];
+export type EditMode = (typeof EDIT_MODE)[keyof typeof EDIT_MODE];
 
 export const settingInfo: SettingInfo = {
   certification: {

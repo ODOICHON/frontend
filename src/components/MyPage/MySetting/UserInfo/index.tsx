@@ -1,4 +1,4 @@
-import { EditMode } from '@/constants/myPage';
+import { EDIT_MODE, EditMode } from '@/constants/myPage';
 import styles from './styles.module.scss';
 
 type UserInfoProps = {
@@ -12,13 +12,13 @@ export default function UserInfo({ title, value, setEditMode }: UserInfoProps) {
     if (!setEditMode) return;
     switch (title) {
       case '닉네임':
-        return setEditMode('nickname');
+        return setEditMode(EDIT_MODE.NICKNAME);
       case '전화번호':
-        return setEditMode('phone');
+        return setEditMode(EDIT_MODE.PHONE);
       case '이메일':
-        return setEditMode('email');
+        return setEditMode(EDIT_MODE.EMAIL);
       default:
-        return setEditMode('none');
+        return setEditMode(EDIT_MODE.NONE);
     }
   };
   return (
