@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate, useOutletContext } from 'react-router-dom';
-import EditEmailInfo from '@/components/MyPage/EditInfo/EditEmailInfo';
-import EditNicknameInfo from '@/components/MyPage/EditInfo/EditNicknameInfo';
-import EditPhoneInfo from '@/components/MyPage/EditInfo/EditPhoneInfo';
-import UserInfo from '@/components/MyPage/UserInfo';
+import EditEmailInfo from '@/components/MyPage/MySetting/EditInfo/EditEmailInfo';
+import EditNicknameInfo from '@/components/MyPage/MySetting/EditInfo/EditNicknameInfo';
+import EditPhoneInfo from '@/components/MyPage/MySetting/EditInfo/EditPhoneInfo';
+import UserInfo from '@/components/MyPage/MySetting/UserInfo';
 import { certificateStore } from '@/store/certificateStore';
 import userStore from '@/store/userStore';
 import { EditMode, SettingStep } from '@/constants/myPage';
