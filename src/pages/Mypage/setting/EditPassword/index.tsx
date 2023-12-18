@@ -123,9 +123,9 @@ export default function EditPassword() {
             {errors.current_password && errors.current_password.message}
           </p>
         </div>
-        {/* 비밀번호 */}
+        {/* 새 비밀번호 */}
         <div className={styles.inputContainer}>
-          <label htmlFor="password">비밀번호</label>
+          <label htmlFor="password">새 비밀번호</label>
           <input
             className={styles.inputStyle}
             id="password"
@@ -155,9 +155,9 @@ export default function EditPassword() {
             {errors.password && errors.password.message}
           </p>
         </div>
-        {/* 비밀번호 확인 */}
+        {/* 새 비밀번호 확인 */}
         <div className={styles.inputContainer}>
-          <label htmlFor="password_check">비밀번호 확인</label>
+          <label htmlFor="password_check">새 비밀번호 확인</label>
           <input
             className={styles.inputStyle}
             id="password_check"
