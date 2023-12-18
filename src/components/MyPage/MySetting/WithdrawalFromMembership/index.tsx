@@ -55,13 +55,14 @@ function WithdrawalFromMembership() {
     setRequiredReasonCheckBox(updatedReasonCheckBox);
   };
 
-  const onSubmitHandler = () => {
+  const onSubmitHandler = async () => {
     if (requiredCheckBox === false) return alert('필수 항목을 체크해주세요.');
 
     if (requiredReasonCheckBox.length === 0)
       return alert('탈퇴 이유를 선택해주세요.');
-    withdrawalAPI(requiredReasonCheckBox, content).catch((err) => {
-      alert(err.response.data.message);
+    await withdrawalAPI(requiredReasonCheckBox, content).catch((err) => {
+      const { code, message } = err.response.data;
+      if (code === 'U0008') return alert(message);
     });
   };
 
