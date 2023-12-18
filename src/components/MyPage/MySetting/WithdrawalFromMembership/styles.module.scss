@@ -97,6 +97,18 @@
   border: none;
 }
 
+.activate {
+  cursor: pointer;
+}
+
+.deactivate {
+  background-color: var(--gray-color);
+  cursor: not-allowed;
+  &:hover {
+    opacity: 1;
+  }
+}
+
 input {
   appearance: none;
   background-color: var(--gray-color);

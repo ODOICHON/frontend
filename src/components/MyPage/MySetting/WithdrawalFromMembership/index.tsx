@@ -16,7 +16,7 @@ function WithdrawalFromMembership() {
   const [requiredCheckBox, setRequiredCheckBox] = useState<boolean>(false);
   const [inputCount, setInputCount] = useState(0);
   const [content, contentHandler] = useInput<string>('');
-  const [reasonCheckBox, setReasonCheckBox] = useState<
+  const [requiredReasonCheckBox, setRequiredReasonCheckBox] = useState<
     MembershipWithdrawalReasonValueType[]
   >([]);
 
@@ -44,22 +44,23 @@ function WithdrawalFromMembership() {
     const membershipWithdrawalReasonValue: MembershipWithdrawalReasonValueType =
       MEMBERSHIP_WITHDRAWAL_REASON[membershipWithdrawalReasonKey];
 
-    const updatedReasonCheckBox = reasonCheckBox.includes(
+    const updatedReasonCheckBox = requiredReasonCheckBox.includes(
       membershipWithdrawalReasonValue,
     )
-      ? reasonCheckBox.filter(
+      ? requiredReasonCheckBox.filter(
           (item) => item !== membershipWithdrawalReasonValue,
         )
-      : [...reasonCheckBox, membershipWithdrawalReasonValue];
+      : [...requiredReasonCheckBox, membershipWithdrawalReasonValue];
 
-    setReasonCheckBox(updatedReasonCheckBox);
+    setRequiredReasonCheckBox(updatedReasonCheckBox);
   };
 
   const onSubmitHandler = () => {
     if (requiredCheckBox === false) return alert('필수 항목을 체크해주세요.');
 
-    if (reasonCheckBox.length === 0) return alert('탈퇴 이유를 선택해주세요.');
-    withdrawalAPI(reasonCheckBox, content).catch((err) => {
+    if (requiredReasonCheckBox.length === 0)
+      return alert('탈퇴 이유를 선택해주세요.');
+    withdrawalAPI(requiredReasonCheckBox, content).catch((err) => {
       alert(err.response.data.message);
     });
   };
@@ -118,7 +119,19 @@ function WithdrawalFromMembership() {
           </p>
         </div>
       </div>
-      <button className={styles.button} type="button" onClick={onSubmitHandler}>
+      <button
+        className={[
+          styles.button,
+          requiredCheckBox === false || requiredReasonCheckBox.length === 0
+            ? styles.deactivate
+            : styles.activate,
+        ].join(' ')}
+        type="button"
+        onClick={onSubmitHandler}
+        disabled={
+          requiredCheckBox === false || requiredReasonCheckBox.length === 0
+        }
+      >
         회원 탈퇴
       </button>
     </article>
