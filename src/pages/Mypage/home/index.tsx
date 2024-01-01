@@ -24,7 +24,7 @@ function MyHomePage() {
 
   const { data: myBoardListData } = useQuery<
     ApiResponseWithDataType<BoardPageType<myBoardType>>
-  >([QueryKeys.MINE, QueryKeys.COMMUNITY_BOARD], () =>
+  >([QueryKeys.COMMUNITY_BOARD, QueryKeys.MINE], () =>
     restFetcher({
       method: 'GET',
       path: 'boards/my',
@@ -54,7 +54,7 @@ function MyHomePage() {
 
   const { data: myScrapBoardListData } = useQuery<
     ApiResponseWithDataType<BoardPageType<TradeBoardType>>
-  >([QueryKeys.MINE, QueryKeys.TRADE_BOARD], () =>
+  >([QueryKeys.MY_SCRAPS, QueryKeys.MINE, QueryKeys.TRADE_BOARD], () =>
     restFetcher({
       method: 'GET',
       path: 'houses/scrap',

@@ -34,6 +34,11 @@ function Scrap({ isScraped, boardId }: ScrapProps) {
 
       return { previousScrapData };
     },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
+        queryKey: [QueryKeys.MY_SCRAPS],
+      });
+    },
     onError: (error, newData, context) => {
       // 캐시를 저장된 값으로 롤백
       queryClient.setQueriesData([QueryKeys.TRADE_BOARD, boardId], {
