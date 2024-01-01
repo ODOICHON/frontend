@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import love from '@/assets/common/love.svg';
 import notLove from '@/assets/common/notLove.svg';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { CommunityBoardDetailType } from '@/types/Board/communityType';
 import { IntroBoardDetailType } from '@/types/Board/introType';
@@ -111,6 +113,11 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
         onClick={onClickButton}
       />
       <p>{loveCount}</p>
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
+      )}
     </div>
   );
 }
