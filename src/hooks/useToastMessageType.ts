@@ -5,13 +5,21 @@ type ToastMessageKeyType =
   | 'POST_COMMENT_SUCCESS'
   | 'POST_COMMENT_ERROR'
   | 'COMMENT_EMPTY_ERROR'
-  | 'LOGIN_REQUIRED_ERROR';
+  | 'LOGIN_REQUIRED_ERROR'
+  | 'POST_DELETE_SUCCESS'
+  | 'SIGN_UP_SUCCESS'
+  | 'AGENT_SIGN_UP_SUCCESS'
+  | 'POST_UPDATE_SUCCESS'
+  | 'POST_UPDATE_ERROR'
+  | 'POST_DELETE_ERROR'
+  | 'POST_CREATE_SUCCESS'
+  | 'POST_CREATE_ERROR';
 
 type ToastMessageType = {
   [key in ToastMessageKeyType]: ToastMessageModalProps;
 };
 
-const toastMessage: ToastMessageType = {
+export const TOAST_MESSAGE: ToastMessageType = {
   POST_COMMENT_SUCCESS: {
     message: '댓글이 등록되었습니다.',
     subMessage: undefined,
@@ -19,6 +27,36 @@ const toastMessage: ToastMessageType = {
   },
   POST_COMMENT_ERROR: {
     message: '댓글 등록에 실패했습니다.',
+    subMessage: '잠시 후 다시 시도해주세요.',
+    iconType: 'ERROR',
+  },
+  POST_CREATE_SUCCESS: {
+    message: '게시글이 등록되었습니다.',
+    subMessage: undefined,
+    iconType: 'SUCCESS',
+  },
+  POST_CREATE_ERROR: {
+    message: '게시글 등록에 실패했습니다.',
+    subMessage: '잠시 후 다시 시도해주세요.',
+    iconType: 'ERROR',
+  },
+  POST_DELETE_SUCCESS: {
+    message: '게시글이 삭제되었습니다.',
+    subMessage: undefined,
+    iconType: 'SUCCESS',
+  },
+  POST_DELETE_ERROR: {
+    message: '게시글 삭제에 실패했습니다.',
+    subMessage: '잠시 후 다시 시도해주세요.',
+    iconType: 'ERROR',
+  },
+  POST_UPDATE_SUCCESS: {
+    message: '게시글이 수정되었습니다.',
+    subMessage: undefined,
+    iconType: 'SUCCESS',
+  },
+  POST_UPDATE_ERROR: {
+    message: '게시글 수정에 실패했습니다.',
     subMessage: '잠시 후 다시 시도해주세요.',
     iconType: 'ERROR',
   },
@@ -33,6 +71,16 @@ const toastMessage: ToastMessageType = {
     iconType: 'DEFAULT',
     confirmModal: true,
   },
+  SIGN_UP_SUCCESS: {
+    message: '회원가입에 성공하였습니다.',
+    subMessage: undefined,
+    iconType: 'SUCCESS',
+  },
+  AGENT_SIGN_UP_SUCCESS: {
+    message: '공인중개사 회원가입에 성공하였습니다.',
+    subMessage: '공인중개사 회원은 관리자 승인 이후에 로그인이 가능합니다.',
+    iconType: 'SUCCESS',
+  },
 };
 
 const useToastMessageType = () => {
@@ -44,7 +92,7 @@ const useToastMessageType = () => {
     onClose: () => void,
     onConfirm?: () => void,
   ) => {
-    setToastMessageProps({ ...toastMessage[key], onClose, onConfirm });
+    setToastMessageProps({ ...TOAST_MESSAGE[key], onClose, onConfirm });
   };
 
   return { toastMessageProps, handleToastMessageProps };

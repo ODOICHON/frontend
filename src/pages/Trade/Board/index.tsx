@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 import { A11y, Navigation, Pagination, Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import AccessModal from '@/components/Common/AccessModal';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import TradeBoardInfo from '@/components/Trade/Info';
 import KakaoMapImage from '@/components/Trade/KakaoMapImage';
 import ReportIcon from '@/components/Trade/Report/ReportIcon';
@@ -19,6 +21,8 @@ import 'swiper/css/navigation';
 import { TradeBoardDetailType } from '@/types/Board/tradeType';
 import { DeleteHouseAPI } from '@/apis/houses';
 import userStore from '@/store/userStore';
+import useModalState from '@/hooks/useModalState';
+import useToastMessageType from '@/hooks/useToastMessageType';
 import { getMoveInType, getUserType } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { opacityVariants } from '@/constants/variants';
@@ -26,6 +30,8 @@ import styles from './styles.module.scss';
 
 export default function TradeBoardPage() {
   const navigate = useNavigate();
+  const { modalState, handleModalOpen, handleModalClose } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
   const { id } = useParams();
   const { user } = userStore();
   const { data } = useQuery<ApiResponseWithDataType<TradeBoardDetailType>>(
@@ -43,8 +49,11 @@ export default function TradeBoardPage() {
   const handleDeleteButtonClick = async (houseId: number) => {
     if (houseId === 0) throw new Error('없는 빈집거래 게시물입니다.');
     await DeleteHouseAPI(houseId);
-    alert('삭제되었습니다.');
-    navigate('/trade');
+    handleToastMessageProps('POST_DELETE_SUCCESS', () => {
+      handleModalClose();
+      navigate('/trade');
+    });
+    handleModalOpen();
   };
 
   const handleEditButtonClick = () => {
@@ -199,6 +208,11 @@ export default function TradeBoardPage() {
           </button>
         </section>
       </section>
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
+      )}
     </motion.div>
   );
 }
