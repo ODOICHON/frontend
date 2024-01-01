@@ -17,6 +17,7 @@ export type TradeBoardForm = {
   rentalType: RentalType;
   city: string;
   zipCode: string;
+  detail: string;
   size: string;
   purpose: string;
   floorNum: number;
@@ -52,6 +53,7 @@ export type TradeBoardDetailType = {
   rentalType: RentalType;
   city: string;
   zipCode: string;
+  detail: string;
   size: string;
   purpose: string;
   floorNum: number;
