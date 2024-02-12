@@ -20,7 +20,13 @@ function MyScrapPage() {
   const [filter, setFilter] = useState<ScrapFilterType>(INITIAL_FILTER);
   const { data: scrapBoardListData, isLoading: isScrapBoardListData } =
     useQuery<ApiResponseWithDataType<BoardPageType<TradeBoardType>>>(
-      [QueryKeys.TRADE_BOARD, QueryKeys.MINE, currentPage, filter],
+      [
+        QueryKeys.MY_SCRAPS,
+        QueryKeys.TRADE_BOARD,
+        QueryKeys.MINE,
+        currentPage,
+        filter,
+      ],
       () =>
         restFetcher({
           method: 'GET',
