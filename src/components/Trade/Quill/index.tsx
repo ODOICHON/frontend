@@ -72,7 +72,10 @@ export default function TradeQuill({
     };
 
     if (!isTempSave) {
-      if (!checkBeforeTradePost(user!, newForm)) return;
+      if (!checkBeforeTradePost(user!, newForm)) {
+        setIsProcessing(false);
+        return;
+      }
     }
 
     try {
