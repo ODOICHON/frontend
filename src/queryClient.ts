@@ -54,7 +54,28 @@ export const restFetcher = async ({
   }
 };
 
-export const QueryKeys = {
+const KEYS = [
+  'USER',
+  'PREVIEW_BOARD',
+  'INTRO_BOARD',
+  'COMMUNITY_BOARD',
+  'TRADE_BOARD',
+  'COMMENT',
+  'MINE',
+  'LIKE',
+  'MY_HOUSES',
+  'MY_SAVES',
+  'MY_COMMENTS',
+  'MY_LIKES',
+] as const;
+
+type QueryKeys = (typeof KEYS)[number];
+
+type QueryKeyObj = {
+  [K in QueryKeys]: K;
+};
+
+export const QueryKeys: QueryKeyObj = {
   USER: 'USER',
   PREVIEW_BOARD: 'PREVIEW_BOARD',
   INTRO_BOARD: 'INTRO_BOARD',
