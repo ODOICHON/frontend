@@ -1,8 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { CommentType } from '@/types/Board/boardType';
 import userStore from '@/store/userStore';
+import useModalState from '@/hooks/useModalState';
+import useToastMessageType from '@/hooks/useToastMessageType';
 import styles from './styles.module.scss';
 import CommentDetail from '../CommentDetail';
 
@@ -22,6 +27,9 @@ export default function Comments({
   const { user } = userStore();
   const queryClient = useQueryClient();
   const [content, setContent] = useState('');
+  const { modalState, handleModalOpen, handleModalClose } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
+  const navigate = useNavigate();
   const { mutate: PostComment } = useMutation(
     () =>
       restFetcher({
@@ -36,24 +44,34 @@ export default function Comments({
       onSuccess: () => {
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
         setContent('');
+        handleToastMessageProps('POST_COMMENT_SUCCESS', handleModalClose);
         return queryClient.refetchQueries([
           intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
         ]);
       },
+      onError: () => {
+        handleToastMessageProps('POST_COMMENT_ERROR', handleModalClose);
+      },
     },
   );
+
   const handleContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.currentTarget;
     if (value.length > 400) return;
     setContent(value);
   };
+
   const onClickButton = () => {
     if (!user) {
-      alert('로그인 후 이용 가능합니다.');
-      return;
+      handleToastMessageProps('LOGIN_REQUIRED_ERROR', handleModalClose, () =>
+        navigate('/login'),
+      );
+    } else if (content.trim() === '') {
+      handleToastMessageProps('COMMENT_EMPTY_ERROR', handleModalClose);
+    } else {
+      PostComment();
     }
-    if (content.trim() === '') return;
-    PostComment();
+    handleModalOpen();
   };
   return (
     <div className={styles.wrapper}>
@@ -82,6 +100,11 @@ export default function Comments({
           intro={intro}
         />
       ))}
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
+      )}
     </div>
   );
 }

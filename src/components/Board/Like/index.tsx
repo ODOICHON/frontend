@@ -1,10 +1,15 @@
+import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import love from '@/assets/common/love.svg';
 import notLove from '@/assets/common/notLove.svg';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { CommunityBoardDetailType } from '@/types/Board/communityType';
 import { IntroBoardDetailType } from '@/types/Board/introType';
 import userStore from '@/store/userStore';
+import useModalState from '@/hooks/useModalState';
+import useToastMessageType from '@/hooks/useToastMessageType';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import styles from './styles.module.scss';
 
@@ -16,6 +21,9 @@ type LikeProps = {
 
 export default function Like({ boardId, loveCount, intro }: LikeProps) {
   const { user } = userStore();
+  const navigate = useNavigate();
+  const { modalState, handleModalOpen, handleModalClose } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
   const queryClient = useQueryClient();
   const { data: isLove } = useQuery<ApiResponseWithDataType<boolean>>(
     [QueryKeys.LIKE, boardId],
@@ -88,7 +96,10 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
   );
   const onClickButton = () => {
     if (!user) {
-      alert('로그인 후 이용 가능합니다.');
+      handleToastMessageProps('LOGIN_REQUIRED_ERROR', handleModalClose, () =>
+        navigate('/login'),
+      );
+      handleModalOpen();
       return;
     }
     clickLove();
@@ -102,6 +113,11 @@ export default function Like({ boardId, loveCount, intro }: LikeProps) {
         onClick={onClickButton}
       />
       <p>{loveCount}</p>
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
+      )}
     </div>
   );
 }
