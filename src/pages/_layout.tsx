@@ -33,11 +33,14 @@ export default function Layout() {
         style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
       >
         <Navbar />
-        <section style={{ flexGrow: '1' }}>
+        <section
+          style={{ display: 'flex', flexDirection: 'column', flexGrow: '1' }}
+        >
           <Outlet />
         </section>
         <Footer />
       </main>
+      <div id="portal" />
     </Suspense>
   );
 }

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+  DealStateType,
   RecommendedTagType,
   RentalType,
   TradeBoardForm,
@@ -45,7 +46,7 @@ export const getPrefixCategoryName = (category: string) => {
 };
 
 // 매매 타입 이름 가져오기
-export const getRentalName = (rental: string) => {
+export const getRentalName = (rental: RentalType) => {
   switch (rental) {
     case 'MONTHLYRENT':
       return '월세';
@@ -58,8 +59,22 @@ export const getRentalName = (rental: string) => {
   }
 };
 
+// 매매 타입 이름 가져오기
+export const getDealStateName = (dealState: DealStateType) => {
+  switch (dealState) {
+    case 'APPLYING':
+      return '승인중';
+    case 'ONGOING':
+      return '판매중';
+    case 'COMPLETED':
+      return '판매완료';
+    default:
+      return '';
+  }
+};
+
 // 매매 타입에 따른 가격 이름
-export const getRentalPriceType = (rental: string) => {
+export const getRentalPriceType = (rental: RentalType) => {
   switch (rental) {
     case 'MONTHLYRENT':
       return '보증금';
@@ -73,7 +88,7 @@ export const getRentalPriceType = (rental: string) => {
 };
 
 // 일반회원, 중개사 회원 구분 함수
-export const getUserType = (userType: string) => {
+export const getUserType = (userType: UserType) => {
   switch (userType) {
     case 'AGENT':
       return '공인중개사 매물';
@@ -84,7 +99,7 @@ export const getUserType = (userType: string) => {
 
 // 입주가능, 입주불가 구분 함수
 export const getMoveInType = (isCompleted: boolean) => {
-  return isCompleted ? '입주불가' : '입주가능';
+  return isCompleted ? '거래완료' : '입주가능';
 };
 
 export const checkBeforePost = (
@@ -121,11 +136,13 @@ export const checkBeforeTradePost = (
     imageUrls,
     city,
     zipCode,
+    detail,
     price,
     monthlyPrice,
     contact,
     agentName,
     size,
+    floorNum,
     createdDate,
     purpose,
     title,
@@ -142,6 +159,10 @@ export const checkBeforeTradePost = (
   }
   if (zipCode === '') {
     alert('우편번호를 입력해주세요.');
+    return false;
+  }
+  if (detail === '') {
+    alert('상세주소를 입력해주세요.');
     return false;
   }
   if (price === 0) {
@@ -166,6 +187,10 @@ export const checkBeforeTradePost = (
   }
   if (size === '') {
     alert('평수를 입력해주세요.');
+    return false;
+  }
+  if (floorNum < 0) {
+    alert('1층 이상의 값만 작성해주세요.');
     return false;
   }
   if (createdDate === '') {

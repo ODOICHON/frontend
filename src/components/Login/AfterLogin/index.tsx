@@ -7,6 +7,7 @@ import homeImage from '@/assets/common/home.svg';
 import logOutImage from '@/assets/common/log-out.svg';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { LogoutAPI } from '@/apis/logout';
+import { certificateStore } from '@/store/certificateStore';
 import { menuToggleStore } from '@/store/menuToggleStore';
 import userStore from '@/store/userStore';
 import useWindowSize from '@/hooks/useWindowSize';
@@ -32,6 +33,10 @@ function DesktopMenu({
   navigate,
 }: DesktopMenuProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const handleMyPageClick = () => {
+    navigate('/mypage');
+    setIsClicked(false);
+  };
   useEffect(() => {
     const handleCloseModal = (e: Event | React.MouseEvent) => {
       if (
@@ -74,7 +79,7 @@ function DesktopMenu({
             <li
               role="presentation"
               className={styles.dropdownMenu}
-              onClick={() => navigate('/mypage')}
+              onClick={handleMyPageClick}
             >
               <img className={styles.image} src={homeImage} alt="home" />
               <p>마이페이지</p>
@@ -123,6 +128,7 @@ export default function AfterLogin() {
   );
 
   const { setToggle } = menuToggleStore();
+  const { setIsCertificated } = certificateStore();
   const [windowSize, windowEventListener] = useWindowSize();
 
   const [isClicked, setIsClicked] = useState(false);
@@ -135,6 +141,7 @@ export default function AfterLogin() {
     if (response?.code === 'SUCCESS') {
       queryClient.clear();
       setToggle(false);
+      setIsCertificated(false);
       logout();
     }
     setIsClicked(false);

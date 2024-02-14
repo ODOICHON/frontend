@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 import { A11y, Navigation, Pagination, Scrollbar } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import AccessModal from '@/components/Common/AccessModal';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import TradeBoardInfo from '@/components/Trade/Info';
 import KakaoMapImage from '@/components/Trade/KakaoMapImage';
 import ReportIcon from '@/components/Trade/Report/ReportIcon';
@@ -17,14 +19,19 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { TradeBoardDetailType } from '@/types/Board/tradeType';
+import { DeleteHouseAPI } from '@/apis/houses';
 import userStore from '@/store/userStore';
-import { getMoveInType, getRentalName, getUserType } from '@/utils/utils';
+import useModalState from '@/hooks/useModalState';
+import useToastMessageType from '@/hooks/useToastMessageType';
+import { getMoveInType, getUserType } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 export default function TradeBoardPage() {
   const navigate = useNavigate();
+  const { modalState, handleModalOpen, handleModalClose } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
   const { id } = useParams();
   const { user } = userStore();
   const { data } = useQuery<ApiResponseWithDataType<TradeBoardDetailType>>(
@@ -38,6 +45,22 @@ export default function TradeBoardPage() {
   const [_, updateState] = useState(false);
   const [modal, setModal] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  const handleDeleteButtonClick = async (houseId: number) => {
+    if (houseId === 0) throw new Error('없는 빈집거래 게시물입니다.');
+    await DeleteHouseAPI(houseId);
+    handleToastMessageProps('POST_DELETE_SUCCESS', () => {
+      handleModalClose();
+      navigate('/trade');
+    });
+    handleModalOpen();
+  };
+
+  const handleEditButtonClick = () => {
+    navigate(`/trade/write`, {
+      state: { data: data?.data },
+    });
+  };
 
   useEffect(() => {
     updateState(true);
@@ -62,8 +85,15 @@ export default function TradeBoardPage() {
       <div className={styles.title}>
         <div className={styles.innerTitle}>
           <ul className={styles.categoryList}>
-            <li>{getRentalName(data?.data.rentalType || '')}</li>
-            <li>{getMoveInType(data?.data.isCompleted || false)}</li>
+            <li
+              className={
+                data?.data.isCompleted
+                  ? styles.isCompletedTrade
+                  : styles.isNotCompletedTrade
+              }
+            >
+              {getMoveInType(data?.data.isCompleted || false)}
+            </li>
             <li
               className={
                 data?.data.userType === 'AGENT'
@@ -71,7 +101,7 @@ export default function TradeBoardPage() {
                   : styles.userTypeNormal
               }
             >
-              {getUserType(data?.data.userType || '')}
+              {getUserType(data?.data.userType || 'NONE')}
             </li>
           </ul>
           <h1>{data?.data.title}</h1>
@@ -86,7 +116,23 @@ export default function TradeBoardPage() {
             </p>
             {user?.nick_name === data?.data.nickName ? (
               <div>
-                <span>수정</span> | <span>삭제</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleEditButtonClick();
+                  }}
+                >
+                  수정
+                </button>{' '}
+                |{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleDeleteButtonClick(data?.data.houseId || 0);
+                  }}
+                >
+                  삭제
+                </button>
               </div>
             ) : null}
           </div>
@@ -132,7 +178,7 @@ export default function TradeBoardPage() {
             <span>매물 특징</span>
             <ul>
               {data?.data.recommendedTagName.map((tag) => (
-                <div>{tag}</div>
+                <div key={tag}>{tag}</div>
               ))}
             </ul>
           </article>
@@ -162,6 +208,11 @@ export default function TradeBoardPage() {
           </button>
         </section>
       </section>
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
+      )}
     </motion.div>
   );
 }

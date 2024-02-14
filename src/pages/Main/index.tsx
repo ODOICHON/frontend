@@ -27,7 +27,6 @@ export default function MainPage() {
   const introPrevRef = useRef<HTMLButtonElement>(null);
   const commuNextRef = useRef<HTMLButtonElement>(null);
   const commuPrevRef = useRef<HTMLButtonElement>(null);
-
   const { data: introData } = useQuery<
     ApiResponseWithDataType<IntroBoardType[]>
   >([QueryKeys.PREVIEW_BOARD, QueryKeys.INTRO_BOARD, introToggle], () =>
@@ -94,6 +93,7 @@ export default function MainPage() {
           </SwiperSlide>
         ))}
       </Swiper>
+
       <div className={styles.section1}>
         <div className={styles.odoiIntro}>
           <h3>오도이촌 소개</h3>

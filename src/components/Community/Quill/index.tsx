@@ -3,12 +3,16 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { BoardFormType } from '@/types/Board/boardType';
 import { CommunityBoardDetailType } from '@/types/Board/communityType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostBoardAPI } from '@/apis/boards';
+import useModalState from '@/hooks/useModalState';
 import useQuillModules from '@/hooks/useQuillModules';
+import useToastMessageType from '@/hooks/useToastMessageType';
 import { checkBeforePost } from '@/utils/utils';
 import { freeCategory, advertiseCategory } from '@/constants/category';
 import styles from './styles.module.scss';
@@ -24,12 +28,16 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const boardData: CommunityBoardDetailType | null = location.state;
+  const { modalState, handleModalOpen, handleModalClose } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
 
   const QuillRef = useRef<ReactQuill>();
 
   const [title, setTitle] = useState(boardData ? boardData.title : '');
   const [contents, setContents] = useState('');
   const [category, setCategory] = useState(boardData ? boardData.category : '');
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const prefixCategory =
     queryParam === 'free_board' ? 'DEFAULT' : 'ADVERTISEMENT';
   const categoryList =
@@ -37,7 +45,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(
+  const { mutate, isLoading: isUpdateLoading } = useMutation(
     (BoardForm: BoardFormType) =>
       restFetcher({
         method: 'PUT',
@@ -48,16 +56,20 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
       }),
     {
       onSuccess: () => {
-        alert('게시글을 수정하였습니다.');
+        handleToastMessageProps('POST_UPDATE_SUCCESS', () => {
+          handleModalClose();
+          navigate(`/community/${queryParam}/${boardData?.boardId}`);
+        });
         queryClient.refetchQueries([
           QueryKeys.COMMUNITY_BOARD,
           `${boardData?.boardId}`,
         ]);
         queryClient.refetchQueries([QueryKeys.COMMUNITY_BOARD]);
-        navigate(`/community/${queryParam}/${boardData?.boardId}`);
+        handleModalOpen();
       },
       onError: () => {
-        alert('게시글 수정을 실패했습니다.');
+        handleToastMessageProps('POST_UPDATE_ERROR', handleModalClose);
+        handleModalOpen();
       },
     },
   );
@@ -69,6 +81,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   };
 
   const onPost = async () => {
+    setIsProcessing(true);
     const imageUrls = [...getImageUrls(contents)];
     if (!checkBeforePost(title, contents, category)) return;
 
@@ -80,11 +93,22 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
       prefixCategory,
       fixed: false,
     };
-    const response = await PostBoardAPI(BoardForm);
-    if (response?.code === 'SUCCESS') {
-      alert('게시글이 작성되었습니다😄');
-      queryClient.refetchQueries([QueryKeys.COMMUNITY_BOARD]);
-      navigate(`/community/${queryParam}`);
+    try {
+      const response = await PostBoardAPI(BoardForm);
+      if (response?.code === 'SUCCESS') {
+        handleToastMessageProps('POST_CREATE_SUCCESS', () => {
+          handleModalClose();
+          navigate(`/community/${queryParam}`);
+        });
+        queryClient.refetchQueries([QueryKeys.COMMUNITY_BOARD]);
+        handleModalOpen();
+      } else {
+        throw new Error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -163,15 +187,20 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
       </section>
       <section>
         {boardData ? (
-          <button type="button" onClick={onUpdate}>
+          <button type="button" onClick={onUpdate} disabled={isUpdateLoading}>
             수정하기
           </button>
         ) : (
-          <button type="button" onClick={onPost}>
+          <button type="button" onClick={onPost} disabled={isProcessing}>
             등록하기
           </button>
         )}
       </section>
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
+      )}
     </div>
   );
 }

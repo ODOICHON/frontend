@@ -4,13 +4,17 @@ import 'react-quill/dist/quill.snow.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { BoardFormType } from '@/types/Board/boardType';
 import { IntroBoardDetailType } from '@/types/Board/introType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostBoardAPI } from '@/apis/boards';
 import { uploadFile } from '@/apis/uploadS3';
+import useModalState from '@/hooks/useModalState';
 import useQuillModules from '@/hooks/useQuillModules';
+import useToastMessageType from '@/hooks/useToastMessageType';
 import { checkBeforePost } from '@/utils/utils';
 import { DEFAULT_OPTIONS } from '@/constants/image';
 import styles from './styles.module.scss';
@@ -23,6 +27,8 @@ export default function IntroduceQuill() {
   const navigate = useNavigate();
   const location = useLocation();
   const boardData: IntroBoardDetailType | null = location.state;
+  const { modalState, handleModalOpen, handleModalClose } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
 
   const QuillRef = useRef<ReactQuill>();
   const thumbnailRef = useRef<HTMLInputElement>(null);
@@ -36,10 +42,11 @@ export default function IntroduceQuill() {
   const [thumbnailTitle, setThumbnailTitle] = useState(
     boardData ? boardData.imageUrls[0].split('/')[3] : '',
   );
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation(
+  const { mutate, isLoading: isUpdateLoading } = useMutation(
     (BoardForm: BoardFormType) =>
       restFetcher({
         method: 'PUT',
@@ -50,16 +57,19 @@ export default function IntroduceQuill() {
       }),
     {
       onSuccess: () => {
-        alert('게시글을 수정하였습니다.');
+        handleToastMessageProps('POST_UPDATE_SUCCESS', () => {
+          handleModalClose();
+          navigate(`/intro_board/${boardData?.boardId}`);
+        });
         queryClient.refetchQueries([
           QueryKeys.INTRO_BOARD,
           `${boardData?.boardId}`,
         ]);
         queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
-        navigate(`/intro_board/${boardData?.boardId}`);
+        handleModalOpen();
       },
       onError: () => {
-        alert('게시글 수정을 실패했습니다.');
+        handleToastMessageProps('POST_UPDATE_ERROR', handleModalClose);
       },
     },
   );
@@ -88,6 +98,7 @@ export default function IntroduceQuill() {
   };
 
   const onPost = async () => {
+    setIsProcessing(true);
     const imageUrls = [thumbnail, ...getImageUrls(contents)];
     if (!checkBeforePost(title, contents, category, imageUrls)) return;
 
@@ -99,11 +110,22 @@ export default function IntroduceQuill() {
       prefixCategory: 'INTRO',
       fixed: false,
     };
-    const response = await PostBoardAPI(BoardForm);
-    if (response?.code === 'SUCCESS') {
-      alert('게시글이 작성되었습니다.');
-      queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
-      navigate('/introduce');
+    try {
+      const response = await PostBoardAPI(BoardForm);
+      if (response?.code === 'SUCCESS') {
+        handleToastMessageProps('POST_CREATE_SUCCESS', () => {
+          handleModalClose();
+          navigate(`/introduce`);
+        });
+        queryClient.refetchQueries([QueryKeys.INTRO_BOARD]);
+        handleModalOpen();
+      } else {
+        throw new Error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -196,13 +218,18 @@ export default function IntroduceQuill() {
         </span>
       </section>
       {boardData ? (
-        <button type="button" onClick={onUpdate}>
+        <button type="button" onClick={onUpdate} disabled={isUpdateLoading}>
           수정하기
         </button>
       ) : (
-        <button type="button" onClick={onPost}>
+        <button type="button" onClick={onPost} disabled={isProcessing}>
           등록하기
         </button>
+      )}
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
       )}
     </div>
   );

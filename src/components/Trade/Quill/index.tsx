@@ -1,15 +1,20 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
-import { useNavigate } from 'react-router-dom';
-import { TradeBoardForm } from '@/types/Board/tradeType';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
+import { QueryKeys, restFetcher } from '@/queryClient';
+import { TradeBoardDetailType, TradeBoardForm } from '@/types/Board/tradeType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostHouseAPI } from '@/apis/houses';
 import userStore from '@/store/userStore';
+import useModalState from '@/hooks/useModalState';
 import useQuillModules from '@/hooks/useQuillModules';
 import 'react-quill/dist/quill.snow.css';
+import useToastMessageType from '@/hooks/useToastMessageType';
 import { checkBeforeTradePost } from '@/utils/utils';
 import styles from './styles.module.scss';
-// TODO: 이미지 10개 이상 등록 불가
 
 type TradeQuillProps = {
   form: TradeBoardForm;
@@ -26,28 +31,120 @@ export default function TradeQuill({
 }: TradeQuillProps) {
   const { user } = userStore();
   const navigate = useNavigate();
-
+  const { modalState, handleModalOpen, handleModalClose } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
+  const { state }: { state: { data: TradeBoardDetailType } } = useLocation();
   const QuillRef = useRef<ReactQuill>();
   // 이미지를 업로드 하기 위한 함수
   const modules = useQuillModules(QuillRef);
 
-  const onPost = async () => {
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const queryClient = useQueryClient();
+  const { mutate, isLoading: isUpdateLoading } = useMutation(
+    (tradeBoardForm: TradeBoardForm) =>
+      restFetcher({
+        method: 'PUT',
+        path: `houses/${state.data.houseId}`,
+        body: {
+          ...tradeBoardForm,
+        },
+      }),
+    {
+      onSuccess: () => {
+        handleToastMessageProps('POST_UPDATE_SUCCESS', () => {
+          handleModalClose();
+        });
+        queryClient.refetchQueries([QueryKeys.TRADE_BOARD]);
+        queryClient.refetchQueries([QueryKeys.MY_SAVES]);
+        handleModalOpen();
+      },
+      onError: () => {
+        handleToastMessageProps('POST_UPDATE_ERROR', handleModalClose);
+        handleModalOpen();
+      },
+    },
+  );
+
+  const onPost = async ({ isTempSave }: { isTempSave: boolean }) => {
+    setIsProcessing(true);
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
 
-    const newForm = {
+    const extractedYear = form.createdDate.match(/\d{4}/);
+    const createdDate = extractedYear ? extractedYear[0] : '';
+
+    const newForm: TradeBoardForm = {
       ...form,
+      contact: form.contact.replace(/\-/g, ''),
+      size: form.size.replace(/m2/g, ''),
+      createdDate,
       imageUrls,
+      tmpYn: isTempSave,
     };
 
-    if (!checkBeforeTradePost(user!, newForm)) return;
+    if (!isTempSave) {
+      if (!checkBeforeTradePost(user!, newForm)) {
+        setIsProcessing(false);
+        return;
+      }
+    }
 
     try {
       await PostHouseAPI(newForm);
-      navigate(`/trade`);
+      if (isTempSave) {
+        alert('게시글이 임시저장 되었습니다.');
+        queryClient.refetchQueries([QueryKeys.MY_SAVES]);
+      } else {
+        handleToastMessageProps('POST_UPDATE_SUCCESS', () => {
+          handleModalClose();
+          navigate(`/trade`);
+        });
+        queryClient.refetchQueries([QueryKeys.TRADE_BOARD]);
+        handleModalOpen();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const onUpdate = async ({ isTempSave }: { isTempSave: boolean }) => {
+    const imageUrls = [thumbnail, ...getImageUrls(form.code)];
+    const extractedYear = form.createdDate.match(/\d{4}/);
+    const createdDate = extractedYear ? extractedYear[0] : '2002';
+
+    const newForm: TradeBoardForm = {
+      ...form,
+      contact: form.contact.replace(/\-/g, ''),
+      size: form.size.replace(/m2/g, ''),
+      createdDate,
+      imageUrls,
+      tmpYn: isTempSave,
+    };
+
+    if (!isTempSave) {
+      if (!checkBeforeTradePost(user!, newForm)) return;
+    }
+    try {
+      mutate(newForm);
+      if (isTempSave) {
+        alert('게시글이 임시저장 되었습니다.');
+      } else {
+        handleToastMessageProps('POST_UPDATE_SUCCESS', () => {
+          handleModalClose();
+          navigate(`/trade`);
+        });
+        handleModalOpen();
+      }
     } catch (error) {
       console.error(error);
     }
   };
+
+  const isPosting = Boolean(!state); // 처음 글을 작성하는 상태
+  const isUpdating = Boolean(state && !state.data.tmpYn); // 등록된 글을 수정하는 상태
+  const isSaving = Boolean(state && state.data.tmpYn); // 임시저장된 글을 작성하는 상태
 
   return (
     <div className={styles.container}>
@@ -72,6 +169,7 @@ export default function TradeQuill({
                 QuillRef.current = element;
               }
             }}
+            value={form.code}
             onChange={(value) => setForm((prev) => ({ ...prev, code: value }))}
             modules={modules}
             placeholder="사진 5장 이상은 필수입니다. 5장 이상(건물 외관, 내부 포함) 업로드 되지 않을 시, 반려됩니다."
@@ -79,19 +177,36 @@ export default function TradeQuill({
         </span>
       </section>
       <section>
+        {(isPosting || isSaving) && (
+          <button
+            type="button"
+            onClick={() =>
+              isPosting
+                ? onPost({ isTempSave: true })
+                : onUpdate({ isTempSave: true })
+            }
+            disabled={isProcessing || isUpdateLoading}
+          >
+            임시저장
+          </button>
+        )}
         <button
           type="button"
-          onClick={() => {
-            // TODO: 임시저장 기능 구현
-            alert('준비중입니다.');
-          }}
+          onClick={() =>
+            isPosting
+              ? onPost({ isTempSave: false })
+              : onUpdate({ isTempSave: false })
+          }
+          disabled={isProcessing || isUpdateLoading}
         >
-          임시저장
-        </button>
-        <button type="button" onClick={onPost}>
-          등록하기
+          {isUpdating ? '수정하기' : '등록하기'}
         </button>
       </section>
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
+      )}
     </div>
   );
 }

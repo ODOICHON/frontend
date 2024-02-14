@@ -62,6 +62,7 @@
 
   & > div {
     display: flex;
+    align-items: center;
     gap: 1rem;
     font-size: 1.25rem;
     font-weight: 400;
@@ -70,8 +71,11 @@
       font-weight: 200;
     }
 
-    & > div > span {
+    & > div > button {
       cursor: pointer;
+      background: inherit;
+      border: none;
+      color: var(--darkgray-color);
       &:hover {
         color: var(--main-color);
       }
@@ -137,10 +141,16 @@
     font-size: 1.375rem;
     padding: 0.5rem 1rem;
     line-height: normal;
-    border: 1px solid var(--main-color);
-    background-color: var(--main-color);
     color: white;
     border-radius: 24px;
+  }
+  & > .isCompletedTrade {
+    border: 1px solid black;
+    background-color: black;
+  }
+  & > .isNotCompletedTrade {
+    border: 1px solid var(--main-color);
+    background-color: var(--main-color);
   }
   & > .userTypeAgent {
     background-color: var(--sub-color);

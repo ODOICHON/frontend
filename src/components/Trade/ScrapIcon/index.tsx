@@ -1,5 +1,8 @@
-import { BsBookmark } from 'react-icons/bs';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ToggleButton from '@/components/Common/ToggleButton';
+
+import BookmarkFillIcon from '@/components/icons/BookMark/BookmarkFillIcon';
+import BookmarkIcon from '@/components/icons/BookMark/BookmarkIcon';
 import { QueryKeys } from '@/queryClient';
 import { TradeBoardDetailType } from '@/types/Board/tradeType';
 import { DeleteScrapAPI, PutScrapAPI } from '@/apis/boards';
@@ -31,6 +34,11 @@ function Scrap({ isScraped, boardId }: ScrapProps) {
 
       return { previousScrapData };
     },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
+        queryKey: [QueryKeys.MY_SCRAPS],
+      });
+    },
     onError: (error, newData, context) => {
       // 캐시를 저장된 값으로 롤백
       queryClient.setQueriesData([QueryKeys.TRADE_BOARD, boardId], {
@@ -41,11 +49,11 @@ function Scrap({ isScraped, boardId }: ScrapProps) {
 
   return (
     <div>
-      <BsBookmark
-        style={{
-          color: isScraped ? '#ec6130' : '',
-        }}
-        onClick={() => mutate(+boardId)}
+      <ToggleButton
+        toggled={isScraped}
+        onToggle={() => mutate(+boardId)}
+        onIcon={<BookmarkFillIcon color="#ec6130" size="2.5rem" />}
+        offIcon={<BookmarkIcon size="2.5rem" />}
       />
       <span>스크랩</span>
     </div>

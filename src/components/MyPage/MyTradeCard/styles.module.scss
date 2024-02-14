@@ -1,0 +1,11 @@
+.tradeCardWrapper {
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+}
+
+.image {
+  width: 10rem;
+  height: 7.5rem;
+}

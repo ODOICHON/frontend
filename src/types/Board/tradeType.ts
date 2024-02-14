@@ -9,10 +9,15 @@ export type RecommendedTagType =
 
 export type RentalType = 'SALE' | 'JEONSE' | 'MONTHLYRENT';
 
+export type MenuType = 'none' | 'rentalType' | 'city' | 'search';
+
+export type DealStateType = 'APPLYING' | 'ONGOING' | 'COMPLETED';
+
 export type TradeBoardForm = {
   rentalType: RentalType;
   city: string;
   zipCode: string;
+  detail: string;
   size: string;
   purpose: string;
   floorNum: number;
@@ -35,7 +40,7 @@ export type TradeBoardType = {
   price: number;
   monthlyPrice: number;
   nickName: string;
-  createdAt: string;
+  createdAt: Date;
   isCompleted: boolean;
   imageUrl: string;
   title: string;
@@ -47,7 +52,8 @@ export type TradeBoardDetailType = {
   houseId: number;
   rentalType: RentalType;
   city: string;
-  zipcode: string;
+  zipCode: string;
+  detail: string;
   size: string;
   purpose: string;
   floorNum: number;
@@ -60,10 +66,11 @@ export type TradeBoardDetailType = {
   code: string;
   imageUrls: string[];
   nickName: string;
-  userType: string;
+  userType: UserType;
   createdAt: Date;
   isCompleted: boolean;
   isScraped: boolean;
+  tmpYn: boolean;
   recommendedTag: RecommendedTagType[];
   recommendedTagName: string[];
 };
@@ -75,4 +82,19 @@ export type ReportFormType = {
   reportReason: string;
 };
 
-export type MenuType = 'none' | 'rentalType' | 'city' | 'search';
+export type MyTradeHouseType = {
+  houseId: number;
+  rentalType: RentalType;
+  city: string;
+  title: string;
+  imageUrl: string;
+  dealState: DealStateType;
+  dealStateName: string;
+};
+
+export type Count = {
+  all: number;
+  applying: number;
+  ongoing: number;
+  completed: number;
+};

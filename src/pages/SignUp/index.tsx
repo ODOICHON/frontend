@@ -7,10 +7,14 @@ import { motion } from 'framer-motion';
 import eyeImage from '@/assets/common/eye.svg';
 import eyeClosedImage from '@/assets/common/eyeClosed.svg';
 import logoImage from '@/assets/common/logo.svg';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import { restFetcher } from '@/queryClient';
 import Terms from '@/components/Terms';
 import userStore from '@/store/userStore';
 import useCheckAPI from '@/hooks/useCheckAPI';
+import useModalState from '@/hooks/useModalState';
+import useToastMessageType from '@/hooks/useToastMessageType';
 import { ApiResponseType } from '@/types/apiResponseType';
 import { TermType } from '@/types/signUp';
 import { opacityVariants } from '@/constants/variants';
@@ -48,6 +52,8 @@ type ISubmitForm = {
 export default function SignUpPage() {
   const { token } = userStore();
   const navigate = useNavigate();
+  const { modalState, handleModalOpen, handleModalClose } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
 
   const [toggle, setToggle] = useState(false); // 약관 토글
   const [eyeState, setEyeState] = useState(false);
@@ -193,7 +199,7 @@ export default function SignUpPage() {
   const onCheckSMS = () => {
     if (/^(?=.*[0-9])[0-9]{4}$/g.test(watch('phone_check')) === false) {
       setPhoneSMSCheck(false);
-      setPhoneSMSMessage('잘못된 인증번호입니다.');
+      setPhoneSMSMessage('인증문자 4자리를 입력해주세요.');
     }
     phoneCheckAPI(watch('phone_check'), {
       onSuccess: (res) => {
@@ -294,8 +300,11 @@ export default function SignUpPage() {
       },
       {
         onSuccess: () => {
-          alert('회원가입에 성공하였습니다.');
-          navigate('/login');
+          handleToastMessageProps('SIGN_UP_SUCCESS', () => {
+            handleModalClose();
+            navigate('/login');
+          });
+          handleModalOpen();
         },
         onError: (err) => {
           const error = err as AxiosError<ApiResponseType>;
@@ -318,10 +327,12 @@ export default function SignUpPage() {
   }, [watch('nick_name')]);
   useEffect(() => {
     setPhoneSMSCheck(false);
+    setIsCheckNum(false);
     setPhoneSMSMessage('전화번호 인증을 해주세요.');
   }, [watch('phone_num')]);
   useEffect(() => {
     setEmailCheck(false);
+    setIsCheckEmail(false);
     setEmailMessage('이메일 인증을 해주세요.');
   }, [watch('email')]);
 
@@ -872,6 +883,11 @@ export default function SignUpPage() {
       {toggle ? (
         <Terms selectedTerm={selectedTerm} setToggle={setToggle} />
       ) : null}
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
+      )}
     </motion.div>
   );
 }

@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Loading from '@/components/Common/Loading';
-import Pagenation from '@/components/Common/Pagenation';
+import NoPosts from '@/components/Common/NoPosts';
+import Pagination from '@/components/Common/Pagination';
 import CommunityBoard from '@/components/Community/Board';
-import NoPosts from '@/components/Community/NoPosts';
 import { restFetcher, QueryKeys } from '@/queryClient';
 import { CommunityBoardPageType } from '@/types/Board/communityType';
 import userStore from '@/store/userStore';
@@ -24,10 +29,13 @@ export default function CommunityBoardPage() {
   const { category } = useParams();
   const navigate = useNavigate();
   const { token } = userStore();
+  const { state } = useLocation();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [focusedCategory, setFocusedCategory] = useState('ALL');
-  const [focusedFilter, setFocusedFilter] = useState('RECENT');
+  const [focusedFilter, setFocusedFilter] = useState(
+    state?.location === '/mypage/home' ? 'POPULAR' : 'RECENT',
+  );
   const [search, handleSearch, setSearch] = useInput('');
 
   const queryClient = useQueryClient();
@@ -173,7 +181,7 @@ export default function CommunityBoardPage() {
                 key={content.boardId}
                 boardId={content.boardId}
                 category={content.category}
-                prefixCategory={category || ''}
+                prefixCategory={content.prefixCategory}
                 title={content.title}
                 oneLineContent={content.oneLineContent}
                 imageUrl={content.imageUrl}
@@ -184,7 +192,14 @@ export default function CommunityBoardPage() {
               />
             ))
           ) : (
-            <NoPosts />
+            <NoPosts
+              text="아직은 글이 없어요."
+              subText={
+                category === 'free_board'
+                  ? '글을 작성해서 자유롭게 오도이촌 이야기를 해보아요!'
+                  : '오도이촌에 필요한 업체를 소개해보세요. '
+              }
+            />
           )}
         </ul>
         <button
@@ -199,7 +214,7 @@ export default function CommunityBoardPage() {
           글쓰기
         </button>
         {boardListData && boardListData.data.content.length > 0 && (
-          <Pagenation
+          <Pagination
             totalPage={boardListData.data.totalPages}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}

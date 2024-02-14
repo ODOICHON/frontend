@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { CommentType } from '@/types/Board/boardType';
 import userStore from '@/store/userStore';
-
 import styles from './styles.module.scss';
 
 type CommentDetailProps = {
