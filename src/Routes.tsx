@@ -3,7 +3,6 @@ import { RouteObject } from 'react-router-dom';
 import GlobalLayout from '@/pages/_layout';
 import MyPage from './pages/MyPage';
 import MyCommentsPage from './pages/MyPage/community/comments';
-
 import MyLikesPage from './pages/MyPage/community/likes';
 import MyWritePage from './pages/MyPage/community/write';
 import MyHomePage from './pages/MyPage/home';
