@@ -72,8 +72,18 @@ export type TradeBoardDetailType = {
   recommendedTag: RecommendedTagType[];
   recommendedTagName: string[];
 };
+type TradeCount = {
+  all: number;
+  applying: number;
+  ongoing: number;
+  completed: number;
+};
+
+type BoardPageWithCountType<T> = BoardPageType<T> & { count: TradeCount };
 
 export type TradeBoardPageType = BoardPageType<TradeBoardType>;
+export type TradeBoardPageWithCountType =
+  BoardPageWithCountType<TradeBoardType>;
 
 export type ReportFormType = {
   reportType: string;

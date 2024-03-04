@@ -67,6 +67,7 @@ const KEYS = [
   'MY_SAVES',
   'MY_COMMENTS',
   'MY_LIKES',
+  'MY_TRADE',
 ] as const;
 
 type QueryKeys = (typeof KEYS)[number];
@@ -88,4 +89,5 @@ export const QueryKeys: QueryKeyObj = {
   MY_SAVES: 'MY_SAVES',
   MY_COMMENTS: 'MY_COMMENTS',
   MY_LIKES: 'MY_LIKES',
+  MY_TRADE: 'MY_TRADE',
 };
