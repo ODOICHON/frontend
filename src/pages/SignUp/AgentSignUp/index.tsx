@@ -7,11 +7,15 @@ import { motion } from 'framer-motion';
 import eyeImage from '@/assets/common/eye.svg';
 import eyeClosedImage from '@/assets/common/eyeClosed.svg';
 import logoImage from '@/assets/common/logo.svg';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import AddressModal from '@/components/Trade/AddressModal';
 import { restFetcher } from '@/queryClient';
 import Terms from '@/components/Terms';
 import userStore from '@/store/userStore';
 import useCheckAPI from '@/hooks/useCheckAPI';
+import useModalState from '@/hooks/useModalState';
+import useToastMessageType from '@/hooks/useToastMessageType';
 import { ApiResponseType } from '@/types/apiResponseType';
 import { TermType } from '@/types/signUp';
 import { opacityVariants } from '@/constants/variants';
@@ -70,6 +74,8 @@ type ISubmitForm = {
 export default function AgentSignUpPage() {
   const { token } = userStore();
   const navigate = useNavigate();
+  const { modalState, handleModalClose, handleModalOpen } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
 
   const [toggle, setToggle] = useState(false); // 약관 토글
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false); // 주소 모달 토글
@@ -344,10 +350,14 @@ export default function AgentSignUpPage() {
     };
     singUpAPI(form, {
       onSuccess: () => {
-        alert(
-          '회원가입에 성공하였습니다.\n공인중개사 회원은 관리자 승인 이후에 로그인이 가능합니다.',
+        handleToastMessageProps(
+          'AGENT_SIGN_UP_SUCCESS',
+          handleModalClose,
+          () => {
+            navigate('/login');
+          },
         );
-        navigate('/login');
+        handleModalOpen();
       },
       onError: (err) => {
         const error = err as AxiosError<ApiResponseType>;
@@ -1257,6 +1267,11 @@ export default function AgentSignUpPage() {
       {toggle ? (
         <Terms selectedTerm={selectedTerm} setToggle={setToggle} />
       ) : null}
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
+      )}
     </motion.div>
   );
 }

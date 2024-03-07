@@ -16,10 +16,9 @@ import styles from './styles.module.scss';
 
 function MyHomePage() {
   const { user } = userStore();
-
   const { data: myScrapBoardListData } = useQuery<
     ApiResponseWithDataType<BoardPageType<TradeBoardType>>
-  >([QueryKeys.MINE, QueryKeys.TRADE_BOARD], () =>
+  >([QueryKeys.MY_SCRAPS, QueryKeys.MINE, QueryKeys.TRADE_BOARD], () =>
     restFetcher({
       method: 'GET',
       path: 'houses/scrap',

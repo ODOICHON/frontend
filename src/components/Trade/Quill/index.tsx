@@ -2,13 +2,17 @@ import { useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { TradeBoardDetailType, TradeBoardForm } from '@/types/Board/tradeType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostHouseAPI } from '@/apis/houses';
 import userStore from '@/store/userStore';
+import useModalState from '@/hooks/useModalState';
 import useQuillModules from '@/hooks/useQuillModules';
 import 'react-quill/dist/quill.snow.css';
+import useToastMessageType from '@/hooks/useToastMessageType';
 import { checkBeforeTradePost } from '@/utils/utils';
 import styles from './styles.module.scss';
 
@@ -27,6 +31,8 @@ export default function TradeQuill({
 }: TradeQuillProps) {
   const { user } = userStore();
   const navigate = useNavigate();
+  const { modalState, handleModalOpen, handleModalClose } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
   const { state }: { state: { data: TradeBoardDetailType } } = useLocation();
   const QuillRef = useRef<ReactQuill>();
   // 이미지를 업로드 하기 위한 함수
@@ -46,11 +52,16 @@ export default function TradeQuill({
       }),
     {
       onSuccess: () => {
+        handleToastMessageProps('POST_UPDATE_SUCCESS', () => {
+          handleModalClose();
+        });
         queryClient.refetchQueries([QueryKeys.TRADE_BOARD]);
         queryClient.refetchQueries([QueryKeys.MY_SAVES]);
+        handleModalOpen();
       },
       onError: () => {
-        alert('게시글 수정을 실패했습니다.');
+        handleToastMessageProps('POST_UPDATE_ERROR', handleModalClose);
+        handleModalOpen();
       },
     },
   );
@@ -72,7 +83,10 @@ export default function TradeQuill({
     };
 
     if (!isTempSave) {
-      if (!checkBeforeTradePost(user!, newForm)) return;
+      if (!checkBeforeTradePost(user!, newForm)) {
+        setIsProcessing(false);
+        return;
+      }
     }
 
     try {
@@ -81,9 +95,12 @@ export default function TradeQuill({
         alert('게시글이 임시저장 되었습니다.');
         queryClient.refetchQueries([QueryKeys.MY_SAVES]);
       } else {
-        alert('게시글이 등록되었습니다.');
+        handleToastMessageProps('POST_UPDATE_SUCCESS', () => {
+          handleModalClose();
+          navigate(`/trade`);
+        });
         queryClient.refetchQueries([QueryKeys.TRADE_BOARD]);
-        navigate(`/trade`);
+        handleModalOpen();
       }
     } catch (error) {
       console.error(error);
@@ -114,8 +131,11 @@ export default function TradeQuill({
       if (isTempSave) {
         alert('게시글이 임시저장 되었습니다.');
       } else {
-        alert(`게시글이 수정되었습니다.`);
-        navigate(`/trade`);
+        handleToastMessageProps('POST_UPDATE_SUCCESS', () => {
+          handleModalClose();
+          navigate(`/trade`);
+        });
+        handleModalOpen();
       }
     } catch (error) {
       console.error(error);
@@ -182,6 +202,11 @@ export default function TradeQuill({
           {isUpdating ? '수정하기' : '등록하기'}
         </button>
       </section>
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
+      )}
     </div>
   );
 }

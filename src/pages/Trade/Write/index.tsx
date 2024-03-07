@@ -30,6 +30,7 @@ export default function TradeWritePage() {
     rentalType: state ? state.data.rentalType : 'SALE',
     city: state ? state.data.city : '',
     zipCode: state ? state.data.zipCode : '',
+    detail: state ? state.data.detail : '',
     size: state ? state.data.size : '',
     purpose: state ? state.data.purpose : '',
     floorNum: state ? state.data.floorNum : 0,
@@ -203,12 +204,23 @@ export default function TradeWritePage() {
               우편번호
             </label>
             <input
-              id="상세 주소"
+              id="우편번호"
               type="text"
-              placeholder="상세주소"
+              placeholder="우편번호"
               name="zipCode"
               readOnly
               value={form.zipCode}
+            />
+          </div>
+          <div>
+            <label htmlFor="상세주소">상세주소</label>
+            <input
+              id="상세주소"
+              type="text"
+              placeholder="상세주소 입력"
+              name="detail"
+              onChange={onChangeForm}
+              value={form.detail}
             />
           </div>
           <div>

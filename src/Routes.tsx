@@ -1,20 +1,19 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import GlobalLayout from '@/pages/_layout';
-import MyPage from './pages/Mypage';
-import MyCommentsPage from './pages/Mypage/community/comments';
-
-import MyLikesPage from './pages/Mypage/community/likes';
-import MyWritePage from './pages/Mypage/community/write';
-import MyHomePage from './pages/Mypage/home';
-import MySettingsPage from './pages/Mypage/setting';
-import CertificateMember from './pages/Mypage/setting/CertificateMember';
-import EditMember from './pages/Mypage/setting/EditMember';
-import EditPassword from './pages/Mypage/setting/EditPassword';
-import WithdrawalFromMembership from './pages/Mypage/setting/WithdrawalFromMembership';
-import MySelfPage from './pages/Mypage/trade/myself';
-import MySavesPage from './pages/Mypage/trade/saves';
-import MyScrapPage from './pages/Mypage/trade/scrap';
+import MyPage from './pages/MyPage';
+import MyCommentsPage from './pages/MyPage/community/comments';
+import MyLikesPage from './pages/MyPage/community/likes';
+import MyWritePage from './pages/MyPage/community/write';
+import MyHomePage from './pages/MyPage/home';
+import MySettingsPage from './pages/MyPage/setting';
+import CertificateMember from './pages/MyPage/setting/CertificateMember';
+import EditMember from './pages/MyPage/setting/EditMember';
+import EditPassword from './pages/MyPage/setting/EditPassword';
+import WithdrawalFromMembership from './pages/MyPage/setting/WithdrawalFromMembership';
+import MySelfPage from './pages/MyPage/trade/myself';
+import MySavesPage from './pages/MyPage/trade/saves';
+import MyScrapPage from './pages/MyPage/trade/scrap';
 
 const MainPage = lazy(() => import('@/pages/Main'));
 const LoginPage = lazy(() => import('@/pages/Login'));
@@ -43,7 +42,7 @@ export const routes: RouteObject[] = [
       { path: 'signup', element: <SignUpPage /> },
       { path: 'agentSignup', element: <AgentSignUpPage /> },
       {
-        path: 'mypage',
+        path: 'myPage',
         element: <MyPage />,
         children: [
           {
