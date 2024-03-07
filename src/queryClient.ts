@@ -63,6 +63,7 @@ const KEYS = [
   'COMMENT',
   'MINE',
   'LIKE',
+  'MY_SCRAPS',
   'MY_HOUSES',
   'MY_SAVES',
   'MY_COMMENTS',
