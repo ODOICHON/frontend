@@ -13,6 +13,14 @@ declare global {
     userType: UserType;
     age: string;
     profile_image_url?: string | null;
+    suspenseReason?: string | null;
+    reportedAt?: string | null;
+    agentCode?: string | null;
+    companyName?: string | null;
+    companyAddress?: string | null;
+    companyPhoneNum?: string | null;
+    agentName?: string | null;
+    assistantName?: string | null;
   };
 
   type Token = {

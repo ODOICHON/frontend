@@ -431,12 +431,12 @@ export default function AgentSignUpPage() {
               className={signUpStyles.inputStyle}
               id="agent_code"
               type="text"
-              placeholder="‘-’빼고 10자리 숫자 입력"
+              placeholder="‘-’빼고 14자리 숫자 입력"
               {...register('agent_code', {
                 required: '필수 입력입니다.',
                 pattern: {
-                  value: /^\d{10}$/g,
-                  message: '‘-’빼고 10자리 숫자를 입력해주세요',
+                  value: /^\d{14}$/g,
+                  message: '‘-’빼고 14자리 숫자를 입력해주세요',
                 },
               })}
             />
@@ -453,12 +453,12 @@ export default function AgentSignUpPage() {
               className={signUpStyles.inputStyle}
               id="business_code"
               type="text"
-              placeholder="‘-’빼고 14자리 숫자 입력"
+              placeholder="‘-’빼고 10자리 숫자 입력"
               {...register('business_code', {
                 required: '필수 입력입니다.',
                 pattern: {
-                  value: /^\d{14}$/g,
-                  message: '‘-’빼고 14자리 숫자를 입력해주세요',
+                  value: /^\d{10}$/g,
+                  message: '‘-’빼고 10자리 숫자를 입력해주세요',
                 },
               })}
             />

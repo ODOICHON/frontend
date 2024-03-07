@@ -12,6 +12,7 @@ import {
   SETTING_STEP,
   SettingStep,
 } from '@/constants/myPage';
+import AgentInfo from './AgentInfo';
 import styles from './styles.module.scss';
 
 type SettingOutletContext = {
@@ -37,37 +38,38 @@ export default function EditMember() {
     }
   }, []);
 
-  if (!isCertificated) return <Navigate to="/mypage/setting" />;
+  if (!isCertificated || !user) return <Navigate to="/mypage/setting" />;
   return (
-    <div className={styles.container}>
-      {user && (
+    <>
+      {user.userType === 'AGENT' && <AgentInfo user={user} />}
+      <div className={styles.container}>
         <section>
           <h1 className={styles.title}>기본정보</h1>
           <ul className={styles.infoWrapper}>
-            <UserInfo title="아이디" value={user?.userName} />
+            <UserInfo title="아이디" value={user.userName} />
 
             {editMode === EDIT_MODE.NICKNAME ? (
               <EditNicknameInfo
-                currentNickname={user?.nick_name}
+                currentNickname={user.nick_name}
                 setEditMode={setEditMode}
               />
             ) : (
               <UserInfo
                 title="닉네임"
-                value={user?.nick_name}
+                value={user.nick_name}
                 setEditMode={setEditMode}
               />
             )}
 
             {editMode === EDIT_MODE.PHONE ? (
               <EditPhoneInfo
-                currentPhoneNum={user?.phone_num}
+                currentPhoneNum={user.phone_num}
                 setEditMode={setEditMode}
               />
             ) : (
               <UserInfo
                 title="전화번호"
-                value={user?.phone_num}
+                value={user.phone_num}
                 setEditMode={setEditMode}
               />
             )}
@@ -80,22 +82,23 @@ export default function EditMember() {
             ) : (
               <UserInfo
                 title="이메일"
-                value={user?.email}
+                value={user.email}
                 setEditMode={setEditMode}
               />
             )}
           </ul>
         </section>
-      )}
-      <section>
-        <h1 className={styles.title}>보안정보</h1>
-        <li className={styles.securityInfoWrapper}>
-          <p>비밀번호</p>
-          <button type="button" onClick={onClickEditPassword}>
-            수정
-          </button>
-        </li>
-      </section>
-    </div>
+
+        <section>
+          <h1 className={styles.title}>보안정보</h1>
+          <li className={styles.securityInfoWrapper}>
+            <p>비밀번호</p>
+            <button type="button" onClick={onClickEditPassword}>
+              수정
+            </button>
+          </li>
+        </section>
+      </div>
+    </>
   );
 }
