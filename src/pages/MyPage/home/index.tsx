@@ -2,56 +2,20 @@ import { Link } from 'react-router-dom';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import { useQuery } from '@tanstack/react-query';
 import NoPosts from '@/components/Common/NoPosts';
-import MyHomeCard from '@/components/MyPage/MyHomeCard';
+import AgentInfoCard from '@/components/MyPage/Home/AgentInfoCard';
+import InfoCard from '@/components/MyPage/Home/InfoCard';
 import MyHomePopularCard from '@/components/MyPage/MyHomePopularCard';
 import TradeBoard from '@/components/Trade/Board';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { BoardPageType } from '@/types/Board/boardType';
 import { CommunityBoardPageType } from '@/types/Board/communityType';
-import { IntroBoardType } from '@/types/Board/introType';
 import { TradeBoardType } from '@/types/Board/tradeType';
 import userStore from '@/store/userStore';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import styles from './styles.module.scss';
 
-type myBoardType = Omit<
-  IntroBoardType,
-  'code' | 'nickName' | 'commentCount' | 'fixed'
->;
-
 function MyHomePage() {
   const { user } = userStore();
-
-  const { data: myBoardListData } = useQuery<
-    ApiResponseWithDataType<BoardPageType<myBoardType>>
-  >([QueryKeys.COMMUNITY_BOARD, QueryKeys.MINE], () =>
-    restFetcher({
-      method: 'GET',
-      path: 'boards/my',
-      params: { page: 0, limit: 3 },
-    }),
-  );
-
-  const { data: myCommentListData } = useQuery<
-    ApiResponseWithDataType<BoardPageType<myBoardType>>
-  >([QueryKeys.MINE, QueryKeys.COMMENT], () =>
-    restFetcher({
-      method: 'GET',
-      path: 'boards/my/comment',
-      params: { page: 0 },
-    }),
-  );
-
-  const { data: myLikeListData } = useQuery<
-    ApiResponseWithDataType<BoardPageType<myBoardType>>
-  >([QueryKeys.MINE, QueryKeys.LIKE], () =>
-    restFetcher({
-      method: 'GET',
-      path: 'boards/my/love',
-      params: { page: 0 },
-    }),
-  );
-
   const { data: myScrapBoardListData } = useQuery<
     ApiResponseWithDataType<BoardPageType<TradeBoardType>>
   >([QueryKeys.MY_SCRAPS, QueryKeys.MINE, QueryKeys.TRADE_BOARD], () =>
@@ -81,25 +45,12 @@ function MyHomePage() {
     <section className={styles.container}>
       <article>
         <div className={styles.titleContainer}>
-          <h1>{user?.nick_name}님의 마이페이지</h1>
+          <h1>
+            {user?.nick_name}님의{' '}
+            {user?.userType === 'AGENT' ? '빈집거래 활동' : '마이페이지'}
+          </h1>
         </div>
-        <ul className={styles.cardWrapper}>
-          <MyHomeCard
-            key="내가 쓴 글"
-            title="내가 쓴 글"
-            count={myBoardListData?.data.totalElements || 0}
-          />
-          <MyHomeCard
-            key="내가 쓴 댓글"
-            title="내가 쓴 댓글"
-            count={myCommentListData?.data.totalElements || 0}
-          />
-          <MyHomeCard
-            key="좋아요한 글"
-            title="좋아요한 글"
-            count={myLikeListData?.data.totalElements || 0}
-          />
-        </ul>
+        {user?.userType === 'AGENT' ? <AgentInfoCard /> : <InfoCard />}
       </article>
 
       <article>

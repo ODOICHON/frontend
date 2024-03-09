@@ -8,11 +8,13 @@ import MyTradeCard from '@/components/MyPage/MyTradeCard';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { BoardPageType } from '@/types/Board/boardType';
 import { Count, MyTradeHouseType } from '@/types/Board/tradeType';
+import userStore from '@/store/userStore';
 import useInput from '@/hooks/useInput';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import styles from './styles.module.scss';
 
 export default function MySelfPage() {
+  const { user } = userStore();
   const [search, handleSearch, setSearch] = useInput('');
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,10 +53,12 @@ export default function MySelfPage() {
         <p>내가 거래하고 있는 매물들을 관리할 수 있어요.</p>
       </article>
       <article className={styles.countBoxWrapper}>
-        <div>
-          <p>승인 중인 매물</p>
-          <strong>{myHouseData?.data.count.applying}</strong>
-        </div>
+        {user?.userType !== 'AGENT' && (
+          <div>
+            <p>승인 중인 매물</p>
+            <strong>{myHouseData?.data.count.applying}</strong>
+          </div>
+        )}
         <div>
           <p>판매 중인 매물</p>
           <strong>{myHouseData?.data.count.ongoing}</strong>
