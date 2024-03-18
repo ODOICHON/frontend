@@ -636,11 +636,19 @@ export default function AgentSignUpPage() {
               인증요청
             </button>
           </div>
-          <p className={signUpStyles.errorMessage}>
+          <p
+            className={
+              isCheckEmail
+                ? signUpStyles.correctMessage
+                : signUpStyles.errorMessage
+            }
+          >
+            {isCheckEmail && '인증코드가 발송되었습니다.'}
             {errors.company_email && errors.company_email.message}
             {!errors.company_email && emailErrMessage && emailErrMessage}
           </p>
         </div>
+        {/* 이메일 인증 */}
         {isCheckEmail && (
           <div className={signUpStyles.inputContainer}>
             <label htmlFor="email_code">인증코드</label>
@@ -884,7 +892,14 @@ export default function AgentSignUpPage() {
               인증요청
             </button>
           </div>
-          <p className={signUpStyles.errorMessage}>
+          <p
+            className={
+              isCheckNum
+                ? signUpStyles.correctMessage
+                : signUpStyles.errorMessage
+            }
+          >
+            {isCheckNum && '인증문자가 발송되었습니다.'}
             {errors.phone_num && errors.phone_num.message}
             {!errors.phone_num && phoneErrMessage && phoneErrMessage}
           </p>

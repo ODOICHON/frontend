@@ -542,7 +542,10 @@ export default function SignUpPage() {
               인증요청
             </button>
           </div>
-          <p className={styles.errorMessage}>
+          <p
+            className={isCheckNum ? styles.correctMessage : styles.errorMessage}
+          >
+            {isCheckNum && '인증문자가 발송되었습니다.'}
             {errors.phone_num && errors.phone_num.message}
             {!errors.phone_num && phoneErrMessage}
           </p>
@@ -629,7 +632,12 @@ export default function SignUpPage() {
               인증요청
             </button>
           </div>
-          <p className={styles.errorMessage}>
+          <p
+            className={
+              isCheckEmail ? styles.correctMessage : styles.errorMessage
+            }
+          >
+            {isCheckEmail && '인증코드가 발송되었습니다.'}
             {errors.email && errors.email.message}
             {!errors.email && emailErrMessage && emailErrMessage}
           </p>
