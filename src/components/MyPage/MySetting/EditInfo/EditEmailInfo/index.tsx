@@ -140,7 +140,7 @@ export default function EditEmailInfo({
               !/^([\w\.\_\-])*[a-zA-Z0-9]+([\w\.\_\-])*([a-zA-Z0-9])+([\w\.\_\-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/g.test(
                 watch('email'),
               ) || isCheckEmail
-                ? styles.buttonStyleDisabled
+                ? styles.Disabled
                 : styles.buttonStyleActive
             }
             disabled={
