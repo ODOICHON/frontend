@@ -84,7 +84,7 @@ export default function IntroBoardPage() {
           }}
         />
       </div>
-      {boardData?.data.category === 'REVIEW' && (
+      {boardData && (
         <div className={styles.commentWrapper}>
           <Like
             boardId={boardData.data.boardId}
