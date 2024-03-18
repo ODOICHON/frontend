@@ -87,9 +87,14 @@ export default function CommentDetail({
           user?.authority === 'ADMIN') &&
           (isUpdating ? (
             <span className={styles.buttonWrapper}>
-              <button type="button" onClick={() => updateComment()}>
-                수정하기
+              <button
+                className={styles.active}
+                type="button"
+                onClick={() => updateComment()}
+              >
+                수정
               </button>
+              <div>|</div>
               <button type="button" onClick={onClickCancel}>
                 취소
               </button>
@@ -101,6 +106,7 @@ export default function CommentDetail({
                   수정
                 </button>
               )}
+              <div>|</div>
               <button type="button" onClick={() => deleteComment()}>
                 삭제
               </button>
