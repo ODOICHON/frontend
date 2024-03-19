@@ -91,12 +91,14 @@ export default function IntroBoardPage() {
             loveCount={boardData.data.loveCount}
             intro
           />
-          <Comments
-            boardId={boardData.data.boardId}
-            comments={boardData.data.comments}
-            count={boardData.data.commentCount}
-            intro
-          />
+          {boardData.data.category === 'REVIEW' && (
+            <Comments
+              boardId={boardData.data.boardId}
+              comments={boardData.data.comments}
+              count={boardData.data.commentCount}
+              intro
+            />
+          )}
         </div>
       )}
     </motion.div>
