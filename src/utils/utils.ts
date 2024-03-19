@@ -13,6 +13,7 @@ export const setInterceptor = (token: string) => {
   return true;
 };
 
+// TODO: 상수 관리 고민
 export const getCategoryName = (category: string) => {
   switch (category) {
     case 'TREND':
@@ -29,6 +30,8 @@ export const getCategoryName = (category: string) => {
       return '질문';
     case 'DAILY':
       return '일상';
+    case 'EMPTY':
+      return '전체';
     default:
       return '';
   }
@@ -116,10 +119,10 @@ export const checkBeforePost = (
     alert('내용을 입력해주세요.');
     return false;
   }
-  if (category === '') {
-    alert('말머리를 선택해주세요.');
-    return false;
-  }
+  // if (category === '') {
+  //   alert('말머리를 선택해주세요.');
+  //   return false;
+  // }
   if (imageUrl && imageUrl[0] === '') {
     alert('썸네일을 등록해주세요.');
     return false;
