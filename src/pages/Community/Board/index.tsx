@@ -8,13 +8,17 @@ import {
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import Loading from '@/components/Common/Loading';
+import ModalPortal from '@/components/Common/ModalPortal';
 import NoPosts from '@/components/Common/NoPosts';
 import Pagination from '@/components/Common/Pagination';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import CommunityBoard from '@/components/Community/Board';
 import { restFetcher, QueryKeys } from '@/queryClient';
 import { CommunityBoardPageType } from '@/types/Board/communityType';
 import userStore from '@/store/userStore';
 import useInput from '@/hooks/useInput';
+import useModalState from '@/hooks/useModalState';
+import useToastMessageType from '@/hooks/useToastMessageType';
 import { checkTextString } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import {
@@ -38,6 +42,9 @@ export default function CommunityBoardPage() {
     state?.location === '/mypage/home' ? 'POPULAR' : 'RECENT',
   );
   const [search, handleSearch, setSearch] = useInput('');
+
+  const { modalState, handleModalOpen, handleModalClose } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
 
   const queryClient = useQueryClient();
 
@@ -76,7 +83,8 @@ export default function CommunityBoardPage() {
     e.preventDefault();
 
     if (checkTextString(search)) {
-      alert(`${search}는 검색어로 사용할 수 없습니다.`);
+      handleToastMessageProps('SEARCH_STRING_ERROR', handleModalClose);
+      handleModalOpen();
     } else {
       refetch();
       setSearch('');
@@ -227,6 +235,11 @@ export default function CommunityBoardPage() {
           />
         )}
       </section>
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
+      )}
     </motion.div>
   );
 }
