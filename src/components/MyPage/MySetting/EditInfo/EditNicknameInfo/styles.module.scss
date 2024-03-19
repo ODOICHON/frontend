@@ -61,11 +61,11 @@
   &:hover {
     opacity: 0.8;
   }
-}
-.buttonStyle:disabled {
-  cursor: auto;
-  &:hover {
-    opacity: 1;
+  &:disabled {
+    cursor: not-allowed;
+    &:hover {
+      opacity: 1;
+    }
   }
 }
 
