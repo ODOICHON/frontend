@@ -144,7 +144,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
           <select
             className={styles.categoryInput}
             name="category"
-            value={category}
+            value={category === 'EMPTY' ? '' : category}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               setCategory(e.target.value)
             }
