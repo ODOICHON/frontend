@@ -7,6 +7,7 @@ type ToastMessageKeyType =
   | 'COMMENT_EMPTY_ERROR'
   | 'LOGIN_REQUIRED_ERROR'
   | 'POST_DELETE_SUCCESS'
+  | 'POST_DELETE_QUESTION'
   | 'SIGN_UP_SUCCESS'
   | 'AGENT_SIGN_UP_SUCCESS'
   | 'POST_UPDATE_SUCCESS'
@@ -49,6 +50,12 @@ export const TOAST_MESSAGE: ToastMessageType = {
     message: '게시글 삭제에 실패했습니다.',
     subMessage: '잠시 후 다시 시도해주세요.',
     iconType: 'ERROR',
+  },
+  POST_DELETE_QUESTION: {
+    message: '해당 게시글을 삭제하시겠습니까?',
+    subMessage: '작성한 내용은 저장되지 않고 바로 삭제됩니다.',
+    iconType: 'ERROR',
+    confirmModal: true,
   },
   POST_UPDATE_SUCCESS: {
     message: '게시글이 수정되었습니다.',
