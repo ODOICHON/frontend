@@ -15,6 +15,7 @@ import { restFetcher, QueryKeys } from '@/queryClient';
 import { CommunityBoardPageType } from '@/types/Board/communityType';
 import userStore from '@/store/userStore';
 import useInput from '@/hooks/useInput';
+import { checkTextString } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import {
   freeCategory,
@@ -73,9 +74,14 @@ export default function CommunityBoardPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    refetch();
-    setSearch('');
-    setCurrentPage(1);
+
+    if (checkTextString(search)) {
+      alert(`${search}는 검색어로 사용할 수 없습니다.`);
+    } else {
+      refetch();
+      setSearch('');
+      setCurrentPage(1);
+    }
   };
 
   // 게시판 이동시 카테고리 초기화
