@@ -14,7 +14,8 @@ type ToastMessageKeyType =
   | 'POST_UPDATE_ERROR'
   | 'POST_DELETE_ERROR'
   | 'POST_CREATE_SUCCESS'
-  | 'POST_CREATE_ERROR';
+  | 'POST_CREATE_ERROR'
+  | 'SEARCH_STRING_ERROR';
 
 type ToastMessageType = {
   [key in ToastMessageKeyType]: ToastMessageModalProps;
@@ -87,6 +88,11 @@ export const TOAST_MESSAGE: ToastMessageType = {
     message: '공인중개사 회원가입에 성공하였습니다.',
     subMessage: '공인중개사 회원은 관리자 승인 이후에 로그인이 가능합니다.',
     iconType: 'SUCCESS',
+  },
+  SEARCH_STRING_ERROR: {
+    message: '해당 검색어는 사용할 수 없습니다.',
+    subMessage: '자음과 모음만으로 이루어진 검색어는 사용할 수 없습니다.',
+    iconType: 'ERROR',
   },
 };
 
