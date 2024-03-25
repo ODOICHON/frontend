@@ -108,7 +108,7 @@ export default function MainPage() {
               className={introToggle === 'trend' ? '' : styles.button_disabled}
               onClick={() => setIntroToggle('trend')}
             >
-              트랜드
+              트렌드
             </button>
             <button
               type="button"
