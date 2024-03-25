@@ -5,6 +5,7 @@ type ToastMessageKeyType =
   | 'POST_COMMENT_SUCCESS'
   | 'DELETE_COMMENT_SUCCESS'
   | 'POST_COMMENT_ERROR'
+  | 'DELETE_COMMENT_ERROR'
   | 'COMMENT_EMPTY_ERROR'
   | 'LOGIN_REQUIRED_ERROR'
   | 'POST_DELETE_SUCCESS'
@@ -34,6 +35,11 @@ export const TOAST_MESSAGE: ToastMessageType = {
   },
   POST_COMMENT_ERROR: {
     message: '댓글 등록에 실패했습니다.',
+    subMessage: '잠시 후 다시 시도해주세요.',
+    iconType: 'ERROR',
+  },
+  DELETE_COMMENT_ERROR: {
+    message: '댓글 삭제에 실패했습니다.',
     subMessage: '잠시 후 다시 시도해주세요.',
     iconType: 'ERROR',
   },
