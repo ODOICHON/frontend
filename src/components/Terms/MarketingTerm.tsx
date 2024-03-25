@@ -7,7 +7,7 @@ type MarketingTermProps = {
 export default function MarketingTerm({ onToggleClick }: MarketingTermProps) {
   return (
     <div className={styles.termsContainer}>
-      <h1>마켓팅 활용 및 광고성 정보 수신 동의(선택)</h1>
+      <h1>마케팅 활용 및 광고성 정보 수신 동의(선택)</h1>
       <div>
         <p style={{ marginTop: '2rem', marginBottom: '3rem' }}>
           전자적 전송매체(SMS/MMS/이메일 등)를 통해, 주말내집이 제공하는
