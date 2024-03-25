@@ -3,6 +3,7 @@ import { ToastMessageModalProps } from '@/components/Common/ToastMessageModal';
 
 type ToastMessageKeyType =
   | 'POST_COMMENT_SUCCESS'
+  | 'DELETE_COMMENT_SUCCESS'
   | 'POST_COMMENT_ERROR'
   | 'COMMENT_EMPTY_ERROR'
   | 'LOGIN_REQUIRED_ERROR'
@@ -23,6 +24,11 @@ type ToastMessageType = {
 export const TOAST_MESSAGE: ToastMessageType = {
   POST_COMMENT_SUCCESS: {
     message: '댓글이 등록되었습니다.',
+    subMessage: undefined,
+    iconType: 'SUCCESS',
+  },
+  DELETE_COMMENT_SUCCESS: {
+    message: '댓글이 삭제되었습니다.',
     subMessage: undefined,
     iconType: 'SUCCESS',
   },
