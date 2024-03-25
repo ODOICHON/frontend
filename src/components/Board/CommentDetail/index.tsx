@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import ModalPortal from '@/components/Common/ModalPortal';
+import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { CommentType } from '@/types/Board/boardType';
 import userStore from '@/store/userStore';
+import useModalState from '@/hooks/useModalState';
+import useToastMessageType from '@/hooks/useToastMessageType';
 import styles from './styles.module.scss';
 
 type CommentDetailProps = {
@@ -19,18 +23,34 @@ export default function CommentDetail({
 }: CommentDetailProps) {
   const { user } = userStore();
   const queryClient = useQueryClient();
-  const [isUpdating, setIsUpdating] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const [isUpdating, setIsUpdating] = useState(false);
   const [updateContent, setUpdateContent] = useState(comment.content);
+  const { modalState, handleModalOpen, handleModalClose } = useModalState();
+  const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
+  console.log(modalState, 'modalState');
+  console.log(toastMessageProps, 'toastMessageProps');
+
   const { mutate: deleteComment } = useMutation(
     () =>
       restFetcher({ method: 'DELETE', path: `comments/${comment.commentId}` }),
     {
       onSuccess: () => {
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
-        return queryClient.refetchQueries([
-          intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
-        ]);
+        handleToastMessageProps('DELETE_COMMENT_SUCCESS', () =>
+          handleModalClose(() => {
+            queryClient.refetchQueries([
+              intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
+            ]);
+          }),
+        );
+        // queryClient.refetchQueries([
+        //   intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
+        // ]);
+      },
+      onError: () => {
+        handleToastMessageProps('DELETE_COMMENT_ERROR', handleModalClose);
       },
     },
   );
@@ -107,7 +127,13 @@ export default function CommentDetail({
                 </button>
               )}
               <div>|</div>
-              <button type="button" onClick={() => deleteComment()}>
+              <button
+                type="button"
+                onClick={() => {
+                  deleteComment();
+                  handleModalOpen();
+                }}
+              >
                 삭제
               </button>
             </span>
@@ -122,6 +148,11 @@ export default function CommentDetail({
         />
       ) : (
         <p className={styles.content}>{comment.content}</p>
+      )}
+      {modalState && toastMessageProps && (
+        <ModalPortal>
+          <ToastMessageModal {...toastMessageProps} />
+        </ModalPortal>
       )}
     </div>
   );

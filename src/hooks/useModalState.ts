@@ -7,7 +7,8 @@ const useModalState = (state = false) => {
     setModalState(true);
   };
 
-  const handleModalClose = () => {
+  const handleModalClose = (callback?: any) => {
+    if (typeof callback === 'function') callback();
     setModalState(false);
   };
 
