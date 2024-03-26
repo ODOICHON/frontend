@@ -87,11 +87,15 @@ export default function Comments({
         />
         <span>
           <p>{content.length}/400</p>
-          <button type="button" onClick={onClickButton}>
-            등록
-          </button>
         </span>
       </div>
+      <button
+        className={styles.commentWrite}
+        type="button"
+        onClick={onClickButton}
+      >
+        등록
+      </button>
       {comments.map((comment) => (
         <CommentDetail
           key={comment.commentId}
