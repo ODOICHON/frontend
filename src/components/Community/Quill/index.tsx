@@ -83,7 +83,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   const onPost = async () => {
     setIsProcessing(true);
     const imageUrls = [...getImageUrls(contents)];
-    if (!checkBeforePost(title, contents, category)) return;
+    if (!checkBeforePost(title, contents)) return;
 
     const BoardForm: BoardFormType = {
       title,
