@@ -21,9 +21,11 @@ export default function CommentDetail({
 }: CommentDetailProps) {
   const { user } = userStore();
   const queryClient = useQueryClient();
-  const [isUpdating, setIsUpdating] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const [isUpdating, setIsUpdating] = useState(false);
   const [updateContent, setUpdateContent] = useState(comment.content);
+
   const { mutate: deleteComment } = useMutation(
     () =>
       restFetcher({ method: 'DELETE', path: `comments/${comment.commentId}` }),
@@ -110,7 +112,12 @@ export default function CommentDetail({
                 </button>
               )}
               <div>|</div>
-              <button type="button" onClick={() => deleteComment()}>
+              <button
+                type="button"
+                onClick={() => {
+                  deleteComment();
+                }}
+              >
                 삭제
               </button>
             </span>
