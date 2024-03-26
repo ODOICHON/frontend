@@ -31,7 +31,7 @@ export const getCategoryName = (category: string) => {
     case 'DAILY':
       return '일상';
     case 'EMPTY':
-      return '전체';
+      return '';
     default:
       return '';
   }
