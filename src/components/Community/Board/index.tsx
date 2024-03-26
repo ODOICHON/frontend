@@ -35,7 +35,9 @@ export default function CommunityBoard({
       >
         <span className={styles.title}>
           {fixed && <span className={styles.advertisement}>광고</span>}
-          <h3 className={styles.category}>[{getCategoryName(category)}]</h3>
+          {getCategoryName(category) && (
+            <h3 className={styles.category}>[{getCategoryName(category)}]</h3>
+          )}
           <h3 className={styles.titleMessage}>{title}</h3>
         </span>
         <div className={styles.contentWrapper}>

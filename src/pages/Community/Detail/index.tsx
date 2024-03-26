@@ -63,8 +63,10 @@ export default function CommunityBoardDetailPage() {
       <div className={styles.title}>
         <div className={styles.innerTitle}>
           <h1>
-            [{getCategoryName(boardData?.data.category || '')}]{' '}
-            {boardData?.data.title}
+            {getCategoryName(boardData?.data.category || '') && (
+              <p>[{getCategoryName(boardData?.data.category || '')}]</p>
+            )}
+            <p>{boardData?.data.title}</p>
           </h1>
           <div>
             <p>

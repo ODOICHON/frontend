@@ -83,12 +83,14 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   const onPost = async () => {
     setIsProcessing(true);
     const imageUrls = [...getImageUrls(contents)];
-    if (!checkBeforePost(title, contents, category)) return;
+    if (!checkBeforePost(title, contents)) return;
 
     const BoardForm: BoardFormType = {
       title,
       code: contents,
-      category,
+      // TODO: 말머리가 없을 경우 'EMPTY'로 처리
+      // 상수로 관리하는게 좋아보임. 백엔드 ENUM 값과 동기화 필요
+      category: category || 'EMPTY',
       imageUrls,
       prefixCategory,
       fixed: false,
@@ -142,7 +144,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
           <select
             className={styles.categoryInput}
             name="category"
-            value={category}
+            value={category === 'EMPTY' ? '' : category}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               setCategory(e.target.value)
             }

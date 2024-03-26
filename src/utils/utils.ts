@@ -13,6 +13,7 @@ export const setInterceptor = (token: string) => {
   return true;
 };
 
+// TODO: 상수 관리 고민
 export const getCategoryName = (category: string) => {
   switch (category) {
     case 'TREND':
@@ -29,6 +30,8 @@ export const getCategoryName = (category: string) => {
       return '질문';
     case 'DAILY':
       return '일상';
+    case 'EMPTY':
+      return '';
     default:
       return '';
   }
@@ -105,7 +108,6 @@ export const getMoveInType = (isCompleted: boolean) => {
 export const checkBeforePost = (
   title: string,
   contents: string,
-  category: string,
   imageUrl?: string[],
 ) => {
   if (title === '') {
@@ -114,10 +116,6 @@ export const checkBeforePost = (
   }
   if (contents === '') {
     alert('내용을 입력해주세요.');
-    return false;
-  }
-  if (category === '') {
-    alert('말머리를 선택해주세요.');
     return false;
   }
   if (imageUrl && imageUrl[0] === '') {
