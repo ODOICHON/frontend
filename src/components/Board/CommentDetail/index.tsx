@@ -10,12 +10,14 @@ type CommentDetailProps = {
   comment: CommentType;
   boardId: number;
   intro?: boolean;
+  handleDeleteComment: () => void;
 };
 
 export default function CommentDetail({
   comment,
   boardId,
   intro,
+  handleDeleteComment,
 }: CommentDetailProps) {
   const { user } = userStore();
   const queryClient = useQueryClient();
@@ -28,6 +30,7 @@ export default function CommentDetail({
     {
       onSuccess: () => {
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
+        handleDeleteComment();
         return queryClient.refetchQueries([
           intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
         ]);

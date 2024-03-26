@@ -61,6 +61,11 @@ export default function Comments({
     setContent(value);
   };
 
+  const handleDeleteComment = () => {
+    handleToastMessageProps('DELETE_COMMENT_SUCCESS', handleModalClose);
+    handleModalOpen();
+  };
+
   const onClickButton = () => {
     if (!user) {
       handleToastMessageProps('LOGIN_REQUIRED_ERROR', handleModalClose, () =>
@@ -98,6 +103,7 @@ export default function Comments({
           comment={comment}
           boardId={boardId}
           intro={intro}
+          handleDeleteComment={handleDeleteComment}
         />
       ))}
       {modalState && toastMessageProps && (
