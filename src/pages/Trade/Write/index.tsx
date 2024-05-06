@@ -14,12 +14,13 @@ import {
 import { uploadFile } from '@/apis/uploadS3';
 import userStore from '@/store/userStore';
 import { getRentalPriceType } from '@/utils/utils';
-import { DEFAULT_OPTIONS } from '@/constants/image';
+// import { DEFAULT_OPTIONS } from '@/constants/image';
 import { specialCategory, tradeCategory } from '@/constants/trade';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
-const { VITE_S3_DOMAIN, VITE_CLOUD_FRONT_DOMAIN } = import.meta.env;
+// const { VITE_CLOUD_FRONT_DOMAIN } = import.meta.env;
+const { VITE_S3_DOMAIN } = import.meta.env;
 
 export default function TradeWritePage() {
   const { user } = userStore();
@@ -77,7 +78,8 @@ export default function TradeWritePage() {
         const res = await uploadFile(file);
         const url = res || '';
         const imageName = url.split(VITE_S3_DOMAIN)[1];
-        const imageUrl = VITE_CLOUD_FRONT_DOMAIN + imageName + DEFAULT_OPTIONS;
+        // const imageUrl = VITE_CLOUD_FRONT_DOMAIN + imageName + DEFAULT_OPTIONS;
+        const imageUrl = VITE_S3_DOMAIN + imageName;
         setThumbnail(imageUrl);
       } catch (error) {
         const err = error as AxiosError;

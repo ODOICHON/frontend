@@ -61,6 +61,11 @@ export default function Comments({
     setContent(value);
   };
 
+  const handleDeleteComment = () => {
+    handleToastMessageProps('DELETE_COMMENT_SUCCESS', handleModalClose);
+    handleModalOpen();
+  };
+
   const onClickButton = () => {
     if (!user) {
       handleToastMessageProps('LOGIN_REQUIRED_ERROR', handleModalClose, () =>
@@ -87,17 +92,22 @@ export default function Comments({
         />
         <span>
           <p>{content.length}/400</p>
-          <button type="button" onClick={onClickButton}>
-            등록
-          </button>
         </span>
       </div>
+      <button
+        className={styles.commentWrite}
+        type="button"
+        onClick={onClickButton}
+      >
+        등록
+      </button>
       {comments.map((comment) => (
         <CommentDetail
           key={comment.commentId}
           comment={comment}
           boardId={boardId}
           intro={intro}
+          handleDeleteComment={handleDeleteComment}
         />
       ))}
       {modalState && toastMessageProps && (

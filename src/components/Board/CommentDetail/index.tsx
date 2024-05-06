@@ -10,24 +10,29 @@ type CommentDetailProps = {
   comment: CommentType;
   boardId: number;
   intro?: boolean;
+  handleDeleteComment: () => void;
 };
 
 export default function CommentDetail({
   comment,
   boardId,
   intro,
+  handleDeleteComment,
 }: CommentDetailProps) {
   const { user } = userStore();
   const queryClient = useQueryClient();
-  const [isUpdating, setIsUpdating] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const [isUpdating, setIsUpdating] = useState(false);
   const [updateContent, setUpdateContent] = useState(comment.content);
+
   const { mutate: deleteComment } = useMutation(
     () =>
       restFetcher({ method: 'DELETE', path: `comments/${comment.commentId}` }),
     {
       onSuccess: () => {
         // TODO: 이후 소개 페이지가 아닐 시 실행할 쿼리키 등록
+        handleDeleteComment();
         return queryClient.refetchQueries([
           intro ? QueryKeys.INTRO_BOARD : QueryKeys.COMMUNITY_BOARD,
         ]);
@@ -87,9 +92,14 @@ export default function CommentDetail({
           user?.authority === 'ADMIN') &&
           (isUpdating ? (
             <span className={styles.buttonWrapper}>
-              <button type="button" onClick={() => updateComment()}>
-                수정하기
+              <button
+                className={styles.active}
+                type="button"
+                onClick={() => updateComment()}
+              >
+                수정
               </button>
+              <div>|</div>
               <button type="button" onClick={onClickCancel}>
                 취소
               </button>
@@ -101,7 +111,13 @@ export default function CommentDetail({
                   수정
                 </button>
               )}
-              <button type="button" onClick={() => deleteComment()}>
+              <div>|</div>
+              <button
+                type="button"
+                onClick={() => {
+                  deleteComment();
+                }}
+              >
                 삭제
               </button>
             </span>
