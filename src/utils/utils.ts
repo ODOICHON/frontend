@@ -272,3 +272,13 @@ export const convertRentalTypeName = (typeName: RentalType) => {
   if (typeName === 'JEONSE') return '전세';
   if (typeName === 'MONTHLYRENT') return '월세';
 };
+
+// 문자가 자음이거나 모음인지 확인하는 함수
+export const isConsonant = (char: string) => {
+  const pattern = /[ㄱ-ㅎ|ㅏ-ㅣ]/;
+  return pattern.test(char);
+};
+
+export const checkTextString = (text: string) => {
+  return [...text].map((v) => isConsonant(v)).some((v) => v === true);
+};
