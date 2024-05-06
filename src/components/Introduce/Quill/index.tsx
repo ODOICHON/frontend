@@ -16,12 +16,13 @@ import useModalState from '@/hooks/useModalState';
 import useQuillModules from '@/hooks/useQuillModules';
 import useToastMessageType from '@/hooks/useToastMessageType';
 import { checkBeforePost } from '@/utils/utils';
-import { DEFAULT_OPTIONS } from '@/constants/image';
+// import { DEFAULT_OPTIONS } from '@/constants/image';
 import styles from './styles.module.scss';
 
 // TODO: 이미지 10개 이상 등록 불가
 
-const { VITE_S3_DOMAIN, VITE_CLOUD_FRONT_DOMAIN } = import.meta.env;
+// const { VITE_CLOUD_FRONT_DOMAIN } = import.meta.env;
+const { VITE_S3_DOMAIN } = import.meta.env;
 
 export default function IntroduceQuill() {
   const navigate = useNavigate();
@@ -82,7 +83,8 @@ export default function IntroduceQuill() {
         const res = await uploadFile(file);
         const url = res || '';
         const imageName = url.split(VITE_S3_DOMAIN)[1];
-        const imageUrl = VITE_CLOUD_FRONT_DOMAIN + imageName + DEFAULT_OPTIONS;
+        // const imageUrl = VITE_CLOUD_FRONT_DOMAIN + imageName + DEFAULT_OPTIONS;
+        const imageUrl = VITE_S3_DOMAIN + imageName;
         setThumbnail(imageUrl);
       } catch (error) {
         const err = error as AxiosError;
