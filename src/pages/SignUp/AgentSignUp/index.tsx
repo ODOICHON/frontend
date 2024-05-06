@@ -1243,7 +1243,7 @@ export default function AgentSignUpPage() {
                 onChange={() => setIsMarketingTerm((prev) => !prev)}
               />
               <label htmlFor="marketing_term">
-                마켓팅 활용 및 광고성 정보 수신 동의(선택)
+                마케팅 활용 및 광고성 정보 수신 동의(선택)
               </label>
             </span>
             <button

@@ -100,7 +100,7 @@ export default function IntroduceQuill() {
   const onPost = async () => {
     setIsProcessing(true);
     const imageUrls = [thumbnail, ...getImageUrls(contents)];
-    if (!checkBeforePost(title, contents, category, imageUrls)) return;
+    if (!checkBeforePost(title, contents, imageUrls)) return;
 
     const BoardForm: BoardFormType = {
       title,

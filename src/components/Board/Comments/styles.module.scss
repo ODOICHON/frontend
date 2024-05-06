@@ -1,4 +1,6 @@
 .wrapper {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   margin-bottom: 5rem;
   & > h1 {
@@ -45,18 +47,23 @@
       font-size: 1.125rem;
       color: #717171;
     }
-    & > button {
-      width: 6.85rem;
-      height: 3.125rem;
-      background-color: transparent;
-      border: 1px solid black;
-      border-radius: 25px;
-      font-size: 1.25rem;
-      font-weight: bold;
-      cursor: pointer;
-      &:hover {
-        opacity: 0.8;
-      }
-    }
+  }
+}
+
+.commentWrite {
+  font-family: 'Pretendard';
+  margin-left: auto;
+  margin-bottom: 1.5rem;
+  width: 6.75rem;
+  height: 3.125rem;
+  border: 1px solid #d9d9d9;
+  background-color: #d9d9d9;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+    background-color: #4d5256;
+    color: #f1f5f5;
   }
 }
