@@ -46,14 +46,14 @@ jobs:
         run: |
           sed -i "s|destination: /home/filename/client|destination: /home/${{ secrets.APPSPEC_FILES_FILENAME_DEV }}/client|g" appspec.yml
           sed -i "s|owner: owner|owner: ${{ secrets.APPSPEC_PERMISSIONS_OWNER_DEV }}|g" appspec.yml
-          sed -i "s|group: owner|group: ${{ secrets.APPSPEC_PERMISSIONS_GROUP_DEV}}|g" appspec.yml
+          sed -i "s|group: group|group: ${{ secrets.APPSPEC_PERMISSIONS_GROUP_DEV}}|g" appspec.yml
 
       - name: Modify appspec.yml (Prod)
         if: contains(github.ref, 'main')
         run: |
           sed -i "s|destination: /home/filename/client|destination: /home/${{ secrets.APPSPEC_FILES_FILENAME }}/client|g" appspec.yml
           sed -i "s|owner: owner|owner: ${{ secrets.APPSPEC_PERMISSIONS_OWNER }}|g" appspec.yml
-          sed -i "s|group: owner|group: ${{ secrets.APPSPEC_PERMISSIONS_GROUP}}|g" appspec.yml
+          sed -i "s|group: group|group: ${{ secrets.APPSPEC_PERMISSIONS_GROUP}}|g" appspec.yml
 
       - name: zip create # zip 파일을 만듭니다
         run: zip -r ./$GITHUB_SHA.zip ./dist appspec.yml
