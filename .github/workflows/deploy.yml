@@ -41,6 +41,16 @@ jobs:
       - name: Build # React Build
         run: yarn build
 
+      - name: Setting appspec.yml (Dev)
+        if: contains(github.ref, 'develop')
+        run: |
+          sed -i "s|destination: /home/os/client|destination: /home/${{ secrets.OS_DEV }}/client|g" appspec.yml
+
+      - name: Setting appspec.yml (Prod)
+        if: contains(github.ref, 'main')
+        run: |
+          sed -i "s|destination: /home/os/client|destination: /home/${{ secrets.OS }}/client|g" appspec.yml
+
       - name: zip create # zip 파일을 만듭니다
         run: zip -r ./$GITHUB_SHA.zip ./dist appspec.yml
         shell: bash
