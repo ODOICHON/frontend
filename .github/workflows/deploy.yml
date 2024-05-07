@@ -41,15 +41,19 @@ jobs:
       - name: Build # React Build
         run: yarn build
 
-      - name: Setting appspec.yml (Dev)
+      - name: Modify appspec.yml (Dev)
         if: contains(github.ref, 'develop')
         run: |
-          sed -i "s|destination: /home/os/client|destination: /home/${{ secrets.OS_DEV }}/client|g" appspec.yml
+          sed -i "s|destination: /home/filename/client|destination: /home/${{ secrets.APPSPEC_FILES_FILENAME_DEV }}/client|g" appspec.yml
+          sed -i "s|owner: owner|owner: ${{ secrets.APPSPEC_PERMISSIONS_OWNER_DEV }}|g" appspec.yml
+          sed -i "s|group: owner|group: ${{ secrets.APPSPEC_PERMISSIONS_GROUP_DEV}}|g" appspec.yml
 
-      - name: Setting appspec.yml (Prod)
+      - name: Modify appspec.yml (Prod)
         if: contains(github.ref, 'main')
         run: |
-          sed -i "s|destination: /home/os/client|destination: /home/${{ secrets.OS }}/client|g" appspec.yml
+          sed -i "s|destination: /home/filename/client|destination: /home/${{ secrets.APPSPEC_FILES_FILENAME }}/client|g" appspec.yml
+          sed -i "s|owner: owner|owner: ${{ secrets.APPSPEC_PERMISSIONS_OWNER }}|g" appspec.yml
+          sed -i "s|group: owner|group: ${{ secrets.APPSPEC_PERMISSIONS_GROUP}}|g" appspec.yml
 
       - name: zip create # zip 파일을 만듭니다
         run: zip -r ./$GITHUB_SHA.zip ./dist appspec.yml
