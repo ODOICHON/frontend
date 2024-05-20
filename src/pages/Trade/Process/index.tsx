@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import nextArrowImg from '@/assets/common/nextArrow.svg';
-import example1Img from '@/assets/trade/example1.png';
-import example2Img from '@/assets/trade/example2.png';
-import example3Img from '@/assets/trade/example3.png';
+import example1Img from '@/assets/trade/example1.jpg';
+import example2Img from '@/assets/trade/example2.jpg';
+import example3Img from '@/assets/trade/example3.jpg';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
