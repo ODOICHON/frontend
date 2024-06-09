@@ -35,6 +35,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
 
   const QuillRef = useRef<ReactQuill>();
+  const latestImages = useRef(images);
 
   const [title, setTitle] = useState(boardData ? boardData.title : '');
   const [contents, setContents] = useState('');
@@ -138,13 +139,20 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   };
 
   useEffect(() => {
+    latestImages.current = images;
+  }, [images]);
+
+  useEffect(() => {
     // 개발모드에선 StricMode 때문에 같은글이 두번 넣어짐. StrictMode를 해제하고 테스트하자
     if (boardData) {
       QuillRef.current
         ?.getEditor()
         .clipboard.dangerouslyPasteHTML(0, boardData.code);
     }
-    return () => resetImages();
+    return () => {
+      deleteFile(latestImages.current);
+      resetImages();
+    };
   }, []);
 
   return (

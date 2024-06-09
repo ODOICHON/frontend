@@ -11,7 +11,7 @@ import {
   TradeBoardDetailType,
   TradeBoardForm,
 } from '@/types/Board/tradeType';
-import { uploadFile } from '@/apis/uploadS3';
+import { deleteFile, uploadFile } from '@/apis/uploadS3';
 import { imageStore } from '@/store/imageStore';
 import userStore from '@/store/userStore';
 import { getRentalPriceType } from '@/utils/utils';
@@ -25,7 +25,7 @@ const { VITE_S3_DOMAIN } = import.meta.env;
 
 export default function TradeWritePage() {
   const { user } = userStore();
-  const { setImages, resetImages } = imageStore();
+  const { images, setImages, resetImages } = imageStore();
 
   const { state }: { state: { data: TradeBoardDetailType } } = useLocation();
 
@@ -55,6 +55,8 @@ export default function TradeWritePage() {
   const [thumbnailTitle, setThumbnailTitle] = useState(
     state ? state.data.imageUrls[0].split('/')[3] : '',
   );
+
+  const imagesRef = useRef(images);
   const thumbnailRef = useRef<HTMLInputElement>(null);
   // 매물특징
   const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
@@ -92,7 +94,14 @@ export default function TradeWritePage() {
   };
 
   useEffect(() => {
-    return () => resetImages();
+    imagesRef.current = images;
+  }, [images]);
+
+  useEffect(() => {
+    return () => {
+      deleteFile(imagesRef.current);
+      resetImages();
+    };
   }, []);
 
   if (!user) return <Navigate to="/login" />;
