@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { FiSearch } from 'react-icons/fi';
 import { MdUploadFile } from 'react-icons/md';
@@ -12,6 +12,7 @@ import {
   TradeBoardForm,
 } from '@/types/Board/tradeType';
 import { uploadFile } from '@/apis/uploadS3';
+import { imageStore } from '@/store/imageStore';
 import userStore from '@/store/userStore';
 import { getRentalPriceType } from '@/utils/utils';
 // import { DEFAULT_OPTIONS } from '@/constants/image';
@@ -24,6 +25,7 @@ const { VITE_S3_DOMAIN } = import.meta.env;
 
 export default function TradeWritePage() {
   const { user } = userStore();
+  const { setImages, resetImages } = imageStore();
 
   const { state }: { state: { data: TradeBoardDetailType } } = useLocation();
 
@@ -81,12 +83,17 @@ export default function TradeWritePage() {
         // const imageUrl = VITE_CLOUD_FRONT_DOMAIN + imageName + DEFAULT_OPTIONS;
         const imageUrl = VITE_S3_DOMAIN + imageName;
         setThumbnail(imageUrl);
+        setImages(imageUrl);
       } catch (error) {
         const err = error as AxiosError;
         return { ...err.response, success: false };
       }
     }
   };
+
+  useEffect(() => {
+    return () => resetImages();
+  }, []);
 
   if (!user) return <Navigate to="/login" />;
 

@@ -108,7 +108,7 @@ export const getMoveInType = (isCompleted: boolean) => {
 export const checkBeforePost = (
   title: string,
   contents: string,
-  imageUrl?: string[],
+  thumbnail?: string,
 ) => {
   if (title === '') {
     alert('제목을 입력해주세요.');
@@ -118,7 +118,7 @@ export const checkBeforePost = (
     alert('내용을 입력해주세요.');
     return false;
   }
-  if (imageUrl && imageUrl[0] === '') {
+  if (thumbnail === '') {
     alert('썸네일을 등록해주세요.');
     return false;
   }

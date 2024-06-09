@@ -10,6 +10,8 @@ import { BoardFormType } from '@/types/Board/boardType';
 import { CommunityBoardDetailType } from '@/types/Board/communityType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostBoardAPI } from '@/apis/boards';
+import { deleteFile } from '@/apis/uploadS3';
+import { imageStore } from '@/store/imageStore';
 import useModalState from '@/hooks/useModalState';
 import useQuillModules from '@/hooks/useQuillModules';
 import useToastMessageType from '@/hooks/useToastMessageType';
@@ -25,6 +27,7 @@ type CommunityQuillProps = {
 // TODO: 이미지 10개 이상 등록 불가
 
 export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
+  const { images, setImages, resetImages } = imageStore();
   const navigate = useNavigate();
   const location = useLocation();
   const boardData: CommunityBoardDetailType | null = location.state;
@@ -75,15 +78,20 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   );
 
   // 이미지를 업로드 하기 위한 함수
-  const modules = useQuillModules(QuillRef);
+  const modules = useQuillModules(QuillRef, setImages);
   const onChange = (content: string) => {
     setContents(content);
   };
 
   const onPost = async () => {
     setIsProcessing(true);
+    if (!checkBeforePost(title, contents)) {
+      setIsProcessing(false);
+      return;
+    }
+
     const imageUrls = [...getImageUrls(contents)];
-    if (!checkBeforePost(title, contents)) return;
+    const notUsedImageUrls = images.filter((url) => !imageUrls.includes(url));
 
     const BoardForm: BoardFormType = {
       title,
@@ -95,9 +103,12 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
       prefixCategory,
       fixed: false,
     };
+
     try {
       const response = await PostBoardAPI(BoardForm);
       if (response?.code === 'SUCCESS') {
+        deleteFile(notUsedImageUrls);
+        resetImages();
         handleToastMessageProps('POST_CREATE_SUCCESS', () => {
           handleModalClose();
           navigate(`/community/${queryParam}`);
@@ -133,6 +144,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
         ?.getEditor()
         .clipboard.dangerouslyPasteHTML(0, boardData.code);
     }
+    return () => resetImages();
   }, []);
 
   return (

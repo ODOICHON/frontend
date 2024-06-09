@@ -8,6 +8,8 @@ import { QueryKeys, restFetcher } from '@/queryClient';
 import { TradeBoardDetailType, TradeBoardForm } from '@/types/Board/tradeType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
 import { PostHouseAPI } from '@/apis/houses';
+import { deleteFile } from '@/apis/uploadS3';
+import { imageStore } from '@/store/imageStore';
 import userStore from '@/store/userStore';
 import useModalState from '@/hooks/useModalState';
 import useQuillModules from '@/hooks/useQuillModules';
@@ -29,6 +31,7 @@ export default function TradeQuill({
   setForm,
   thumbnail,
 }: TradeQuillProps) {
+  const { images, setImages, resetImages } = imageStore();
   const { user } = userStore();
   const navigate = useNavigate();
   const { modalState, handleModalOpen, handleModalClose } = useModalState();
@@ -36,7 +39,7 @@ export default function TradeQuill({
   const { state }: { state: { data: TradeBoardDetailType } } = useLocation();
   const QuillRef = useRef<ReactQuill>();
   // 이미지를 업로드 하기 위한 함수
-  const modules = useQuillModules(QuillRef);
+  const modules = useQuillModules(QuillRef, setImages);
 
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -69,6 +72,7 @@ export default function TradeQuill({
   const onPost = async ({ isTempSave }: { isTempSave: boolean }) => {
     setIsProcessing(true);
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
+    const notUsedImageUrls = images.filter((url) => !imageUrls.includes(url));
 
     const extractedYear = form.createdDate.match(/\d{4}/);
     const createdDate = extractedYear ? extractedYear[0] : '';
@@ -91,6 +95,8 @@ export default function TradeQuill({
 
     try {
       await PostHouseAPI(newForm);
+      deleteFile(notUsedImageUrls);
+      resetImages();
       if (isTempSave) {
         alert('게시글이 임시저장 되었습니다.');
         queryClient.refetchQueries([QueryKeys.MY_SAVES]);
@@ -111,6 +117,7 @@ export default function TradeQuill({
 
   const onUpdate = async ({ isTempSave }: { isTempSave: boolean }) => {
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
+    const notUsedImageUrls = images.filter((url) => !imageUrls.includes(url));
     const extractedYear = form.createdDate.match(/\d{4}/);
     const createdDate = extractedYear ? extractedYear[0] : '2002';
 
@@ -128,6 +135,8 @@ export default function TradeQuill({
     }
     try {
       mutate(newForm);
+      deleteFile(notUsedImageUrls);
+      resetImages();
       if (isTempSave) {
         alert('게시글이 임시저장 되었습니다.');
       } else {
