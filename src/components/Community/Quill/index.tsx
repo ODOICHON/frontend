@@ -34,13 +34,14 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   const { modalState, handleModalOpen, handleModalClose } = useModalState();
   const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
 
-  const QuillRef = useRef<ReactQuill>();
-  const latestImages = useRef(images);
-
   const [title, setTitle] = useState(boardData ? boardData.title : '');
   const [contents, setContents] = useState('');
   const [category, setCategory] = useState(boardData ? boardData.category : '');
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const QuillRef = useRef<ReactQuill>();
+  const imagesRef = useRef(images);
+  const isProcessingRef = useRef(isProcessing);
 
   const prefixCategory =
     queryParam === 'free_board' ? 'DEFAULT' : 'ADVERTISEMENT';
@@ -121,26 +122,42 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
       }
     } catch (error) {
       console.error(error);
-    } finally {
       setIsProcessing(false);
     }
   };
 
   const onUpdate = () => {
+    setIsProcessing(true);
+    if (!checkBeforePost(title, contents)) {
+      setIsProcessing(false);
+      return;
+    }
+
+    const imageUrls = [...getImageUrls(contents)];
+    const notUsedImageUrls = images.filter((url) => !imageUrls.includes(url));
+
     const BoardForm: BoardFormType = {
       title,
       code: contents,
       category,
-      imageUrls: [...getImageUrls(contents)],
+      imageUrls,
       prefixCategory,
       fixed: false,
     };
-    mutate(BoardForm);
+    try {
+      mutate(BoardForm);
+      deleteFile(notUsedImageUrls);
+      resetImages();
+    } catch (error) {
+      console.error(error);
+      setIsProcessing(false);
+    }
   };
 
   useEffect(() => {
-    latestImages.current = images;
-  }, [images]);
+    imagesRef.current = images;
+    isProcessingRef.current = isProcessing;
+  }, [images, isProcessing]);
 
   useEffect(() => {
     // 개발모드에선 StricMode 때문에 같은글이 두번 넣어짐. StrictMode를 해제하고 테스트하자
@@ -150,8 +167,10 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
         .clipboard.dangerouslyPasteHTML(0, boardData.code);
     }
     return () => {
-      deleteFile(latestImages.current);
-      resetImages();
+      if (!isProcessingRef.current) {
+        deleteFile(imagesRef.current);
+        resetImages();
+      }
     };
   }, []);
 

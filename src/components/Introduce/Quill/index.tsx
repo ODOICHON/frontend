@@ -33,10 +33,6 @@ export default function IntroduceQuill() {
   const { modalState, handleModalOpen, handleModalClose } = useModalState();
   const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
 
-  const QuillRef = useRef<ReactQuill>();
-  const thumbnailRef = useRef<HTMLInputElement>(null);
-  const imagesRef = useRef(images);
-
   const [title, setTitle] = useState(boardData ? boardData.title : '');
   const [contents, setContents] = useState('');
   const [category, setCategory] = useState(boardData ? boardData.category : '');
@@ -47,6 +43,11 @@ export default function IntroduceQuill() {
     boardData ? boardData.imageUrls[0].split('/')[3] : '',
   );
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const QuillRef = useRef<ReactQuill>();
+  const thumbnailRef = useRef<HTMLInputElement>(null);
+  const imagesRef = useRef(images);
+  const isProcessingRef = useRef(isProcessing);
 
   const queryClient = useQueryClient();
 
@@ -137,13 +138,18 @@ export default function IntroduceQuill() {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setIsProcessing(false);
     }
   };
 
   const onUpdate = () => {
+    setIsProcessing(true);
     const imageUrls = [thumbnail, ...getImageUrls(contents)];
+
+    if (!checkBeforePost(title, contents, thumbnail)) {
+      setIsProcessing(false);
+      return;
+    }
+
     const notUsedImageUrls = images.filter((url) => !imageUrls.includes(url));
 
     const BoardForm: BoardFormType = {
@@ -160,12 +166,14 @@ export default function IntroduceQuill() {
       resetImages();
     } catch (error) {
       console.error(error);
+      setIsProcessing(false);
     }
   };
 
   useEffect(() => {
     imagesRef.current = images;
-  }, [images]);
+    isProcessingRef.current = isProcessing;
+  }, [images, isProcessing]);
 
   useEffect(() => {
     // 개발모드에선 StricMode 때문에 같은글이 두번 넣어짐. StrictMode를 해제하고 테스트하자
@@ -175,8 +183,10 @@ export default function IntroduceQuill() {
         .clipboard.dangerouslyPasteHTML(0, boardData.code);
     }
     return () => {
-      deleteFile(imagesRef.current);
-      resetImages();
+      if (!isProcessingRef.current) {
+        deleteFile(imagesRef.current);
+        resetImages();
+      }
     };
   }, []);
 
