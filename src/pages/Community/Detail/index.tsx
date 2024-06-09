@@ -19,7 +19,6 @@ export default function CommunityBoardDetailPage() {
   const { user } = userStore();
   const { category, id } = useParams();
   const navigate = useNavigate();
-
   const queryClient = useQueryClient();
   const { data: boardData, isError } = useQuery<
     ApiResponseWithDataType<CommunityBoardDetailType>
