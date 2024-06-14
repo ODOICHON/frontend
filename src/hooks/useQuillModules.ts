@@ -12,6 +12,7 @@ Quill.register('modules/imageResize', ImageResize);
 
 const useQuillModules = (
   QuillRef: React.MutableRefObject<ReactQuill | undefined>,
+  setImages: (imageUrl: string) => void,
 ) => {
   const modules = useMemo(
     () => ({
@@ -80,7 +81,7 @@ const useQuillModules = (
           ['image'],
           ['clean'],
         ],
-        handlers: { image: () => imageHandler(QuillRef) },
+        handlers: { image: () => imageHandler(QuillRef, setImages) },
       },
     }),
     [],
