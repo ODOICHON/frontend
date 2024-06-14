@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { CommunityBoardType } from '@/types/Board/communityType';
 import { getCategoryName, getPrefixCategoryName } from '@/utils/utils';
-import { THUMBNAIL_SIZE_OPTION } from '@/constants/image';
 import styles from './styles.module.scss';
 
 type CommunityBoardProps = Omit<CommunityBoardType, 'code'>;
@@ -52,7 +51,8 @@ export default function CommunityBoard({
           {imageUrl && (
             <img
               className={styles.thumbnailImage}
-              src={imageUrl + THUMBNAIL_SIZE_OPTION}
+              // src={imageUrl + THUMBNAIL_SIZE_OPTION}
+              src={imageUrl}
               alt="thumbnail"
             />
           )}

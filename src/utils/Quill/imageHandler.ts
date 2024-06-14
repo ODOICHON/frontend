@@ -9,7 +9,9 @@ const { VITE_S3_DOMAIN } = import.meta.env;
 
 const imageHandler = (
   QuillRef: React.MutableRefObject<ReactQuill | undefined>,
+  setImages: (imageUrl: string) => void,
 ) => {
+  // const { setImages } = imageStore();
   const input = document.createElement('input');
 
   input.setAttribute('type', 'file');
@@ -25,6 +27,8 @@ const imageHandler = (
         const imageName = url.split(VITE_S3_DOMAIN)[1];
         // const imageUrl = VITE_CLOUD_FRONT_DOMAIN + imageName + DEFAULT_OPTIONS;
         const imageUrl = VITE_S3_DOMAIN + imageName;
+
+        setImages(imageUrl);
 
         const range = QuillRef.current?.getEditor().getSelection()?.index;
         if (range !== null && range !== undefined) {

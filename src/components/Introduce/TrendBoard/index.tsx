@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { IntroBoardType } from '@/types/Board/introType';
-import { THUMBNAIL_SIZE_OPTION } from '@/constants/image';
 import { updownVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -17,12 +16,19 @@ export default function TrendBoard(props: TrendBoardProps) {
       onClick={() => navigate(`/intro_board/${props.boardId}`)}
       onMouseOver={() => setIsMouseOver(true)}
       onMouseLeave={() => setIsMouseOver(false)}
+      // style={{
+      //   backgroundImage: isMouseOver
+      //     ? `linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+      // url('${props.imageUrl + THUMBNAIL_SIZE_OPTION}')`
+      //     : `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+      // url('${props.imageUrl + THUMBNAIL_SIZE_OPTION}')`,
+      // }}
       style={{
         backgroundImage: isMouseOver
           ? `linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
-      url('${props.imageUrl + THUMBNAIL_SIZE_OPTION}')`
+      url('${props.imageUrl}')`
           : `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-      url('${props.imageUrl + THUMBNAIL_SIZE_OPTION}')`,
+      url('${props.imageUrl}')`,
       }}
     >
       <h1>{props.title}</h1>
