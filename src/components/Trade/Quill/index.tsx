@@ -7,6 +7,7 @@ import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { TradeBoardDetailType, TradeBoardForm } from '@/types/Board/tradeType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
+import getNotUsedImageUrl from '@/utils/Quill/getNotUsedImageUrl';
 import { PostHouseAPI } from '@/apis/houses';
 import { deleteFile } from '@/apis/uploadS3';
 import { imageStore } from '@/store/imageStore';
@@ -75,7 +76,7 @@ export default function TradeQuill({
   const onPost = async ({ isTempSave }: { isTempSave: boolean }) => {
     setIsProcessing(true);
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
-    const notUsedImageUrls = images.filter((url) => !imageUrls.includes(url));
+    const notUsedImageUrls = getNotUsedImageUrl(images, imageUrls);
 
     const extractedYear = form.createdDate.match(/\d{4}/);
     const createdDate = extractedYear ? extractedYear[0] : '';
@@ -120,7 +121,7 @@ export default function TradeQuill({
 
   const onUpdate = async ({ isTempSave }: { isTempSave: boolean }) => {
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
-    const notUsedImageUrls = images.filter((url) => !imageUrls.includes(url));
+    const notUsedImageUrls = getNotUsedImageUrl(images, imageUrls);
     const extractedYear = form.createdDate.match(/\d{4}/);
     const createdDate = extractedYear ? extractedYear[0] : '2002';
 

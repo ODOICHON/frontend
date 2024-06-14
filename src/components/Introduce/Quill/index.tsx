@@ -10,6 +10,7 @@ import { QueryKeys, restFetcher } from '@/queryClient';
 import { BoardFormType } from '@/types/Board/boardType';
 import { IntroBoardDetailType } from '@/types/Board/introType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
+import getNotUsedImageUrl from '@/utils/Quill/getNotUsedImageUrl';
 import { PostBoardAPI } from '@/apis/boards';
 import { deleteFile, uploadFile } from '@/apis/uploadS3';
 import { imageStore } from '@/store/imageStore';
@@ -112,7 +113,7 @@ export default function IntroduceQuill() {
       return;
     }
 
-    const notUsedImageUrls = images.filter((url) => !imageUrls.includes(url));
+    const notUsedImageUrls = getNotUsedImageUrl(images, imageUrls);
 
     const BoardForm: BoardFormType = {
       title,
@@ -150,7 +151,7 @@ export default function IntroduceQuill() {
       return;
     }
 
-    const notUsedImageUrls = images.filter((url) => !imageUrls.includes(url));
+    const notUsedImageUrls = getNotUsedImageUrl(images, imageUrls);
 
     const BoardForm: BoardFormType = {
       title,

@@ -9,6 +9,7 @@ import { QueryKeys, restFetcher } from '@/queryClient';
 import { BoardFormType } from '@/types/Board/boardType';
 import { CommunityBoardDetailType } from '@/types/Board/communityType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
+import getNotUsedImageUrl from '@/utils/Quill/getNotUsedImageUrl';
 import { PostBoardAPI } from '@/apis/boards';
 import { deleteFile } from '@/apis/uploadS3';
 import { imageStore } from '@/store/imageStore';
@@ -93,7 +94,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
     }
 
     const imageUrls = [...getImageUrls(contents)];
-    const notUsedImageUrls = images.filter((url) => !imageUrls.includes(url));
+    const notUsedImageUrls = getNotUsedImageUrl(images, imageUrls);
 
     const BoardForm: BoardFormType = {
       title,
@@ -134,7 +135,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
     }
 
     const imageUrls = [...getImageUrls(contents)];
-    const notUsedImageUrls = images.filter((url) => !imageUrls.includes(url));
+    const notUsedImageUrls = getNotUsedImageUrl(images, imageUrls);
 
     const BoardForm: BoardFormType = {
       title,
