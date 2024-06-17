@@ -28,7 +28,7 @@ const navList: NavListType[] = [
     subList: [],
   },
   {
-    title: '빈집중개',
+    title: '빈집거래',
     path: '/mypage/trade/myself',
     icon: <FiMap />,
     arrowUp: <MdKeyboardArrowUp />,
