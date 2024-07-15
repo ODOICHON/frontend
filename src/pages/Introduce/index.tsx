@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Scrollbar } from 'swiper';
+import { Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ReviewBoard from '@/components/Introduce/ReviewBoard';
 import TrendBoard from '@/components/Introduce/TrendBoard';
