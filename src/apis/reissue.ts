@@ -1,8 +1,5 @@
-import axios, { AxiosError } from 'axios';
-import {
-  ApiResponseType,
-  ApiResponseWithDataType,
-} from '@/types/apiResponseType';
+import axios from 'axios';
+import { ApiResponseWithDataType } from '@/types/apiResponseType';
 
 export const reissue = async () => {
   try {
@@ -16,6 +13,6 @@ export const reissue = async () => {
     );
     return data;
   } catch (err) {
-    alert((err as AxiosError<ApiResponseType>).response?.data.message);
+    console.error(err);
   }
 };
