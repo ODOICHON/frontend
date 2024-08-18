@@ -313,7 +313,9 @@ export default function TradeWritePage() {
           </div>
           {user?.userType === 'AGENT' && (
             <div>
-              <label htmlFor="공인중개사명">공인중개사명</label>
+              <label htmlFor="공인중개사명">
+                공인중개사명<span className={styles.essential}>*</span>
+              </label>
               <input
                 id="공인중개사명"
                 type="text"
