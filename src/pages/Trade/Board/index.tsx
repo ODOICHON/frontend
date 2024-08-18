@@ -23,7 +23,7 @@ import { DeleteHouseAPI } from '@/apis/houses';
 import userStore from '@/store/userStore';
 import useModalState from '@/hooks/useModalState';
 import useToastMessageType from '@/hooks/useToastMessageType';
-import { getMoveInType, getUserType } from '@/utils/utils';
+import { getHouseName, getMoveInType, getUserType } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
@@ -104,7 +104,10 @@ export default function TradeBoardPage() {
               {getUserType(data?.data.userType || 'NONE')}
             </li>
           </ul>
-          <h1>{data?.data.title}</h1>
+          <h1>
+            {data?.data.houseType && `[${getHouseName(data?.data.houseType)}]`}{' '}
+            {data?.data.title}
+          </h1>
           <div>
             <p>
               {data?.data.nickName}

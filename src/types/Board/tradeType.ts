@@ -38,6 +38,7 @@ export type TradeBoardForm = {
 
 export type TradeBoardType = {
   houseId: number;
+  houseType: HouseType;
   rentalType: RentalType;
   city: string;
   price: number;
