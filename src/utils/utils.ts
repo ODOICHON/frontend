@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   DealStateType,
+  HouseType,
   RecommendedTagType,
   RentalType,
   TradeBoardForm,
@@ -13,6 +14,7 @@ export const setInterceptor = (token: string) => {
   return true;
 };
 
+// TODO: 상수 관리 고민
 export const getCategoryName = (category: string) => {
   switch (category) {
     case 'TREND':
@@ -29,6 +31,8 @@ export const getCategoryName = (category: string) => {
       return '질문';
     case 'DAILY':
       return '일상';
+    case 'EMPTY':
+      return '';
     default:
       return '';
   }
@@ -40,6 +44,20 @@ export const getPrefixCategoryName = (category: string) => {
       return 'free_board';
     case 'ADVERTISEMENT':
       return 'advertisement_board';
+    default:
+      return '';
+  }
+};
+
+// 매매 타입 이름 가져오기
+export const getHouseName = (house: HouseType) => {
+  switch (house) {
+    case 'LAND':
+      return '토지';
+    case 'HOUSE':
+      return '주택';
+    case 'FARM_HOUSE':
+      return '농가';
     default:
       return '';
   }
@@ -105,8 +123,7 @@ export const getMoveInType = (isCompleted: boolean) => {
 export const checkBeforePost = (
   title: string,
   contents: string,
-  category: string,
-  imageUrl?: string[],
+  thumbnail?: string,
 ) => {
   if (title === '') {
     alert('제목을 입력해주세요.');
@@ -116,18 +133,14 @@ export const checkBeforePost = (
     alert('내용을 입력해주세요.');
     return false;
   }
-  if (category === '') {
-    alert('말머리를 선택해주세요.');
-    return false;
-  }
-  if (imageUrl && imageUrl[0] === '') {
+  if (thumbnail === '') {
     alert('썸네일을 등록해주세요.');
     return false;
   }
   return true;
 };
 
-// 빈집거래 글쓰기 필수 입력사항 체크
+// 농가거래 글쓰기 필수 입력사항 체크
 export const checkBeforeTradePost = (
   user: User,
   tradeBoardForm: TradeBoardForm,
@@ -141,9 +154,8 @@ export const checkBeforeTradePost = (
     monthlyPrice,
     contact,
     agentName,
+    agentDetail,
     size,
-    floorNum,
-    createdDate,
     purpose,
     title,
     code,
@@ -185,18 +197,17 @@ export const checkBeforeTradePost = (
     alert('중개사 이름을 입력해주세요.');
     return false;
   }
+
+  if (user.userType === 'AGENT' && agentDetail === '') {
+    alert('상세 설명을 적어주세요.');
+    return false;
+  }
+
   if (size === '') {
     alert('평수를 입력해주세요.');
     return false;
   }
-  if (floorNum < 0) {
-    alert('1층 이상의 값만 작성해주세요.');
-    return false;
-  }
-  if (createdDate === '') {
-    alert('준공일을 입력해주세요.');
-    return false;
-  }
+
   if (purpose === '') {
     alert('용도를 입력해주세요.');
     return false;
@@ -271,4 +282,20 @@ export const convertRentalTypeName = (typeName: RentalType) => {
   if (typeName === 'SALE') return '매매';
   if (typeName === 'JEONSE') return '전세';
   if (typeName === 'MONTHLYRENT') return '월세';
+};
+
+export const convertHouseTypeName = (typeName: HouseType) => {
+  if (typeName === 'LAND') return '토지';
+  if (typeName === 'HOUSE') return '주택';
+  if (typeName === 'FARM_HOUSE') return '농가';
+};
+
+// 문자가 자음이거나 모음인지 확인하는 함수
+export const isConsonant = (char: string) => {
+  const pattern = /[ㄱ-ㅎ|ㅏ-ㅣ]/;
+  return pattern.test(char);
+};
+
+export const checkTextString = (text: string) => {
+  return [...text].map((v) => isConsonant(v)).some((v) => v === true);
 };

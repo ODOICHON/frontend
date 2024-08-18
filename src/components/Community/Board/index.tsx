@@ -2,7 +2,6 @@ import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { CommunityBoardType } from '@/types/Board/communityType';
 import { getCategoryName, getPrefixCategoryName } from '@/utils/utils';
-import { THUMBNAIL_SIZE_OPTION } from '@/constants/image';
 import styles from './styles.module.scss';
 
 type CommunityBoardProps = Omit<CommunityBoardType, 'code'>;
@@ -35,7 +34,9 @@ export default function CommunityBoard({
       >
         <span className={styles.title}>
           {fixed && <span className={styles.advertisement}>광고</span>}
-          <h3 className={styles.category}>[{getCategoryName(category)}]</h3>
+          {getCategoryName(category) && (
+            <h3 className={styles.category}>[{getCategoryName(category)}]</h3>
+          )}
           <h3 className={styles.titleMessage}>{title}</h3>
         </span>
         <div className={styles.contentWrapper}>
@@ -50,7 +51,8 @@ export default function CommunityBoard({
           {imageUrl && (
             <img
               className={styles.thumbnailImage}
-              src={imageUrl + THUMBNAIL_SIZE_OPTION}
+              // src={imageUrl + THUMBNAIL_SIZE_OPTION}
+              src={imageUrl}
               alt="thumbnail"
             />
           )}

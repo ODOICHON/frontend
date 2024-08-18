@@ -1,9 +1,25 @@
-import { RecommendedTagType, RentalType } from '@/types/Board/tradeType';
+import {
+  HouseType,
+  RecommendedTagType,
+  RentalType,
+} from '@/types/Board/tradeType';
 
 export type TradeCategoryType = {
   content: string;
   type: RentalType | '';
 };
+
+export type TradeHouseType = {
+  content: string;
+  type: HouseType | '';
+};
+
+export const houseCategory: TradeHouseType[] = [
+  { content: '전체', type: '' },
+  { content: '토지', type: 'LAND' },
+  { content: '주택', type: 'HOUSE' },
+  { content: '농가', type: 'FARM_HOUSE' },
+];
 
 export const tradeCategory: TradeCategoryType[] = [
   { content: '전체', type: '' },

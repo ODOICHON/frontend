@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactQuill from 'react-quill';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -7,7 +7,10 @@ import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { TradeBoardDetailType, TradeBoardForm } from '@/types/Board/tradeType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
+import getNotUsedImageUrl from '@/utils/Quill/getNotUsedImageUrl';
 import { PostHouseAPI } from '@/apis/houses';
+import { deleteFile } from '@/apis/uploadS3';
+import { imageStore } from '@/store/imageStore';
 import userStore from '@/store/userStore';
 import useModalState from '@/hooks/useModalState';
 import useQuillModules from '@/hooks/useQuillModules';
@@ -29,16 +32,20 @@ export default function TradeQuill({
   setForm,
   thumbnail,
 }: TradeQuillProps) {
+  const { images, setImages, resetImages } = imageStore();
   const { user } = userStore();
   const navigate = useNavigate();
   const { modalState, handleModalOpen, handleModalClose } = useModalState();
   const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
   const { state }: { state: { data: TradeBoardDetailType } } = useLocation();
-  const QuillRef = useRef<ReactQuill>();
-  // 이미지를 업로드 하기 위한 함수
-  const modules = useQuillModules(QuillRef);
 
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const QuillRef = useRef<ReactQuill>();
+  const imagesRef = useRef(images);
+  const isProcessingRef = useRef(isProcessing);
+
+  const modules = useQuillModules(QuillRef, setImages);
 
   const queryClient = useQueryClient();
   const { mutate, isLoading: isUpdateLoading } = useMutation(
@@ -69,6 +76,7 @@ export default function TradeQuill({
   const onPost = async ({ isTempSave }: { isTempSave: boolean }) => {
     setIsProcessing(true);
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
+    const notUsedImageUrls = getNotUsedImageUrl(images, imageUrls);
 
     const extractedYear = form.createdDate.match(/\d{4}/);
     const createdDate = extractedYear ? extractedYear[0] : '';
@@ -91,6 +99,8 @@ export default function TradeQuill({
 
     try {
       await PostHouseAPI(newForm);
+      deleteFile(notUsedImageUrls);
+      resetImages();
       if (isTempSave) {
         alert('게시글이 임시저장 되었습니다.');
         queryClient.refetchQueries([QueryKeys.MY_SAVES]);
@@ -111,6 +121,7 @@ export default function TradeQuill({
 
   const onUpdate = async ({ isTempSave }: { isTempSave: boolean }) => {
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
+    const notUsedImageUrls = getNotUsedImageUrl(images, imageUrls);
     const extractedYear = form.createdDate.match(/\d{4}/);
     const createdDate = extractedYear ? extractedYear[0] : '2002';
 
@@ -128,6 +139,8 @@ export default function TradeQuill({
     }
     try {
       mutate(newForm);
+      deleteFile(notUsedImageUrls);
+      resetImages();
       if (isTempSave) {
         alert('게시글이 임시저장 되었습니다.');
       } else {
@@ -145,6 +158,20 @@ export default function TradeQuill({
   const isPosting = Boolean(!state); // 처음 글을 작성하는 상태
   const isUpdating = Boolean(state && !state.data.tmpYn); // 등록된 글을 수정하는 상태
   const isSaving = Boolean(state && state.data.tmpYn); // 임시저장된 글을 작성하는 상태
+
+  useEffect(() => {
+    imagesRef.current = images;
+    isProcessingRef.current = isProcessing;
+  }, [images, isProcessing]);
+
+  useEffect(() => {
+    return () => {
+      if (!isProcessingRef.current) {
+        deleteFile(imagesRef.current);
+        resetImages();
+      }
+    };
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -169,7 +196,6 @@ export default function TradeQuill({
                 QuillRef.current = element;
               }
             }}
-            value={form.code}
             onChange={(value) => setForm((prev) => ({ ...prev, code: value }))}
             modules={modules}
             placeholder="사진 5장 이상은 필수입니다. 5장 이상(건물 외관, 내부 포함) 업로드 되지 않을 시, 반려됩니다."

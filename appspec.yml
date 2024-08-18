@@ -2,11 +2,10 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/client
+    destination: /home/filename/client
     overwrite: yes
 permissions:
   - object: /
     pattern: '**'
-    owner: root
-    group: root
-    mode: 775
+    owner: owner
+    group: group

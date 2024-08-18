@@ -9,7 +9,10 @@ import { QueryKeys, restFetcher } from '@/queryClient';
 import { BoardFormType } from '@/types/Board/boardType';
 import { CommunityBoardDetailType } from '@/types/Board/communityType';
 import getImageUrls from '@/utils/Quill/getImageUrls';
+import getNotUsedImageUrl from '@/utils/Quill/getNotUsedImageUrl';
 import { PostBoardAPI } from '@/apis/boards';
+import { deleteFile } from '@/apis/uploadS3';
+import { imageStore } from '@/store/imageStore';
 import useModalState from '@/hooks/useModalState';
 import useQuillModules from '@/hooks/useQuillModules';
 import useToastMessageType from '@/hooks/useToastMessageType';
@@ -25,18 +28,21 @@ type CommunityQuillProps = {
 // TODO: 이미지 10개 이상 등록 불가
 
 export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
+  const { images, setImages, resetImages } = imageStore();
   const navigate = useNavigate();
   const location = useLocation();
   const boardData: CommunityBoardDetailType | null = location.state;
   const { modalState, handleModalOpen, handleModalClose } = useModalState();
   const { toastMessageProps, handleToastMessageProps } = useToastMessageType();
 
-  const QuillRef = useRef<ReactQuill>();
-
   const [title, setTitle] = useState(boardData ? boardData.title : '');
   const [contents, setContents] = useState('');
   const [category, setCategory] = useState(boardData ? boardData.category : '');
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const QuillRef = useRef<ReactQuill>();
+  const imagesRef = useRef(images);
+  const isProcessingRef = useRef(isProcessing);
 
   const prefixCategory =
     queryParam === 'free_board' ? 'DEFAULT' : 'ADVERTISEMENT';
@@ -75,27 +81,37 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
   );
 
   // 이미지를 업로드 하기 위한 함수
-  const modules = useQuillModules(QuillRef);
+  const modules = useQuillModules(QuillRef, setImages);
   const onChange = (content: string) => {
     setContents(content);
   };
 
   const onPost = async () => {
     setIsProcessing(true);
+    if (!checkBeforePost(title, contents)) {
+      setIsProcessing(false);
+      return;
+    }
+
     const imageUrls = [...getImageUrls(contents)];
-    if (!checkBeforePost(title, contents, category)) return;
+    const notUsedImageUrls = getNotUsedImageUrl(images, imageUrls);
 
     const BoardForm: BoardFormType = {
       title,
       code: contents,
-      category,
+      // TODO: 말머리가 없을 경우 'EMPTY'로 처리
+      // 상수로 관리하는게 좋아보임. 백엔드 ENUM 값과 동기화 필요
+      category: category || 'EMPTY',
       imageUrls,
       prefixCategory,
       fixed: false,
     };
+
     try {
       const response = await PostBoardAPI(BoardForm);
       if (response?.code === 'SUCCESS') {
+        deleteFile(notUsedImageUrls);
+        resetImages();
         handleToastMessageProps('POST_CREATE_SUCCESS', () => {
           handleModalClose();
           navigate(`/community/${queryParam}`);
@@ -107,22 +123,42 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
       }
     } catch (error) {
       console.error(error);
-    } finally {
       setIsProcessing(false);
     }
   };
 
   const onUpdate = () => {
+    setIsProcessing(true);
+    if (!checkBeforePost(title, contents)) {
+      setIsProcessing(false);
+      return;
+    }
+
+    const imageUrls = [...getImageUrls(contents)];
+    const notUsedImageUrls = getNotUsedImageUrl(images, imageUrls);
+
     const BoardForm: BoardFormType = {
       title,
       code: contents,
       category,
-      imageUrls: [...getImageUrls(contents)],
+      imageUrls,
       prefixCategory,
       fixed: false,
     };
-    mutate(BoardForm);
+    try {
+      mutate(BoardForm);
+      deleteFile(notUsedImageUrls);
+      resetImages();
+    } catch (error) {
+      console.error(error);
+      setIsProcessing(false);
+    }
   };
+
+  useEffect(() => {
+    imagesRef.current = images;
+    isProcessingRef.current = isProcessing;
+  }, [images, isProcessing]);
 
   useEffect(() => {
     // 개발모드에선 StricMode 때문에 같은글이 두번 넣어짐. StrictMode를 해제하고 테스트하자
@@ -131,6 +167,12 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
         ?.getEditor()
         .clipboard.dangerouslyPasteHTML(0, boardData.code);
     }
+    return () => {
+      if (!isProcessingRef.current) {
+        deleteFile(imagesRef.current);
+        resetImages();
+      }
+    };
   }, []);
 
   return (
@@ -142,7 +184,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
           <select
             className={styles.categoryInput}
             name="category"
-            value={category}
+            value={category === 'EMPTY' ? '' : category}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               setCategory(e.target.value)
             }

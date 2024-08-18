@@ -14,7 +14,6 @@ import { CommunityBoardType } from '@/types/Board/communityType';
 import { IntroBoardType } from '@/types/Board/introType';
 import { getPrefixCategoryName } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
-import { THUMBNAIL_SIZE_OPTION } from '@/constants/image';
 import { jumbotronData } from '@/constants/main_dummy';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
@@ -108,7 +107,7 @@ export default function MainPage() {
               className={introToggle === 'trend' ? '' : styles.button_disabled}
               onClick={() => setIntroToggle('trend')}
             >
-              트랜드
+              트렌드
             </button>
             <button
               type="button"
@@ -181,7 +180,8 @@ export default function MainPage() {
                 </div>
                 <img
                   className={styles.odoiIntro_slide_image}
-                  src={data.imageUrl + THUMBNAIL_SIZE_OPTION}
+                  // src={data.imageUrl + THUMBNAIL_SIZE_OPTION}
+                  src={data.imageUrl}
                   alt="ThumbnailImage"
                 />
               </div>
@@ -223,9 +223,13 @@ export default function MainPage() {
                 <div
                   role="presentation"
                   className={styles.odoiCommunity}
+                  //   style={{
+                  //     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.35)),
+                  // url(${data.imageUrl + THUMBNAIL_SIZE_OPTION})`,
+                  //   }}
                   style={{
                     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.35)),
-                url(${data.imageUrl + THUMBNAIL_SIZE_OPTION})`,
+                url(${data.imageUrl})`,
                   }}
                   onClick={() => {
                     navigate(
