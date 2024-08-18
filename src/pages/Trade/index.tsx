@@ -27,6 +27,7 @@ export default function TradePage() {
   const [currentPage, setCurrentPage] = useState(0);
   const [isLastPage, setIsLastPage] = useState(false);
 
+  const [houseType, setHouseType] = useState('');
   const [rentalType, setRentalType] = useState('');
   const [city, setCity] = useState('');
   const [search, setSearch] = useState('');
@@ -98,9 +99,11 @@ export default function TradePage() {
       </section>
       <section className={styles.contentWrapper}>
         <SearchBar
+          houseType={houseType}
           rentalType={rentalType}
           city={city}
           search={search}
+          setHouseType={setHouseType}
           setRentalType={setRentalType}
           setCity={setCity}
           setSearch={setSearch}
