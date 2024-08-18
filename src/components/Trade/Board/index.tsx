@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { RentalType, TradeBoardType } from '@/types/Board/tradeType';
-import { convertRentalTypeName, priceCount } from '@/utils/utils';
+import { convertRentalTypeName, getHouseName, priceCount } from '@/utils/utils';
 import styles from './styles.module.scss';
 
 type TradeBoardProps = Omit<TradeBoardType, 'recommendedTag'>;
 
 export default function TradeBoard({
   houseId,
+  houseType,
   rentalType,
   city,
   price,
@@ -97,7 +98,9 @@ export default function TradeBoard({
         )}
       </div>
       <div className={styles.contentsWrapper}>
-        <h1>{title}</h1>
+        <h1>
+          {getHouseName(houseType)} {title}
+        </h1>
         <p>
           <strong>위치</strong> : {city}
         </p>
