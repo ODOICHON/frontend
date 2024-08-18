@@ -47,7 +47,7 @@ export default function TradeBoardPage() {
   const ref = useRef<HTMLDivElement>(null);
 
   const handleDeleteButtonClick = async (houseId: number) => {
-    if (houseId === 0) throw new Error('없는 빈집거래 게시물입니다.');
+    if (houseId === 0) throw new Error('없는 농가거래 게시물입니다.');
     await DeleteHouseAPI(houseId);
     handleToastMessageProps('POST_DELETE_SUCCESS', () => {
       handleModalClose();
@@ -197,7 +197,7 @@ export default function TradeBoardPage() {
           <KakaoMapImage address={data?.data.city || ''} />
         </section>
         <section className={styles.process}>
-          <span>빈집거래 프로세스가 궁금하신가요?</span>
+          <span>농가거래 프로세스가 궁금하신가요?</span>
           <button
             type="button"
             onClick={() => {

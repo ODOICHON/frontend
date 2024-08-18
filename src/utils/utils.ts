@@ -125,7 +125,7 @@ export const checkBeforePost = (
   return true;
 };
 
-// 빈집거래 글쓰기 필수 입력사항 체크
+// 농가거래 글쓰기 필수 입력사항 체크
 export const checkBeforeTradePost = (
   user: User,
   tradeBoardForm: TradeBoardForm,
