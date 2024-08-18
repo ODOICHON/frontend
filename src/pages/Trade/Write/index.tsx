@@ -48,6 +48,7 @@ export default function TradeWritePage() {
     price: state ? state.data.price : 0,
     monthlyPrice: state ? state.data.monthlyPrice : 0,
     agentName: state ? state.data.agentName : '',
+    agentDetail: state ? state.data.agentDetail : '',
     title: state ? state.data.title : '',
     code: state ? state.data.code : '',
     imageUrls: state ? state.data.imageUrls : [],
