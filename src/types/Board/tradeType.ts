@@ -29,6 +29,7 @@ export type TradeBoardForm = {
   price: number;
   monthlyPrice: number;
   agentName: string;
+  agentDetail: string;
   title: string;
   code: string;
   imageUrls: string[];
@@ -67,6 +68,7 @@ export type TradeBoardDetailType = {
   price: number;
   monthlyPrice: number;
   agentName: string;
+  agentDetail: string;
   title: string;
   code: string;
   imageUrls: string[];
