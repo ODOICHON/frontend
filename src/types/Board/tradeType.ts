@@ -7,13 +7,16 @@ export type RecommendedTagType =
   | 'WANT_TO_LOOK_A_GOOD_VIEW'
   | 'WANT_TO_FARM';
 
+export type HouseType = 'LAND' | 'HOUSE' | 'FARM_HOUSE';
+
 export type RentalType = 'SALE' | 'JEONSE' | 'MONTHLYRENT';
 
-export type MenuType = 'none' | 'rentalType' | 'city' | 'search';
+export type MenuType = 'none' | 'houseType' | 'rentalType' | 'city' | 'search';
 
 export type DealStateType = 'APPLYING' | 'ONGOING' | 'COMPLETED';
 
 export type TradeBoardForm = {
+  houseType: HouseType;
   rentalType: RentalType;
   city: string;
   zipCode: string;
@@ -26,6 +29,7 @@ export type TradeBoardForm = {
   price: number;
   monthlyPrice: number;
   agentName: string;
+  agentDetail: string;
   title: string;
   code: string;
   imageUrls: string[];
@@ -35,6 +39,7 @@ export type TradeBoardForm = {
 
 export type TradeBoardType = {
   houseId: number;
+  houseType: HouseType;
   rentalType: RentalType;
   city: string;
   price: number;
@@ -50,6 +55,7 @@ export type TradeBoardType = {
 
 export type TradeBoardDetailType = {
   houseId: number;
+  houseType: HouseType;
   rentalType: RentalType;
   city: string;
   zipCode: string;
@@ -62,6 +68,7 @@ export type TradeBoardDetailType = {
   price: number;
   monthlyPrice: number;
   agentName: string;
+  agentDetail: string;
   title: string;
   code: string;
   imageUrls: string[];

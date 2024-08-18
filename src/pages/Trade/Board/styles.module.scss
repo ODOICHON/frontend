@@ -130,7 +130,7 @@
 }
 
 .infoContainer {
-  margin-bottom: 3rem;
+  margin-bottom: 1.25rem;
 }
 .categoryList {
   display: flex;
@@ -199,12 +199,46 @@
   }
 }
 
+.agentInfo {
+  display: flex;
+  padding: 3.75rem 4.375rem;
+  background-color: transparent;
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
+  border: 1px solid #ced3d6;
+  border-radius: 8px;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 5rem;
+  }
+  & > article {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    font-size: 1.375rem;
+    font-family: 'Pretendard';
+    font-weight: bold;
+    gap: 1.125rem;
+    & > div {
+      display: flex;
+      color: #4d5256;
+      gap: 1rem;
+      & > p {
+        font-weight: normal;
+      }
+    }
+  }
+}
+
 .recommendedTag {
   display: flex;
   padding: 3.75rem 4.375rem;
-  background-color: #f8f8f8;
+  background-color: transparent;
   border-radius: 10px;
   margin-bottom: 6rem;
+  border: 1px solid #ced3d6;
+  border-radius: 8px;
 
   @include mobile {
     flex-direction: column;
@@ -228,7 +262,7 @@
       flex-wrap: wrap;
       gap: 1rem;
 
-      background-color: #f6f7fb;
+      background-color: transparent;
       border-radius: 16px;
       font-size: 1.125rem;
       font-family: 'Pretandard';
