@@ -1,17 +1,18 @@
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
-import { Autoplay, Pagination, Navigation } from 'swiper';
+import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import footer from '@/assets/common/footer.png';
 import { QueryKeys, restFetcher } from '@/queryClient';
 import { CommunityBoardType } from '@/types/Board/communityType';
 import { IntroBoardType } from '@/types/Board/introType';
+import useSwiperRef from '@/hooks/useSwiperRef';
 import { getPrefixCategoryName } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { jumbotronData } from '@/constants/main_dummy';
@@ -19,13 +20,14 @@ import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 export default function MainPage() {
-  const [_, updateState] = useState(false);
   const [introToggle, setIntroToggle] = useState<'trend' | 'review'>('trend');
   const navigate = useNavigate();
-  const introNextRef = useRef<HTMLButtonElement>(null);
-  const introPrevRef = useRef<HTMLButtonElement>(null);
-  const commuNextRef = useRef<HTMLButtonElement>(null);
-  const commuPrevRef = useRef<HTMLButtonElement>(null);
+
+  const [introPrevEl, introPrevRef] = useSwiperRef<HTMLButtonElement>();
+  const [introNextEl, introNextRef] = useSwiperRef<HTMLButtonElement>();
+  const [commuNextEl, commuNextRef] = useSwiperRef<HTMLButtonElement>();
+  const [commuPrevEl, commuPrevRef] = useSwiperRef<HTMLButtonElement>();
+
   const { data: introData } = useQuery<
     ApiResponseWithDataType<IntroBoardType[]>
   >([QueryKeys.PREVIEW_BOARD, QueryKeys.INTRO_BOARD, introToggle], () =>
@@ -52,10 +54,6 @@ export default function MainPage() {
     }),
   );
 
-  useEffect(() => {
-    updateState(true);
-  }, [introNextRef, commuNextRef]);
-
   return (
     <motion.div
       className={styles.container}
@@ -74,7 +72,7 @@ export default function MainPage() {
         pagination={{
           clickable: true,
         }}
-        modules={[Autoplay, Pagination, Navigation]}
+        modules={[Autoplay, Pagination]}
         className={styles.swiperContainer}
       >
         {jumbotronData.map((data, idx) => (
@@ -151,8 +149,8 @@ export default function MainPage() {
         </div>
         <Swiper
           navigation={{
-            nextEl: introNextRef.current,
-            prevEl: introPrevRef.current,
+            nextEl: introNextEl,
+            prevEl: introPrevEl,
           }}
           slidesPerView={1}
           breakpoints={{
@@ -211,8 +209,8 @@ export default function MainPage() {
               clickable: true,
             }}
             navigation={{
-              nextEl: commuNextRef.current,
-              prevEl: commuPrevRef.current,
+              nextEl: commuNextEl,
+              prevEl: commuPrevEl,
             }}
             touchStartPreventDefault={false}
             modules={[Pagination, Navigation]}

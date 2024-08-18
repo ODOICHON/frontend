@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import Dompurify from 'dompurify';
 import { motion } from 'framer-motion';
-import { A11y, Navigation, Pagination, Scrollbar } from 'swiper';
+import { A11y, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import AccessModal from '@/components/Common/AccessModal';
 import ModalPortal from '@/components/Common/ModalPortal';
@@ -22,6 +22,7 @@ import { TradeBoardDetailType } from '@/types/Board/tradeType';
 import { DeleteHouseAPI } from '@/apis/houses';
 import userStore from '@/store/userStore';
 import useModalState from '@/hooks/useModalState';
+import useSwiperRef from '@/hooks/useSwiperRef';
 import useToastMessageType from '@/hooks/useToastMessageType';
 import { getHouseName, getMoveInType, getUserType } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
@@ -44,7 +45,8 @@ export default function TradeBoardPage() {
   );
   const [_, updateState] = useState(false);
   const [modal, setModal] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+
+  const [paginationEl, paginationRef] = useSwiperRef<HTMLDivElement>();
 
   const handleDeleteButtonClick = async (houseId: number) => {
     if (houseId === 0) throw new Error('없는 농가거래 게시물입니다.');
@@ -160,7 +162,7 @@ export default function TradeBoardPage() {
           spaceBetween={50}
           slidesPerView={1}
           navigation
-          pagination={{ el: ref.current }}
+          pagination={{ el: paginationEl }}
           scrollbar={{ draggable: true }}
         >
           {data?.data.imageUrls.map((url, index) => (
@@ -169,7 +171,7 @@ export default function TradeBoardPage() {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className={styles.pagination} ref={ref} />
+        <div className={styles.pagination} ref={paginationRef} />
         <section
           className={styles.infoContainer}
           style={user ? undefined : { visibility: 'hidden' }}
