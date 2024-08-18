@@ -124,6 +124,7 @@ export default function TradePage() {
               <TradeBoard
                 key={content.houseId}
                 houseId={content.houseId}
+                houseType={content.houseType}
                 rentalType={content.rentalType}
                 city={content.city}
                 price={content.price}

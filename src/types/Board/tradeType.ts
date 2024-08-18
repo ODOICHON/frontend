@@ -37,6 +37,7 @@ export type TradeBoardForm = {
 
 export type TradeBoardType = {
   houseId: number;
+  houseType: HouseType;
   rentalType: RentalType;
   city: string;
   price: number;
@@ -52,6 +53,7 @@ export type TradeBoardType = {
 
 export type TradeBoardDetailType = {
   houseId: number;
+  houseType: HouseType;
   rentalType: RentalType;
   city: string;
   zipCode: string;

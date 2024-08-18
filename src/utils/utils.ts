@@ -50,6 +50,20 @@ export const getPrefixCategoryName = (category: string) => {
 };
 
 // 매매 타입 이름 가져오기
+export const getHouseName = (house: HouseType) => {
+  switch (house) {
+    case 'LAND':
+      return '토지';
+    case 'HOUSE':
+      return '주택';
+    case 'FARM_HOUSE':
+      return '농가';
+    default:
+      return '';
+  }
+};
+
+// 매매 타입 이름 가져오기
 export const getRentalName = (rental: RentalType) => {
   switch (rental) {
     case 'MONTHLYRENT':
