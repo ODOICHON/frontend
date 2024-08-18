@@ -141,8 +141,6 @@ export const checkBeforeTradePost = (
     contact,
     agentName,
     size,
-    floorNum,
-    createdDate,
     purpose,
     title,
     code,
