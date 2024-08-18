@@ -24,7 +24,7 @@ import userStore from '@/store/userStore';
 import useModalState from '@/hooks/useModalState';
 import useSwiperRef from '@/hooks/useSwiperRef';
 import useToastMessageType from '@/hooks/useToastMessageType';
-import { getMoveInType, getUserType } from '@/utils/utils';
+import { getHouseName, getMoveInType, getUserType } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
@@ -49,7 +49,7 @@ export default function TradeBoardPage() {
   const [paginationEl, paginationRef] = useSwiperRef<HTMLDivElement>();
 
   const handleDeleteButtonClick = async (houseId: number) => {
-    if (houseId === 0) throw new Error('없는 빈집거래 게시물입니다.');
+    if (houseId === 0) throw new Error('없는 농가거래 게시물입니다.');
     await DeleteHouseAPI(houseId);
     handleToastMessageProps('POST_DELETE_SUCCESS', () => {
       handleModalClose();
@@ -106,7 +106,10 @@ export default function TradeBoardPage() {
               {getUserType(data?.data.userType || 'NONE')}
             </li>
           </ul>
-          <h1>{data?.data.title}</h1>
+          <h1>
+            {data?.data.houseType && `[${getHouseName(data?.data.houseType)}]`}{' '}
+            {data?.data.title}
+          </h1>
           <div>
             <p>
               {data?.data.nickName}
@@ -175,6 +178,20 @@ export default function TradeBoardPage() {
         >
           <TradeBoardInfo info={data?.data} />
         </section>
+        {data?.data.userType === 'AGENT' && (
+          <section className={styles.agentInfo}>
+            <article>
+              <div>
+                공인중개사명{' '}
+                <p>{data.data.agentName !== '' ? data.data.agentName : 'X'}</p>
+              </div>
+              <div>
+                상세 설명{' '}
+                <p>{data.data.agentDetail && data.data.agentDetail}</p>
+              </div>
+            </article>
+          </section>
+        )}
         <section className={styles.recommendedTag}>
           <article>
             <span>매물 특징</span>
@@ -199,7 +216,7 @@ export default function TradeBoardPage() {
           <KakaoMapImage address={data?.data.city || ''} />
         </section>
         <section className={styles.process}>
-          <span>빈집거래 프로세스가 궁금하신가요?</span>
+          <span>농가거래 프로세스가 궁금하신가요?</span>
           <button
             type="button"
             onClick={() => {
