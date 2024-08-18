@@ -99,7 +99,7 @@ export default function TradeBoard({
       </div>
       <div className={styles.contentsWrapper}>
         <h1>
-          {getHouseName(houseType)} {title}
+          [{getHouseName(houseType)}] {title}
         </h1>
         <p>
           <strong>위치</strong> : {city}

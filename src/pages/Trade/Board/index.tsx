@@ -105,7 +105,7 @@ export default function TradeBoardPage() {
             </li>
           </ul>
           <h1>
-            {data?.data.houseType && getHouseName(data?.data.houseType)}{' '}
+            {data?.data.houseType && `[${getHouseName(data?.data.houseType)}]`}{' '}
             {data?.data.title}
           </h1>
           <div>
