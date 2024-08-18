@@ -176,6 +176,20 @@ export default function TradeBoardPage() {
         >
           <TradeBoardInfo info={data?.data} />
         </section>
+        {data?.data.userType === 'AGENT' && (
+          <section className={styles.agentInfo}>
+            <article>
+              <div>
+                공인중개사명{' '}
+                <p>{data.data.agentName !== '' ? data.data.agentName : 'X'}</p>
+              </div>
+              <div>
+                상세 설명{' '}
+                <p>{data.data.agentDetail && data.data.agentDetail}</p>
+              </div>
+            </article>
+          </section>
+        )}
         <section className={styles.recommendedTag}>
           <article>
             <span>매물 특징</span>

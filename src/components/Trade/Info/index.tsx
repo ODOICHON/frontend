@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { TradeBoardDetailType } from '@/types/Board/tradeType';
-import { getHouseName, getRentalName } from '@/utils/utils';
+import { getHouseName, getRentalName, priceCount } from '@/utils/utils';
 import styles from './styles.module.scss';
 
 // TODO: undefined 처리하기
@@ -22,18 +22,13 @@ function TradeBoardInfo({ info }: TradeBoardInfoProps) {
         <div>
           가격{' '}
           <p>
-            {info?.rentalType && getRentalName(info?.rentalType)} {info?.price}
-            만원
+            {info?.rentalType && getRentalName(info?.rentalType)}{' '}
+            {info?.price && priceCount(info?.price)}
           </p>
         </div>
         <div>
           전화번호 <p>{info?.contact}</p>
         </div>
-        {info?.userType === 'AGENT' && (
-          <div>
-            공인중개사명 <p>{info?.agentName !== '' ? info?.agentName : 'X'}</p>
-          </div>
-        )}
       </article>
       <article>
         <span>기본정보</span>
