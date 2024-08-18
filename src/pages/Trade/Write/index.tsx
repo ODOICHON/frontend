@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import AddressModal from '@/components/Trade/AddressModal';
 import TradeQuill from '@/components/Trade/Quill';
 import {
+  HouseType,
   RentalType,
   TradeBoardDetailType,
   TradeBoardForm,
@@ -16,7 +17,11 @@ import { imageStore } from '@/store/imageStore';
 import userStore from '@/store/userStore';
 import { getRentalPriceType } from '@/utils/utils';
 // import { DEFAULT_OPTIONS } from '@/constants/image';
-import { specialCategory, tradeCategory } from '@/constants/trade';
+import {
+  houseCategory,
+  specialCategory,
+  tradeCategory,
+} from '@/constants/trade';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -30,6 +35,7 @@ export default function TradeWritePage() {
   const { state }: { state: { data: TradeBoardDetailType } } = useLocation();
 
   const [form, setForm] = useState<TradeBoardForm>({
+    houseType: state ? state.data.houseType : 'LAND',
     rentalType: state ? state.data.rentalType : 'SALE',
     city: state ? state.data.city : '',
     zipCode: state ? state.data.zipCode : '',
@@ -133,7 +139,35 @@ export default function TradeWritePage() {
         <p>해당 정보는 필수로 입력해야 하는 값입니다.</p>
         <div>
           <div>
-            <label>거래 형태</label>
+            <label>
+              매물 유형<span className={styles.essential}>*</span>
+            </label>
+            <ul>
+              {houseCategory.slice(1).map((item) => (
+                <button
+                  key={item.type}
+                  type="button"
+                  className={
+                    form.houseType === item.type
+                      ? styles.selectRentalType
+                      : styles.rentalType
+                  }
+                  onClick={() => {
+                    setForm((prev: TradeBoardForm) => ({
+                      ...prev,
+                      houseType: item.type as HouseType,
+                    }));
+                  }}
+                >
+                  {item.content}
+                </button>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <label>
+              거래 형태<span className={styles.essential}>*</span>
+            </label>
             <ul>
               {tradeCategory.slice(1).map((item) => (
                 <button
@@ -157,7 +191,9 @@ export default function TradeWritePage() {
             </ul>
           </div>
           <div>
-            <label htmlFor="메인 사진">메인 사진</label>
+            <label htmlFor="메인 사진">
+              메인 사진<span className={styles.essential}>*</span>
+            </label>
             <input
               id="메인 사진"
               type="text"
@@ -185,7 +221,9 @@ export default function TradeWritePage() {
             </button>
           </div>
           <div>
-            <label htmlFor="매물 위치">매물 위치</label>
+            <label htmlFor="매물 위치">
+              매물 위치<span className={styles.essential}>*</span>
+            </label>
             <input
               id="매물 위치"
               type="text"
@@ -219,7 +257,9 @@ export default function TradeWritePage() {
             />
           </div>
           <div>
-            <label htmlFor="상세주소">상세주소</label>
+            <label style={{ visibility: 'hidden' }} htmlFor="상세주소">
+              상세주소
+            </label>
             <input
               id="상세주소"
               type="text"
@@ -232,6 +272,7 @@ export default function TradeWritePage() {
           <div>
             <label htmlFor="임대 가격">
               {getRentalPriceType(form.rentalType)}
+              <span className={styles.essential}>*</span>
             </label>
             <input
               id="임대 가격"
@@ -258,7 +299,9 @@ export default function TradeWritePage() {
             />
           </div>
           <div>
-            <label htmlFor="전화번호">전화번호</label>
+            <label htmlFor="전화번호">
+              전화번호<span className={styles.essential}>*</span>
+            </label>
             <input
               id="전화번호"
               type="text"
@@ -289,21 +332,19 @@ export default function TradeWritePage() {
         <div>
           <div>
             <label htmlFor="매물 면적">
-              매물 면적<span>*</span>
+              매물 면적<span className={styles.essential}>*</span>
             </label>
             <input
               id="매물 면적"
               type="text"
-              placeholder="m2로 표기"
+              placeholder="㎡로 표기"
               name="size"
               value={form.size}
               onChange={onChangeForm}
             />
           </div>
           <div>
-            <label htmlFor="준공연도">
-              준공연도<span>*</span>
-            </label>
+            <label htmlFor="준공연도">준공연도</label>
             <input
               id="준공연도"
               type="text"
@@ -314,9 +355,7 @@ export default function TradeWritePage() {
             />
           </div>
           <div>
-            <label htmlFor="매물 용도">
-              매물 용도<span>*</span>
-            </label>
+            <label htmlFor="매물 용도">매물 용도</label>
             <input
               id="매물 용도"
               type="text"
@@ -326,7 +365,7 @@ export default function TradeWritePage() {
               onChange={onChangeForm}
             />
           </div>
-          <div>
+          {/* <div>
             <label htmlFor="층수">층수</label>
             <input
               id="층수"
@@ -336,7 +375,7 @@ export default function TradeWritePage() {
               value={form.floorNum}
               onChange={onChangeForm}
             />
-          </div>
+          </div> */}
         </div>
       </article>
       <article className={styles.specialInfoContainer}>
