@@ -19,7 +19,7 @@ export default function TradeProcessPage() {
       <section className={styles.titleContainer}>
         <div className={styles.title}>
           <h1>중개 프로세스</h1>
-          <p>빈집거래 걱정되시나요?</p>
+          <p>농가거래 걱정되시나요?</p>
           <p>주말내집이 중개 프로세스를 제안합니다.</p>
         </div>
       </section>

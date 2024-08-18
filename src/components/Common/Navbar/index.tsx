@@ -37,7 +37,7 @@ function DesktopNavbar({
           오도이촌 소개
         </Link>
         <Link className={isFocus('trade')} ref={tradeRef} to="/trade">
-          빈집거래
+          농가거래
         </Link>
         <Link
           className={isFocus('community')}
