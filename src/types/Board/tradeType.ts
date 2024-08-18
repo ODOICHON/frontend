@@ -16,6 +16,7 @@ export type MenuType = 'none' | 'houseType' | 'rentalType' | 'city' | 'search';
 export type DealStateType = 'APPLYING' | 'ONGOING' | 'COMPLETED';
 
 export type TradeBoardForm = {
+  houseType: HouseType;
   rentalType: RentalType;
   city: string;
   zipCode: string;
@@ -52,6 +53,7 @@ export type TradeBoardType = {
 
 export type TradeBoardDetailType = {
   houseId: number;
+  houseType: HouseType;
   rentalType: RentalType;
   city: string;
   zipCode: string;
