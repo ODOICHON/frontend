@@ -155,8 +155,6 @@ export const checkBeforeTradePost = (
     contact,
     agentName,
     size,
-    floorNum,
-    createdDate,
     purpose,
     title,
     code,
@@ -202,14 +200,7 @@ export const checkBeforeTradePost = (
     alert('평수를 입력해주세요.');
     return false;
   }
-  if (floorNum < 0) {
-    alert('1층 이상의 값만 작성해주세요.');
-    return false;
-  }
-  if (createdDate === '') {
-    alert('준공일을 입력해주세요.');
-    return false;
-  }
+
   if (purpose === '') {
     alert('용도를 입력해주세요.');
     return false;
