@@ -43,7 +43,7 @@ export default function ToggleMenu() {
           alt="close"
         />
         <Link to="/introduce">오도이촌 소개</Link>
-        <Link to="/trade">빈집거래</Link>
+        <Link to="/trade">농가거래</Link>
         <Link to="/community/free_board">커뮤니티</Link>
         {token ? <AfterLogin /> : <BeforeLogin />}
       </div>

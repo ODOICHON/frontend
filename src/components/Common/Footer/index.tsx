@@ -40,7 +40,7 @@ export default function Footer() {
               );
             }}
           >
-            빈집거래 서비스 관련
+            농가거래 서비스 관련
           </button>
         </span>
       </div>

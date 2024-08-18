@@ -380,11 +380,17 @@ export default function SignUpPage() {
             <button
               type="button"
               className={
-                /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g.test(watch('userName'))
+                /^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g.test(watch('userName')) &&
+                !idCheck
                   ? styles.buttonStyleActive
                   : styles.buttonStyle
               }
               onClick={idCheckHandler}
+              disabled={
+                !/^(?=.*[A-Za-z])[A-Za-z_0-9]{4,20}$/g.test(
+                  watch('userName'),
+                ) || idCheck
+              }
             >
               중복확인
             </button>
@@ -479,11 +485,16 @@ export default function SignUpPage() {
               className={
                 /^(?=.*[a-zA-Z0-9가-힣])[A-Za-z0-9가-힣]{1,20}$/g.test(
                   watch('nick_name'),
-                )
+                ) && !nicknameCheck
                   ? styles.buttonStyleActive
                   : styles.buttonStyle
               }
               onClick={nicknameCheckHandler}
+              disabled={
+                !/^(?=.*[a-zA-Z0-9가-힣])[A-Za-z0-9가-힣]{1,20}$/g.test(
+                  watch('nick_name'),
+                ) || nicknameCheck
+              }
             >
               중복확인
             </button>
@@ -517,16 +528,24 @@ export default function SignUpPage() {
             <button
               type="button"
               className={
-                /^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(watch('phone_num'))
+                /^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(watch('phone_num')) &&
+                !isCheckNum
                   ? styles.buttonStyleActive
                   : styles.buttonStyle
               }
               onClick={onSendSMS}
+              disabled={
+                !/^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(watch('phone_num')) ||
+                isCheckNum
+              }
             >
               인증요청
             </button>
           </div>
-          <p className={styles.errorMessage}>
+          <p
+            className={isCheckNum ? styles.correctMessage : styles.errorMessage}
+          >
+            {isCheckNum && '인증문자가 발송되었습니다.'}
             {errors.phone_num && errors.phone_num.message}
             {!errors.phone_num && phoneErrMessage}
           </p>
@@ -552,11 +571,16 @@ export default function SignUpPage() {
               <button
                 type="button"
                 className={
-                  /^(?=.*[0-9])[0-9]{4}$/g.test(watch('phone_check'))
+                  /^(?=.*[0-9])[0-9]{4}$/g.test(watch('phone_check')) &&
+                  !phoneSMSCheck
                     ? styles.buttonStyleActive
                     : styles.buttonStyle
                 }
                 onClick={onCheckSMS}
+                disabled={
+                  !/^(?=.*[0-9])[0-9]{4}$/g.test(watch('phone_check')) ||
+                  phoneSMSCheck
+                }
               >
                 확인
               </button>
@@ -594,16 +618,26 @@ export default function SignUpPage() {
               className={
                 /^([\w\.\_\-])*[a-zA-Z0-9]+([\w\.\_\-])*([a-zA-Z0-9])+([\w\.\_\-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/g.test(
                   watch('email'),
-                )
+                ) && !isCheckEmail
                   ? styles.buttonStyleActive
                   : styles.buttonStyle
               }
               onClick={onSendEmail}
+              disabled={
+                !/^([\w\.\_\-])*[a-zA-Z0-9]+([\w\.\_\-])*([a-zA-Z0-9])+([\w\.\_\-])+@([a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,8}$/g.test(
+                  watch('email'),
+                ) || isCheckEmail
+              }
             >
               인증요청
             </button>
           </div>
-          <p className={styles.errorMessage}>
+          <p
+            className={
+              isCheckEmail ? styles.correctMessage : styles.errorMessage
+            }
+          >
+            {isCheckEmail && '인증코드가 발송되었습니다.'}
             {errors.email && errors.email.message}
             {!errors.email && emailErrMessage && emailErrMessage}
           </p>
@@ -629,11 +663,16 @@ export default function SignUpPage() {
               <button
                 type="button"
                 className={
-                  /^(?=.*[0-9])[0-9]{4}$/g.test(watch('email_code'))
+                  /^(?=.*[0-9])[0-9]{4}$/g.test(watch('email_code')) &&
+                  !emailCheck
                     ? styles.buttonStyleActive
                     : styles.buttonStyle
                 }
                 onClick={onCheckEmail}
+                disabled={
+                  !/^(?=.*[0-9])[0-9]{4}$/g.test(watch('email_code')) ||
+                  emailCheck
+                }
               >
                 확인
               </button>
