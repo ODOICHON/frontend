@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   DealStateType,
+  HouseType,
   RecommendedTagType,
   RentalType,
   TradeBoardForm,
@@ -269,6 +270,12 @@ export const convertRentalTypeName = (typeName: RentalType) => {
   if (typeName === 'SALE') return '매매';
   if (typeName === 'JEONSE') return '전세';
   if (typeName === 'MONTHLYRENT') return '월세';
+};
+
+export const convertHouseTypeName = (typeName: HouseType) => {
+  if (typeName === 'LAND') return '토지';
+  if (typeName === 'HOUSE') return '주택';
+  if (typeName === 'FARM_HOUSE') return '농가';
 };
 
 // 문자가 자음이거나 모음인지 확인하는 함수
