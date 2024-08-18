@@ -133,7 +133,7 @@ export default function TradeWritePage() {
         <p>해당 정보는 필수로 입력해야 하는 값입니다.</p>
         <div>
           <div>
-            <label>매물 유형</label>
+            <label>거래 형태</label>
             <ul>
               {tradeCategory.slice(1).map((item) => (
                 <button
