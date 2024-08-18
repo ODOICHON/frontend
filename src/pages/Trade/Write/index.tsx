@@ -327,6 +327,21 @@ export default function TradeWritePage() {
               />
             </div>
           )}
+          {user?.userType === 'AGENT' && (
+            <div>
+              <label htmlFor="상세 설명">
+                상세 설명<span className={styles.essential}>*</span>
+              </label>
+              <input
+                id="상세 설명"
+                type="text"
+                placeholder="부동산을 소개할 수 있는 링크 첨부"
+                name="agentDetail"
+                value={form.agentDetail}
+                onChange={onChangeForm}
+              />
+            </div>
+          )}
         </div>
       </article>
       <article className={styles.basicInfoContainer}>

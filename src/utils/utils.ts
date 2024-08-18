@@ -154,6 +154,7 @@ export const checkBeforeTradePost = (
     monthlyPrice,
     contact,
     agentName,
+    agentDetail,
     size,
     purpose,
     title,
@@ -196,6 +197,12 @@ export const checkBeforeTradePost = (
     alert('중개사 이름을 입력해주세요.');
     return false;
   }
+
+  if (user.userType === 'AGENT' && agentDetail === '') {
+    alert('상세 설명을 적어주세요.');
+    return false;
+  }
+
   if (size === '') {
     alert('평수를 입력해주세요.');
     return false;
