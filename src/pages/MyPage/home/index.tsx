@@ -68,6 +68,7 @@ function MyHomePage() {
               <TradeBoard
                 key={content.houseId}
                 houseId={content.houseId}
+                houseType={content.houseType}
                 rentalType={content.rentalType}
                 city={content.city}
                 price={content.price}
