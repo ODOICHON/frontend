@@ -87,7 +87,7 @@ jobs:
         if: contains(github.ref, 'develop')
         run: |
           aws deploy create-deployment \
-          --application-name duaily-dev-deploy \
+          --application-name ${{ secrets.DEPLOY_APPLICATION_NAME_DEV }} \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name ${{ secrets.DEPLOY_GROUP_DEV }} \
           --s3-location bucket=${{ secrets.S3_BUCKET_NAME_DEV }},bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
@@ -96,7 +96,7 @@ jobs:
         if: contains(github.ref, 'main')
         run: |
           aws deploy create-deployment \
-          --application-name duaily-deploy \
+          --application-name ${{ secrets.DEPLOY_APPLICATION_NAME }} \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name ${{ secrets.DEPLOY_GROUP }} \
           --s3-location bucket=${{ secrets.S3_BUCKET_NAME }},bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
