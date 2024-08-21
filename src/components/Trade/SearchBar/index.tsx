@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { GoTriangleDown } from 'react-icons/go';
 import { AnimatePresence } from 'framer-motion';
-import { MenuType, RentalType } from '@/types/Board/tradeType';
-import { convertRentalTypeName } from '@/utils/utils';
-import { tradeCategory, tradeCity } from '@/constants/trade';
+import { HouseType, MenuType, RentalType } from '@/types/Board/tradeType';
+import { convertHouseTypeName, convertRentalTypeName } from '@/utils/utils';
+import { houseCategory, tradeCategory, tradeCity } from '@/constants/trade';
 import styles from './styles.module.scss';
 import Dropdown from '../Dropdown';
 
 type SearchBarProps = {
+  houseType: string;
   rentalType: string;
   city: string;
   search: string;
+  setHouseType: React.Dispatch<React.SetStateAction<string>>;
   setRentalType: React.Dispatch<React.SetStateAction<string>>;
   setCity: React.Dispatch<React.SetStateAction<string>>;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
@@ -19,9 +21,11 @@ type SearchBarProps = {
 };
 
 export default function SearchBar({
+  houseType,
   rentalType,
   city,
   search,
+  setHouseType,
   setRentalType,
   setCity,
   setSearch,
@@ -60,8 +64,38 @@ export default function SearchBar({
       <section
         ref={dropdownRef}
         className={styles.selectItem}
-        style={{ flexGrow: '2' }}
+        style={{ flexGrow: '1' }}
       >
+        <span
+          role="presentation"
+          className={
+            selectedMenu === 'houseType'
+              ? styles.selectedSearchItem
+              : styles.searchItem
+          }
+          onClick={() => setSelectedMenu('houseType')}
+        >
+          <div>
+            <p style={{ color: houseType !== '' ? 'black' : '' }}>
+              {houseType === ''
+                ? '유형'
+                : convertHouseTypeName(houseType as HouseType)}
+            </p>
+            <GoTriangleDown color="#d9d9d9" size="1.25rem" />
+          </div>
+          <AnimatePresence>
+            {selectedMenu === 'houseType' && (
+              <Dropdown
+                menu={houseCategory}
+                setMenu={setHouseType}
+                setSelectedMenu={setSelectedMenu}
+              />
+            )}
+          </AnimatePresence>
+        </span>
+
+        <div className={styles.divider} />
+
         <span
           role="presentation"
           className={
@@ -74,7 +108,7 @@ export default function SearchBar({
           <div>
             <p style={{ color: rentalType !== '' ? 'black' : '' }}>
               {rentalType === ''
-                ? '유형'
+                ? '거래'
                 : convertRentalTypeName(rentalType as RentalType)}
             </p>
             <GoTriangleDown color="#d9d9d9" size="1.25rem" />
@@ -126,7 +160,7 @@ export default function SearchBar({
             ? styles.selectedSearchItem
             : styles.searchItem
         }
-        style={{ flexGrow: '3' }}
+        style={{ flexGrow: '1' }}
         onClick={() => setSelectedMenu('search')}
       >
         <form onSubmit={handleSubmit}>

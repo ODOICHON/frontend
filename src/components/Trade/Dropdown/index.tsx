@@ -1,11 +1,15 @@
 import { motion } from 'framer-motion';
 import { MenuType } from '@/types/Board/tradeType';
-import { TradeCategoryType, TradeCityType } from '@/constants/trade';
+import {
+  TradeCategoryType,
+  TradeCityType,
+  TradeHouseType,
+} from '@/constants/trade';
 import { tradeDropdownVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
 type DropdownProps = {
-  menu: TradeCategoryType[] | TradeCityType[];
+  menu: TradeHouseType[] | TradeCategoryType[] | TradeCityType[];
   setMenu: React.Dispatch<React.SetStateAction<string>>;
   setSelectedMenu: React.Dispatch<React.SetStateAction<MenuType>>;
 };

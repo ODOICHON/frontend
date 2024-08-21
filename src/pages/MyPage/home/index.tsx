@@ -47,7 +47,7 @@ function MyHomePage() {
         <div className={styles.titleContainer}>
           <h1>
             {user?.nick_name}님의{' '}
-            {user?.userType === 'AGENT' ? '빈집거래 활동' : '마이페이지'}
+            {user?.userType === 'AGENT' ? '농가거래 활동' : '마이페이지'}
           </h1>
         </div>
         {user?.userType === 'AGENT' ? <AgentInfoCard /> : <InfoCard />}
@@ -68,6 +68,7 @@ function MyHomePage() {
               <TradeBoard
                 key={content.houseId}
                 houseId={content.houseId}
+                houseType={content.houseType}
                 rentalType={content.rentalType}
                 city={content.city}
                 price={content.price}

@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import nextArrowImg from '@/assets/common/nextArrow.svg';
-import example1Img from '@/assets/trade/example1.png';
-import example2Img from '@/assets/trade/example2.png';
-import example3Img from '@/assets/trade/example3.png';
+import example1Img from '@/assets/trade/example1.jpg';
+import example2Img from '@/assets/trade/example2.jpg';
+import example3Img from '@/assets/trade/example3.jpg';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -19,7 +19,7 @@ export default function TradeProcessPage() {
       <section className={styles.titleContainer}>
         <div className={styles.title}>
           <h1>중개 프로세스</h1>
-          <p>빈집거래 걱정되시나요?</p>
+          <p>농가거래 걱정되시나요?</p>
           <p>주말내집이 중개 프로세스를 제안합니다.</p>
         </div>
       </section>
@@ -173,13 +173,22 @@ export default function TradeProcessPage() {
               <h4>(3) 문서 예시 이미지</h4>
               <ul className={styles.imageUl}>
                 <li>
-                  <img src={example1Img} alt="exampleImage1" />
+                  <figure>
+                    <img src={example1Img} alt="exampleImage1" />
+                    <figcaption>부동산 매매 계약서 예시</figcaption>
+                  </figure>
                 </li>
                 <li>
-                  <img src={example2Img} alt="exampleImage2" />
+                  <figure>
+                    <img src={example2Img} alt="exampleImage2" />
+                    <figcaption>부동산 거래 계약 신고서 예시</figcaption>
+                  </figure>
                 </li>
                 <li>
-                  <img src={example3Img} alt="exampleImage3" />
+                  <figure>
+                    <img src={example3Img} alt="exampleImage3" />
+                    <figcaption>등기부등본 예시</figcaption>
+                  </figure>
                 </li>
               </ul>
             </ul>

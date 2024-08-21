@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import Dompurify from 'dompurify';
 import { motion } from 'framer-motion';
-import { A11y, Navigation, Pagination, Scrollbar } from 'swiper';
+import { A11y, Navigation, Pagination, Scrollbar } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import AccessModal from '@/components/Common/AccessModal';
 import ModalPortal from '@/components/Common/ModalPortal';
@@ -22,8 +22,9 @@ import { TradeBoardDetailType } from '@/types/Board/tradeType';
 import { DeleteHouseAPI } from '@/apis/houses';
 import userStore from '@/store/userStore';
 import useModalState from '@/hooks/useModalState';
+import useSwiperRef from '@/hooks/useSwiperRef';
 import useToastMessageType from '@/hooks/useToastMessageType';
-import { getMoveInType, getUserType } from '@/utils/utils';
+import { getHouseName, getMoveInType, getUserType } from '@/utils/utils';
 import { ApiResponseWithDataType } from '@/types/apiResponseType';
 import { opacityVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
@@ -44,10 +45,11 @@ export default function TradeBoardPage() {
   );
   const [_, updateState] = useState(false);
   const [modal, setModal] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+
+  const [paginationEl, paginationRef] = useSwiperRef<HTMLDivElement>();
 
   const handleDeleteButtonClick = async (houseId: number) => {
-    if (houseId === 0) throw new Error('없는 빈집거래 게시물입니다.');
+    if (houseId === 0) throw new Error('없는 농가거래 게시물입니다.');
     await DeleteHouseAPI(houseId);
     handleToastMessageProps('POST_DELETE_SUCCESS', () => {
       handleModalClose();
@@ -104,7 +106,10 @@ export default function TradeBoardPage() {
               {getUserType(data?.data.userType || 'NONE')}
             </li>
           </ul>
-          <h1>{data?.data.title}</h1>
+          <h1>
+            {data?.data.houseType && `[${getHouseName(data?.data.houseType)}]`}{' '}
+            {data?.data.title}
+          </h1>
           <div>
             <p>
               {data?.data.nickName}
@@ -157,7 +162,7 @@ export default function TradeBoardPage() {
           spaceBetween={50}
           slidesPerView={1}
           navigation
-          pagination={{ el: ref.current }}
+          pagination={{ el: paginationEl }}
           scrollbar={{ draggable: true }}
         >
           {data?.data.imageUrls.map((url, index) => (
@@ -166,13 +171,27 @@ export default function TradeBoardPage() {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className={styles.pagination} ref={ref} />
+        <div className={styles.pagination} ref={paginationRef} />
         <section
           className={styles.infoContainer}
           style={user ? undefined : { visibility: 'hidden' }}
         >
           <TradeBoardInfo info={data?.data} />
         </section>
+        {data?.data.userType === 'AGENT' && (
+          <section className={styles.agentInfo}>
+            <article>
+              <div>
+                공인중개사명{' '}
+                <p>{data.data.agentName !== '' ? data.data.agentName : 'X'}</p>
+              </div>
+              <div>
+                상세 설명{' '}
+                <p>{data.data.agentDetail && data.data.agentDetail}</p>
+              </div>
+            </article>
+          </section>
+        )}
         <section className={styles.recommendedTag}>
           <article>
             <span>매물 특징</span>
@@ -197,7 +216,7 @@ export default function TradeBoardPage() {
           <KakaoMapImage address={data?.data.city || ''} />
         </section>
         <section className={styles.process}>
-          <span>빈집거래 프로세스가 궁금하신가요?</span>
+          <span>농가거래 프로세스가 궁금하신가요?</span>
           <button
             type="button"
             onClick={() => {
