@@ -96,6 +96,13 @@ export default function TradeWritePage() {
       .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
   };
 
+  const onParsingDecimal = (decimal: string) => {
+    return decimal
+      .replace(/[^0-9.]/g, '')
+      .replace(/^0+(?!\.)/, '')
+      .replace(/(\.\d{2})\d*/, '$1');
+  };
+
   const addComma = (price: number) => {
     if (price === 0) return '';
     const returnString = price
@@ -388,10 +395,19 @@ export default function TradeWritePage() {
             <input
               id="매물 면적"
               type="text"
-              placeholder="㎡로 표기"
+              placeholder="㎡ 단위로 표기"
               name="size"
               value={form.size}
-              onChange={onChangeForm}
+              onChange={(event) =>
+                onChangeForm({
+                  ...event,
+                  target: {
+                    ...event.target,
+                    name: 'size',
+                    value: onParsingDecimal(event.target.value),
+                  },
+                })
+              }
             />
           </div>
           <div>
