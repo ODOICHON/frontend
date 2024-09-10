@@ -90,6 +90,12 @@ export default function TradeWritePage() {
     onChangeForm(e, numValue);
   };
 
+  const onParsingPhoneNumber = (phoneNum: string) => {
+    return phoneNum
+      .replace(/[^0-9]/g, '')
+      .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+  };
+
   const addComma = (price: number) => {
     if (price === 0) return '';
     const returnString = price
@@ -324,10 +330,19 @@ export default function TradeWritePage() {
             <input
               id="전화번호"
               type="text"
-              placeholder="01000000000 표기(매물 관련 연락 가능한 연락처)"
+              placeholder="매물 관련 연락 가능한 연락처"
               name="contact"
               value={form.contact}
-              onChange={onChangeForm}
+              onChange={(event) =>
+                onChangeForm({
+                  ...event,
+                  target: {
+                    ...event.target,
+                    name: 'contact',
+                    value: onParsingPhoneNumber(event.target.value),
+                  },
+                })
+              }
             />
           </div>
           {user?.userType === 'AGENT' && (
