@@ -75,9 +75,27 @@ export default function TradeWritePage() {
     }));
   };
 
-  const onChangeForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeForm = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    numValue?: number,
+  ) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: numValue ?? value }));
+  };
+
+  const onChangePoints = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    let numValue = Number(value.replace(/[^0-9]/g, ''));
+    if (!numValue) numValue = 0;
+    onChangeForm(e, numValue);
+  };
+
+  const addComma = (price: number) => {
+    if (price === 0) return '';
+    const returnString = price
+      ?.toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return returnString;
   };
 
   const thumbnailHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -277,11 +295,10 @@ export default function TradeWritePage() {
             </label>
             <input
               id="임대 가격"
-              type="number"
-              placeholder="만원으로 표기"
+              placeholder="만원 단위로 표기"
               name="price"
-              value={form.price}
-              onChange={onChangeForm}
+              value={addComma(form.price) || ''}
+              onChange={onChangePoints}
             />
           </div>
           <div
@@ -289,14 +306,15 @@ export default function TradeWritePage() {
               display: form.rentalType === 'MONTHLYRENT' ? '' : 'none',
             }}
           >
-            <label htmlFor="월세">월세</label>
+            <label htmlFor="월세">
+              월세<span className={styles.essential}>*</span>
+            </label>
             <input
               id="월세"
-              type="number"
-              placeholder="만원으로 표기"
+              placeholder="만원 단위로 표기"
               name="monthlyPrice"
-              value={form.monthlyPrice}
-              onChange={onChangeForm}
+              value={addComma(form.monthlyPrice) || ''}
+              onChange={onChangePoints}
             />
           </div>
           <div>
