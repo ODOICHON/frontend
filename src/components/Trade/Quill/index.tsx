@@ -165,6 +165,11 @@ export default function TradeQuill({
   }, [images, isProcessing]);
 
   useEffect(() => {
+    if (form.code !== '') {
+      QuillRef.current
+        ?.getEditor()
+        .clipboard.dangerouslyPasteHTML(0, form.code);
+    }
     return () => {
       if (!isProcessingRef.current) {
         deleteFile(imagesRef.current);
