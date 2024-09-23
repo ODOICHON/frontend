@@ -155,7 +155,6 @@ export const checkBeforeTradePost = (
     agentName,
     agentDetail,
     size,
-    purpose,
     title,
     code,
   } = tradeBoardForm;
@@ -203,10 +202,6 @@ export const checkBeforeTradePost = (
     return false;
   }
 
-  if (purpose === '') {
-    alert('용도를 입력해주세요.');
-    return false;
-  }
   if (title === '') {
     alert('제목을 입력해주세요.');
     return false;
