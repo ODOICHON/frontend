@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import DOMPurify from 'dompurify';
 import { motion } from 'framer-motion';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -85,7 +86,11 @@ export default function MainPage() {
             }}
           >
             <h3>0{idx + 1}</h3>
-            <h1 dangerouslySetInnerHTML={{ __html: data.title }} />
+            <h1
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(data.title),
+              }}
+            />
             <p>{data.content}</p>
           </SwiperSlide>
         ))}
