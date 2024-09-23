@@ -103,7 +103,7 @@ export default function TradeQuill({
         alert('게시글이 임시저장 되었습니다.');
         queryClient.refetchQueries([QueryKeys.MY_SAVES]);
       } else {
-        handleToastMessageProps('POST_UPDATE_SUCCESS', () => {
+        handleToastMessageProps('POST_CREATE_SUCCESS', () => {
           handleModalClose();
           navigate(`/trade`);
         });
