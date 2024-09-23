@@ -50,7 +50,7 @@ export const TOAST_MESSAGE: ToastMessageType = {
     iconType: 'SUCCESS',
   },
   POST_CREATE_ERROR: {
-    message: '에 실패했습니다.',
+    message: '게시글 등록에 실패했습니다.',
     subMessage: '잠시 후 다시 시도해주세요.',
     iconType: 'ERROR',
   },
