@@ -33,7 +33,12 @@ function TradeBoardInfo({ info }: TradeBoardInfoProps) {
       <article>
         <span>기본정보</span>
         <div>
-          면적 <p>{info?.size}㎡</p>
+          면적{' '}
+          <p>
+            {info?.size}㎡
+            {info?.size &&
+              `(약 ${parseFloat((Number(info?.size) / 3.3).toFixed(1))}평)`}
+          </p>
         </div>
         <div>
           준공연도{' '}

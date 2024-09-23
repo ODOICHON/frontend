@@ -388,27 +388,30 @@ export default function TradeWritePage() {
         <span>기본 정보</span>
         <p>*는 필수로 입력해야 하는 값입니다.</p>
         <div>
-          <div>
-            <label htmlFor="매물 면적">
-              매물 면적<span className={styles.essential}>*</span>
-            </label>
-            <input
-              id="매물 면적"
-              type="text"
-              placeholder="㎡ 단위로 표기"
-              name="size"
-              value={form.size}
-              onChange={(event) =>
-                onChangeForm({
-                  ...event,
-                  target: {
-                    ...event.target,
-                    name: 'size',
-                    value: onParsingDecimal(event.target.value),
-                  },
-                })
-              }
-            />
+          <div className={styles.additionalIinfoContainer}>
+            <div>
+              <label htmlFor="매물 면적">
+                매물 면적<span className={styles.essential}>*</span>
+              </label>
+              <input
+                id="매물 면적"
+                type="text"
+                placeholder="㎡ 단위로 표기"
+                name="size"
+                value={form.size}
+                onChange={(event) =>
+                  onChangeForm({
+                    ...event,
+                    target: {
+                      ...event.target,
+                      name: 'size',
+                      value: onParsingDecimal(event.target.value),
+                    },
+                  })
+                }
+              />
+            </div>
+            <p>*1평은 약 3.3제곱미터(㎡)입니다.</p>
           </div>
           <div>
             <label htmlFor="준공연도">준공연도</label>
