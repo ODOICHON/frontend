@@ -83,8 +83,6 @@ export default function TradeQuill({
 
     const newForm: TradeBoardForm = {
       ...form,
-      contact: form.contact.replace(/\-/g, ''),
-      size: form.size.replace(/m2/g, ''),
       createdDate,
       imageUrls,
       tmpYn: isTempSave,
@@ -105,7 +103,7 @@ export default function TradeQuill({
         alert('게시글이 임시저장 되었습니다.');
         queryClient.refetchQueries([QueryKeys.MY_SAVES]);
       } else {
-        handleToastMessageProps('POST_UPDATE_SUCCESS', () => {
+        handleToastMessageProps('POST_CREATE_SUCCESS', () => {
           handleModalClose();
           navigate(`/trade`);
         });
@@ -123,12 +121,10 @@ export default function TradeQuill({
     const imageUrls = [thumbnail, ...getImageUrls(form.code)];
     const notUsedImageUrls = getNotUsedImageUrl(images, imageUrls);
     const extractedYear = form.createdDate.match(/\d{4}/);
-    const createdDate = extractedYear ? extractedYear[0] : '2002';
+    const createdDate = extractedYear ? extractedYear[0] : '';
 
     const newForm: TradeBoardForm = {
       ...form,
-      contact: form.contact.replace(/\-/g, ''),
-      size: form.size.replace(/m2/g, ''),
       createdDate,
       imageUrls,
       tmpYn: isTempSave,
@@ -165,6 +161,11 @@ export default function TradeQuill({
   }, [images, isProcessing]);
 
   useEffect(() => {
+    if (form.code !== '') {
+      QuillRef.current
+        ?.getEditor()
+        .clipboard.dangerouslyPasteHTML(0, form.code);
+    }
     return () => {
       if (!isProcessingRef.current) {
         deleteFile(imagesRef.current);

@@ -3,6 +3,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import DOMPurify from 'dompurify';
 import ModalPortal from '@/components/Common/ModalPortal';
 import ToastMessageModal from '@/components/Common/ToastMessageModal';
 import { QueryKeys, restFetcher } from '@/queryClient';
@@ -165,7 +166,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
     if (boardData) {
       QuillRef.current
         ?.getEditor()
-        .clipboard.dangerouslyPasteHTML(0, boardData.code);
+        .clipboard.dangerouslyPasteHTML(0, DOMPurify.sanitize(boardData.code));
     }
     return () => {
       if (!isProcessingRef.current) {

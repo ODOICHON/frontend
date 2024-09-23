@@ -75,9 +75,40 @@ export default function TradeWritePage() {
     }));
   };
 
-  const onChangeForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeForm = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    numValue?: number,
+  ) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: numValue ?? value }));
+  };
+
+  const onChangePoints = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    let numValue = Number(value.replace(/[^0-9]/g, ''));
+    if (!numValue) numValue = 0;
+    onChangeForm(e, numValue);
+  };
+
+  const onParsingPhoneNumber = (phoneNum: string) => {
+    return phoneNum
+      .replace(/[^0-9]/g, '')
+      .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+  };
+
+  const onParsingDecimal = (decimal: string) => {
+    return decimal
+      .replace(/[^0-9.]/g, '')
+      .replace(/^0+(?!\.)/, '')
+      .replace(/(\.\d{2})\d*/, '$1');
+  };
+
+  const addComma = (price: number) => {
+    if (price === 0) return '';
+    const returnString = price
+      ?.toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return returnString;
   };
 
   const thumbnailHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -277,11 +308,10 @@ export default function TradeWritePage() {
             </label>
             <input
               id="임대 가격"
-              type="number"
-              placeholder="만원으로 표기"
+              placeholder="만원 단위로 표기"
               name="price"
-              value={form.price}
-              onChange={onChangeForm}
+              value={addComma(form.price) || ''}
+              onChange={onChangePoints}
             />
           </div>
           <div
@@ -289,14 +319,15 @@ export default function TradeWritePage() {
               display: form.rentalType === 'MONTHLYRENT' ? '' : 'none',
             }}
           >
-            <label htmlFor="월세">월세</label>
+            <label htmlFor="월세">
+              월세<span className={styles.essential}>*</span>
+            </label>
             <input
               id="월세"
-              type="number"
-              placeholder="만원으로 표기"
+              placeholder="만원 단위로 표기"
               name="monthlyPrice"
-              value={form.monthlyPrice}
-              onChange={onChangeForm}
+              value={addComma(form.monthlyPrice) || ''}
+              onChange={onChangePoints}
             />
           </div>
           <div>
@@ -306,10 +337,19 @@ export default function TradeWritePage() {
             <input
               id="전화번호"
               type="text"
-              placeholder="01000000000 표기(매물 관련 연락 가능한 연락처)"
+              placeholder="매물 관련 연락 가능한 연락처"
               name="contact"
               value={form.contact}
-              onChange={onChangeForm}
+              onChange={(event) =>
+                onChangeForm({
+                  ...event,
+                  target: {
+                    ...event.target,
+                    name: 'contact',
+                    value: onParsingPhoneNumber(event.target.value),
+                  },
+                })
+              }
             />
           </div>
           {user?.userType === 'AGENT' && (
@@ -356,10 +396,19 @@ export default function TradeWritePage() {
               <input
                 id="매물 면적"
                 type="text"
-                placeholder="㎡로 표기"
+                placeholder="㎡ 단위로 표기"
                 name="size"
                 value={form.size}
-                onChange={onChangeForm}
+                onChange={(event) =>
+                  onChangeForm({
+                    ...event,
+                    target: {
+                      ...event.target,
+                      name: 'size',
+                      value: onParsingDecimal(event.target.value),
+                    },
+                  })
+                }
               />
             </div>
             <p>*1평은 약 3.3제곱미터(㎡)입니다.</p>
