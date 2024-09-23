@@ -36,7 +36,12 @@ function TradeBoardInfo({ info }: TradeBoardInfoProps) {
           면적 <p>{info?.size}㎡</p>
         </div>
         <div>
-          준공연도 <p>{dayjs(info?.createdDate).format('YYYY')}년</p>
+          준공연도{' '}
+          <p>
+            {info?.createdDate
+              ? `${dayjs(info?.createdDate).format('YYYY')}년`
+              : '-'}
+          </p>
         </div>
         <div>
           용도 <p>{info?.purpose}</p>
