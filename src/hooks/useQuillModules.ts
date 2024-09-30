@@ -26,7 +26,7 @@ const useQuillModules = (
       },
       toolbar: {
         container: [
-          [{ header: [1, 2, 3, 4, 5, 6, false] }],
+          [{ header: [1, 2, 5, false] }],
           ['bold', 'underline', 'strike', 'blockquote'],
           [{ align: ['left', 'center', 'right', 'justify'] }],
           [
