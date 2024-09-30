@@ -200,6 +200,7 @@ export default function TradeQuill({
             onChange={(value) => setForm((prev) => ({ ...prev, code: value }))}
             modules={modules}
             placeholder="사진 5장 이상은 필수입니다. 5장 이상(건물 외관, 내부 포함) 업로드 되지 않을 시, 반려됩니다."
+            scrollingContainer="html"
           />
         </span>
       </section>

@@ -256,6 +256,7 @@ export default function IntroduceQuill() {
             }}
             onChange={onChange}
             modules={modules}
+            scrollingContainer="html"
           />
         </span>
       </section>

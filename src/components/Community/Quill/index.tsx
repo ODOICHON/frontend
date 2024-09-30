@@ -225,6 +225,7 @@ export default function CommunityQuill({ queryParam }: CommunityQuillProps) {
             }}
             onChange={onChange}
             modules={modules}
+            scrollingContainer="html"
           />
         </span>
       </section>
