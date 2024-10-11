@@ -183,10 +183,6 @@ export const checkBeforeTradePost = (
     alert('연락처를 입력해주세요.');
     return false;
   }
-  if (contact.includes('-')) {
-    alert('연락처를 - 없이 입력해주세요.');
-    return false;
-  }
   if (user.userType === 'AGENT' && agentName === '') {
     alert('중개사 이름을 입력해주세요.');
     return false;
@@ -198,7 +194,7 @@ export const checkBeforeTradePost = (
   }
 
   if (size === '') {
-    alert('평수를 입력해주세요.');
+    alert('매물 면적을 입력해주세요.');
     return false;
   }
 
