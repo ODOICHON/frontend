@@ -212,7 +212,7 @@ export default function TradeBoardPage() {
         </div>
 
         <section className={styles.kakao}>
-          <span>지도 API</span>
+          <span>지도</span>
           <KakaoMapImage address={data?.data.city || ''} />
         </section>
         <section className={styles.process}>
