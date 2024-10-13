@@ -38,6 +38,7 @@ export default function TradePage() {
 
   const fetchBoardList = (page = 0) => {
     const params = {
+      ...(houseType !== '' && { houseType }),
       ...(search && { search }),
       ...(rentalType !== '' && { rentalType }),
       ...(city !== '' && { city }),
