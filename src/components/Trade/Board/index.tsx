@@ -27,6 +27,18 @@ export default function TradeBoard({
   const [hiddenTags, setHiddenTags] = useState<string[]>([]);
   const ulRef = useRef<HTMLUListElement>(null);
 
+  let displayPrice = '';
+
+  if (price === 0) {
+    displayPrice = '무료';
+  } else if (convertRentalTypeName(rentalType) === '월세') {
+    displayPrice = `보증금 ${priceCount(price)} / 월세 ${priceCount(
+      monthlyPrice,
+    )}`;
+  } else {
+    displayPrice = `${convertRentalTypeName(rentalType)} ${priceCount(price)}`;
+  }
+
   const checkAndManageTags = () => {
     if (ulRef.current) {
       const containerWidth = ulRef.current.offsetWidth;
@@ -104,11 +116,8 @@ export default function TradeBoard({
         <p>
           <strong>위치</strong> : {city}
         </p>
-        <p>
-          <strong>가격</strong> :{' '}
-          {convertRentalTypeName(rentalType) === '월세'
-            ? `보증금 ${priceCount(price)} / 월세 ${priceCount(monthlyPrice)}`
-            : `${convertRentalTypeName(rentalType)} ${priceCount(price)}`}
+        <p style={{ fontWeight: displayPrice === '무료' ? 600 : undefined }}>
+          <strong>가격</strong> : {displayPrice}
         </p>
         <ul ref={ulRef} className={styles.tagWrapper}>
           {visibleTags.map((tag, index) => (
