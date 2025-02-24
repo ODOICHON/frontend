@@ -49,7 +49,7 @@ export default function MyTradeCard({
     >
       <td>{getRentalName(rentalType)}</td>
       <td>
-        <img className={styles.image} src={imageUrl} alt="tradeImage" />
+        <img className={styles.image} src={imageUrl} alt="-" />
       </td>
       <td>{title}</td>
       <td>{city}</td>

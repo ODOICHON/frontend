@@ -15,7 +15,7 @@ import {
 import { uploadFile } from '@/apis/uploadS3';
 import { imageStore } from '@/store/imageStore';
 import userStore from '@/store/userStore';
-import { getRentalPriceType } from '@/utils/utils';
+import { getRentalPriceType, onParsingPhoneNumber } from '@/utils/utils';
 // import { DEFAULT_OPTIONS } from '@/constants/image';
 import {
   houseCategory,
@@ -88,12 +88,6 @@ export default function TradeWritePage() {
     let numValue = Number(value.replace(/[^0-9]/g, ''));
     if (!numValue) numValue = 0;
     onChangeForm(e, numValue);
-  };
-
-  const onParsingPhoneNumber = (phoneNum: string) => {
-    return phoneNum
-      .replace(/[^0-9]/g, '')
-      .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
   };
 
   const onParsingDecimal = (decimal: string) => {
