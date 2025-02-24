@@ -138,6 +138,7 @@ export default function DealStateModal({
                 {isCalendarOpen && (
                   <div className={styles.calendarWrapper}>
                     <Calendar
+                      maxDate={new Date()}
                       onChange={handleDateChange}
                       value={selectedDate}
                     />

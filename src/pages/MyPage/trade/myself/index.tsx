@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Loading from '@/components/Common/Loading';
 import NoPosts from '@/components/Common/NoPosts';
@@ -37,12 +37,21 @@ export default function MySelfPage() {
     ApiResponseWithDataType<BoardPageType<MyTradeHouseType> & { count: Count }>
   >([QueryKeys.MY_HOUSES, currentPage], () => fetchMyHouseList(currentPage));
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const resetSearch = () => {
     refetch();
     setCurrentPage(1);
     setSearch('');
   };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    resetSearch();
+  };
+
+  useEffect(() => {
+    resetSearch();
+  }, []);
+
   return (
     <section className={styles.container}>
       {modal && (
