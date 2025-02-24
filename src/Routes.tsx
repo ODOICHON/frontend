@@ -1,6 +1,14 @@
-import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 import GlobalLayout from '@/pages/_layout';
+import CommunityPage from './pages/Community';
+import CommunityBoardPage from './pages/Community/Board';
+import CommunityBoardDetailPage from './pages/Community/Detail';
+import CommunityWritePage from './pages/Community/Write';
+import IntroducePage from './pages/Introduce';
+import IntroBoardPage from './pages/Introduce/Board';
+import IntroWritePage from './pages/Introduce/Write';
+import LoginPage from './pages/Login';
+import MainPage from './pages/Main';
 import MyPage from './pages/MyPage';
 import MyCommentsPage from './pages/MyPage/community/comments';
 import MyLikesPage from './pages/MyPage/community/likes';
@@ -14,24 +22,15 @@ import WithdrawalFromMembership from './pages/MyPage/setting/WithdrawalFromMembe
 import MySelfPage from './pages/MyPage/trade/myself';
 import MySavesPage from './pages/MyPage/trade/saves';
 import MyScrapPage from './pages/MyPage/trade/scrap';
+import NotFoundPage from './pages/NotFound';
+import SignUpPage from './pages/SignUp';
+import AgentSignUpPage from './pages/SignUp/AgentSignUp';
+import TradePage from './pages/Trade';
+import TradeBoardPage from './pages/Trade/Board';
+import TradeProcessPage from './pages/Trade/Process';
+import TradeWritePage from './pages/Trade/Write';
+import TradeLayoutPage from './pages/Trade/_layout';
 
-const MainPage = lazy(() => import('@/pages/Main'));
-const LoginPage = lazy(() => import('@/pages/Login'));
-const SignUpPage = lazy(() => import('@/pages/SignUp'));
-const AgentSignUpPage = lazy(() => import('@/pages/SignUp/AgentSignUp'));
-const IntroducePage = lazy(() => import('@/pages/Introduce'));
-const IntroWritePage = lazy(() => import('@/pages/Introduce/Write'));
-const IntroBoardPage = lazy(() => import('@/pages/Introduce/Board'));
-const CommunityPage = lazy(() => import('@/pages/Community'));
-const CommunityBoardPage = lazy(() => import('@/pages/Community/Board'));
-const CommunityBoardDetailPage = lazy(() => import('@/pages/Community/Detail'));
-const CommunityWritePage = lazy(() => import('@/pages/Community/Write'));
-const TradeLayoutPage = lazy(() => import('@/pages/Trade/_layout'));
-const TradePage = lazy(() => import('@/pages/Trade'));
-const TradeBoardPage = lazy(() => import('@/pages/Trade/Board'));
-const TradeWritePage = lazy(() => import('@/pages/Trade/Write'));
-const TradeProcessPage = lazy(() => import('@/pages/Trade/Process'));
-const NotFoundPage = lazy(() => import('@/pages/NotFound'));
 export const routes: RouteObject[] = [
   {
     path: '/',
