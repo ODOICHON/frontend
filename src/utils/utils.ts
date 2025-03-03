@@ -217,7 +217,7 @@ export const getLatLng = async (address: string) => {
     `https://dapi.kakao.com/v2/local/search/address.json?query=${address}`,
     {
       headers: {
-        Authorization: `KakaoAK ${import.meta.env.VITE_KAKAO_MAP_REST_API_KEY}`,
+        Authorization: `KakaoAK ${import.meta.env.VITE_KAKAO_MAP_REST_API}`,
       },
     },
   );
