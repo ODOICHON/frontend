@@ -34,6 +34,9 @@ export default function TradeWritePage() {
 
   const { state }: { state: { data: TradeBoardDetailType } } = useLocation();
 
+  const priceRef = useRef<HTMLInputElement>(null);
+  const montlyPriceRef = useRef<HTMLInputElement>(null);
+
   const [form, setForm] = useState<TradeBoardForm>({
     houseType: state ? state.data.houseType : 'LAND',
     rentalType: state ? state.data.rentalType : 'SALE',
@@ -109,6 +112,28 @@ export default function TradeWritePage() {
       ?.toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return returnString;
+  };
+
+  const onCheckFree = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.currentTarget.checked;
+    if (isChecked) {
+      setForm((prev) => {
+        return { ...prev, price: 0, monthlyPrice: 0 };
+      });
+      if (priceRef.current) {
+        priceRef.current.disabled = true;
+      }
+      if (montlyPriceRef.current) {
+        montlyPriceRef.current.disabled = true;
+      }
+    } else {
+      if (priceRef.current) {
+        priceRef.current.disabled = false;
+      }
+      if (montlyPriceRef.current) {
+        montlyPriceRef.current.disabled = false;
+      }
+    }
   };
 
   const thumbnailHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -301,18 +326,30 @@ export default function TradeWritePage() {
               value={form.detail}
             />
           </div>
-          <div>
-            <label htmlFor="임대 가격">
-              {getRentalPriceType(form.rentalType)}
-              <span className={styles.essential}>*</span>
-            </label>
-            <input
-              id="임대 가격"
-              placeholder="만원 단위로 표기"
-              name="price"
-              value={addComma(form.price) || ''}
-              onChange={onChangePoints}
-            />
+          <div className={styles.additionalInfoContainer}>
+            <div>
+              <label htmlFor="임대 가격">
+                {getRentalPriceType(form.rentalType)}
+                <span className={styles.essential}>*</span>
+              </label>
+              <input
+                ref={priceRef}
+                id="임대 가격"
+                placeholder="만원 단위로 표기"
+                name="price"
+                value={addComma(form.price) || ''}
+                onChange={onChangePoints}
+              />
+            </div>
+            <span className={styles.checkboxContainer}>
+              <input
+                id="free"
+                type="checkbox"
+                value="무료 매물"
+                onChange={onCheckFree}
+              />
+              <label htmlFor="free">무료 매물</label>
+            </span>
           </div>
           <div
             style={{
@@ -323,6 +360,7 @@ export default function TradeWritePage() {
               월세<span className={styles.essential}>*</span>
             </label>
             <input
+              ref={montlyPriceRef}
               id="월세"
               placeholder="만원 단위로 표기"
               name="monthlyPrice"
@@ -388,7 +426,7 @@ export default function TradeWritePage() {
         <span>기본 정보</span>
         <p>*는 필수로 입력해야 하는 값입니다.</p>
         <div>
-          <div className={styles.additionalIinfoContainer}>
+          <div className={styles.additionalInfoContainer}>
             <div>
               <label htmlFor="매물 면적">
                 매물 면적<span className={styles.essential}>*</span>

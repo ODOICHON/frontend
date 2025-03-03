@@ -149,7 +149,6 @@ export const checkBeforeTradePost = (
     imageUrls,
     city,
     zipCode,
-    price,
     monthlyPrice,
     contact,
     agentName,
@@ -169,10 +168,6 @@ export const checkBeforeTradePost = (
   }
   if (zipCode === '') {
     alert('우편번호를 입력해주세요.');
-    return false;
-  }
-  if (price === 0) {
-    alert('매매가를 입력해주세요.');
     return false;
   }
   if (tradeBoardForm.rentalType === 'MONTHLYRENT' && monthlyPrice === 0) {
