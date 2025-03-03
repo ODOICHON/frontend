@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -15,6 +15,7 @@ import userStore from '@/store/userStore';
 import useCheckAPI from '@/hooks/useCheckAPI';
 import useModalState from '@/hooks/useModalState';
 import useToastMessageType from '@/hooks/useToastMessageType';
+import { onParsingPhoneNumber } from '@/utils/utils';
 import { ApiResponseType } from '@/types/apiResponseType';
 import { TermType } from '@/types/signUp';
 import { opacityVariants } from '@/constants/variants';
@@ -76,6 +77,7 @@ export default function SignUpPage() {
     watch,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
   } = useForm<IForm>({
     mode: 'onSubmit',
@@ -183,8 +185,10 @@ export default function SignUpPage() {
     else setEyeCheckState((prev) => !prev);
   };
   const onSendSMS = () => {
-    if (/^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(watch('phone_num')) === false)
-      return;
+    const phoneNumber = watch('phone_num').replace(/-/g, ''); // '-' 제거
+
+    if (!/^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(phoneNumber)) return;
+
     phoneSMSAPI(watch('phone_num'), {
       onSuccess: (res) => {
         if (!res) throw Error;
@@ -512,30 +516,44 @@ export default function SignUpPage() {
         <div className={styles.inputContainer}>
           <label htmlFor="phone_num">휴대폰</label>
           <div className={styles.inputInline}>
-            <input
-              className={styles.inputStyle}
-              id="phone_num"
-              type="text"
-              placeholder="‘-’빼고 숫자만 입력"
-              {...register('phone_num', {
+            <Controller
+              name="phone_num"
+              control={control}
+              defaultValue=""
+              rules={{
                 required: '전화번호를 입력해주세요.',
                 pattern: {
-                  value: /^01(?:0|1|[6-9])[0-9]{7,8}$/g,
-                  message: '‘-’빼고 숫자만 입력해주세요.',
+                  value: /^\d{2,3}-\d{3,4}-\d{4}$/,
+                  message: '유효한 전화번호 형식이 아닙니다.',
                 },
-              })}
+              }}
+              render={({ field }) => (
+                <input
+                  className={styles.inputStyle}
+                  id="phone_num"
+                  type="text"
+                  placeholder="전화번호 입력"
+                  value={field.value}
+                  onChange={(e) => {
+                    const formattedValue = onParsingPhoneNumber(e.target.value);
+                    setValue('phone_num', formattedValue, {
+                      shouldValidate: true,
+                    });
+                  }}
+                />
+              )}
             />
             <button
               type="button"
               className={
-                /^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(watch('phone_num')) &&
+                /^\d{2,3}-\d{3,4}-\d{4}$/.test(watch('phone_num')) &&
                 !isCheckNum
                   ? styles.buttonStyleActive
                   : styles.buttonStyle
               }
               onClick={onSendSMS}
               disabled={
-                !/^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(watch('phone_num')) ||
+                !/^\d{2,3}-\d{3,4}-\d{4}$/.test(watch('phone_num')) ||
                 isCheckNum
               }
             >

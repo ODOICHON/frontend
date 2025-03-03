@@ -11,6 +11,7 @@ import { QueryKeys } from '@/queryClient';
 import { HouseStatusType } from '@/types/Board/myPageType';
 import { PutHouseStatusAPI } from '@/apis/houses';
 import useInput from '@/hooks/useInput';
+import { onParsingPhoneNumber } from '@/utils/utils';
 import { DropdownVariants } from '@/constants/variants';
 import styles from './styles.module.scss';
 
@@ -27,7 +28,7 @@ export default function DealStateModal({
 }: DealStateModalProps) {
   const queryClient = useQueryClient();
 
-  const [contact, handleContact] = useInput('');
+  const [contact, setContact] = useState('');
   const [review, setReview] = useInput('');
   const [nickName, setNickName] = useInput('');
 
@@ -49,6 +50,11 @@ export default function DealStateModal({
   };
   const handleToggleAgeDropdown = () => {
     setIsAgeDropdownOpen(!isAgeDropdownOpen);
+  };
+
+  const handleContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = onParsingPhoneNumber(e.target.value);
+    setContact(formattedValue);
   };
 
   const handleDateChange = (date: ValuePiece) => {
@@ -80,7 +86,7 @@ export default function DealStateModal({
       alert('필수 항목을 입력해주세요.');
       return;
     }
-    if (!contact.match(/^(\d{2,3}\d{3,4}\d{4})$/g)) {
+    if (!contact.match(/^\d{2,3}-\d{3,4}-\d{4}$/g)) {
       alert('전화번호 형식이 맞지 않습니다.');
       return;
     }
@@ -138,6 +144,7 @@ export default function DealStateModal({
                 {isCalendarOpen && (
                   <div className={styles.calendarWrapper}>
                     <Calendar
+                      maxDate={new Date()}
                       onChange={handleDateChange}
                       value={selectedDate}
                     />
@@ -150,9 +157,9 @@ export default function DealStateModal({
               <input
                 className={styles.inputStyle}
                 type="text"
-                placeholder={`'-'없이 기재`}
+                placeholder="전화번호 입력"
                 value={contact}
-                onChange={handleContact}
+                onChange={handleContactChange}
               />
               <label htmlFor="">구매자 주말내집 닉네임</label>
               <input

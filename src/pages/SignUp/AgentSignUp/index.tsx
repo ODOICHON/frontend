@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -16,6 +16,7 @@ import userStore from '@/store/userStore';
 import useCheckAPI from '@/hooks/useCheckAPI';
 import useModalState from '@/hooks/useModalState';
 import useToastMessageType from '@/hooks/useToastMessageType';
+import { onParsingPhoneNumber } from '@/utils/utils';
 import { ApiResponseType } from '@/types/apiResponseType';
 import { TermType } from '@/types/signUp';
 import { opacityVariants } from '@/constants/variants';
@@ -100,6 +101,7 @@ export default function AgentSignUpPage() {
     watch,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
   } = useForm<IForm>({
     mode: 'onSubmit',
@@ -218,8 +220,10 @@ export default function AgentSignUpPage() {
     else setEyeCheckState((prev) => !prev);
   };
   const onSendSMS = () => {
-    if (/^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(watch('phone_num')) === false)
-      return;
+    const phoneNumber = watch('phone_num').replace(/-/g, ''); // '-' 제거
+
+    if (!/^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(phoneNumber)) return;
+
     phoneSMSAPI(watch('phone_num'), {
       onSuccess: (res) => {
         if (!res) throw Error;
@@ -522,18 +526,32 @@ export default function AgentSignUpPage() {
             공인중개사 사무소 대표 전화번호
           </label>
           <div className={signUpStyles.inputInline}>
-            <input
-              className={signUpStyles.inputStyle}
-              id="company_phone_num"
-              type="text"
-              placeholder="지역번호까지 입력 예) 02, 031"
-              {...register('company_phone_num', {
-                required: '비밀번호는 필수 입력입니다.',
+            <Controller
+              name="company_phone_num"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: '전화번호를 입력해주세요.',
                 pattern: {
-                  value: /^\d{9,11}$/g,
-                  message: `'-' 제외한 유효한 번호를 입력해주세요.`,
+                  value: /^\d{2,3}-\d{3,4}-\d{4}$/,
+                  message: '유효한 전화번호 형식이 아닙니다.',
                 },
-              })}
+              }}
+              render={({ field }) => (
+                <input
+                  className={signUpStyles.inputStyle}
+                  id="company_phone_num"
+                  type="text"
+                  placeholder="지역번호까지 입력 예) 02, 031"
+                  value={field.value}
+                  onChange={(e) => {
+                    const formattedValue = onParsingPhoneNumber(e.target.value);
+                    setValue('company_phone_num', formattedValue, {
+                      shouldValidate: true,
+                    });
+                  }}
+                />
+              )}
             />
           </div>
           <p className={signUpStyles.errorMessage}>
@@ -862,30 +880,44 @@ export default function AgentSignUpPage() {
         <div className={signUpStyles.inputContainer}>
           <label htmlFor="phone_num">휴대폰</label>
           <div className={signUpStyles.inputInline}>
-            <input
-              className={signUpStyles.inputStyle}
-              id="phone_num"
-              type="text"
-              placeholder="‘-’빼고 숫자만 입력"
-              {...register('phone_num', {
+            <Controller
+              name="phone_num"
+              control={control}
+              defaultValue=""
+              rules={{
                 required: '전화번호를 입력해주세요.',
                 pattern: {
-                  value: /^01(?:0|1|[6-9])[0-9]{7,8}$/g,
-                  message: '‘-’빼고 숫자만 입력해주세요.',
+                  value: /^\d{2,3}-\d{3,4}-\d{4}$/,
+                  message: '유효한 전화번호 형식이 아닙니다.',
                 },
-              })}
+              }}
+              render={({ field }) => (
+                <input
+                  className={signUpStyles.inputStyle}
+                  id="phone_num"
+                  type="text"
+                  placeholder="전화번호 입력"
+                  value={field.value}
+                  onChange={(e) => {
+                    const formattedValue = onParsingPhoneNumber(e.target.value);
+                    setValue('phone_num', formattedValue, {
+                      shouldValidate: true,
+                    });
+                  }}
+                />
+              )}
             />
             <button
               type="button"
               className={
-                /^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(watch('phone_num')) &&
+                /^\d{2,3}-\d{3,4}-\d{4}$/.test(watch('phone_num')) &&
                 !isCheckNum
                   ? signUpStyles.buttonStyleActive
                   : signUpStyles.buttonStyle
               }
               onClick={onSendSMS}
               disabled={
-                !/^01(?:0|1|[6-9])[0-9]{7,8}$/g.test(watch('phone_num')) ||
+                !/^\d{2,3}-\d{3,4}-\d{4}$/.test(watch('phone_num')) ||
                 isCheckNum
               }
             >

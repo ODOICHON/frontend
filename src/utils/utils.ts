@@ -280,3 +280,9 @@ export const isConsonant = (char: string) => {
 export const checkTextString = (text: string) => {
   return [...text].map((v) => isConsonant(v)).some((v) => v === true);
 };
+
+export const onParsingPhoneNumber = (phoneNum: string) => {
+  return phoneNum
+    .replace(/[^0-9]/g, '')
+    .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+};
