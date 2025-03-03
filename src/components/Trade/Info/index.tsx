@@ -22,8 +22,11 @@ function TradeBoardInfo({ info }: TradeBoardInfoProps) {
         <div>
           가격{' '}
           <p>
-            {info?.rentalType && getRentalName(info?.rentalType)}{' '}
-            {info?.price && priceCount(info?.price)}
+            {info?.price === 0
+              ? '무료'
+              : `${info?.rentalType && getRentalName(info?.rentalType)} ${
+                  info?.price && priceCount(info?.price)
+                }`}
           </p>
         </div>
         <div>
